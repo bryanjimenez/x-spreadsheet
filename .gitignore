@@ -1,4 +1,9 @@
 node_modules
-yarn.lock
 
 .nyc_output/*
+
+dist
+.tsc-dist
+
+*.txt
+*.tgz

@@ -1,0 +1,31 @@
+{
+  // "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./.tsc-dist/",
+
+    "strict": true,
+    "skipLibCheck": true,
+
+    // Set the JavaScript language version for emitted JavaScript
+    // and include compatible library declarations.
+    "target": "es6",
+    // Specify what module code is generated.
+    "module": "es2022",
+    // "lib": ["dom", "webworker", "es2021.Promise"],
+
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    "allowJs": true,
+    "checkJs": true,
+
+    "removeComments": true,
+    "declaration": true
+  },
+  "exclude": ["./node_modules", "./dist"],
+  "include": ["./src"]
+}
