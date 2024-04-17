@@ -1,0 +1,11 @@
+{
+  "extends":"./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist/types/",
+    // "outFile": "./dist/xspreadsheet.d.ts",
+
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}
