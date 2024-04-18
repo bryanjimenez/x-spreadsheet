@@ -13,86 +13,28 @@ import { type LineType } from "./canvas/draw";
 import { type SelectType } from "./component/form_select";
 import { type OperatorType, type ValidatorType } from "./core/validator";
 
-
-export type CELL_SELECTED = "cell-selected";
-export type CELLS_SELECTED = "cells-selected";
-export type CELL_EDITED = "cell-edited";
-export type CELL_EDITED_DONE = "cell-edited-done";
 export type CellMerge = [number, number];
-
-export interface SpreadsheetEventHandler {
-  (
-    envt: CELL_SELECTED,
-    callback: (cell: CellData, rowIndex: number, colIndex: number) => void,
-  ): void;
-  (
-    envt: CELLS_SELECTED,
-    callback: (
-      cell: CellData,
-      parameters: { sri: number; sci: number; eri: number; eci: number },
-    ) => void,
-  ): void;
-  (
-    evnt: CELL_EDITED,
-    callback: (text: string, rowIndex: number, colIndex: number) => void,
-  ): void;
-  (
-    evnt: CELL_EDITED_DONE,
-    callback: (text: string, rowIndex: number, colIndex: number) => void,
-  ): void;
-}
-
-
 
 /**
  * Data for representing a cell
  */
 export interface CellData {
   text?: string;
-  value?:string;
+  value?: string;
   style?: number;
   merge?: CellMerge;
   editable?: boolean;
-  formula?:string;
+  formula?: string;
 }
 
-
 export interface ColList {
-    len?: number;
-    [key: number]: ColProperties;
+  len?: number;
+  [key: number]: ColProperties;
 }
 
 export interface RowList {
-  len?:number;
+  len?: number;
   [key: number]: RowData;
-}
-
-/**
- * Data for representing a sheet
- */
-export interface SheetData {
-  name: string;
-  freeze?: string;
-  styles?: CellStyle[];
-  merges?: string[];
-  validations?:{
-    refs: string[];
-    mode: SelectType;
-    type: ValidatorType;
-    required: boolean;
-    operator: OperatorType;
-    value: string;
-}[];
-  autofilter:{ ref:string, filters:Filter[], sort:Sort };
-  cols?: ColList
-  rows?: RowList;
-}
-
-/**
- * Data for representing a spreadsheet
- */
-export interface SpreadsheetData {
-  [index: number]: SheetData;
 }
 
 export interface CellStyle {
@@ -112,6 +54,46 @@ export interface CellStyle {
   };
 }
 
+/**
+ * Data for representing a sheet
+ */
+export interface SheetData {
+  name: string;
+  freeze?: string;
+  styles?: CellStyle[];
+  merges?: string[];
+  validations?: {
+    refs: string[];
+    mode: SelectType;
+    type: ValidatorType;
+    required: boolean;
+    operator: OperatorType;
+    value: string;
+  }[];
+  autofilter: { ref: string | null; filters: Filter[]; sort: Sort | null };
+  cols?: ColList;
+  rows?: RowList;
+}
+
+// Mapping event to callback for Spreadsheet.on
+interface CellOnEventCallbackMap {
+  ["cell-selected"]: (
+    cell: CellData,
+    rowIndex: number,
+    colIndex: number
+  ) => void;
+  ["cells-selected"]: (
+    cell: CellData,
+    parameters: { sri: number; sci: number; eri: number; eci: number }
+  ) => void;
+  ["cell-edited"]: (text: string, rowIndex: number, colIndex: number) => void;
+  ["cell-edited-done"]: (
+    text: string,
+    rowIndex: number,
+    colIndex: number
+  ) => void;
+}
+
 export default class Spreadsheet {
   options: Partial<DefaultSettings>;
   sheetIndex: number;
@@ -120,10 +102,13 @@ export default class Spreadsheet {
   sheet: Sheet;
   bottombar: Bottombar | null;
 
-  constructor(selectors:string | Element, options = {}) {
-    let targetEl = typeof selectors === "string"? document.querySelector(selectors): selectors;
-    if(targetEl === null){
-      throw new Error(`Selector ${selectors} was not found`);
+  constructor(selectors: string | Element, options = {}) {
+    const targetEl =
+      typeof selectors === "string"
+        ? document.querySelector(selectors)
+        : selectors;
+    if (targetEl === null) {
+      throw new Error(`Selector ${JSON.stringify(selectors)} was not found`);
     }
 
     this.options = { showBottomBar: true, ...options };
@@ -151,9 +136,9 @@ export default class Spreadsheet {
         )
       : null;
     this.data = this.addSheet();
-    const rootEl = h("div", `${cssPrefix}`).on("contextmenu", (evt) =>
-      evt.preventDefault()
-    );
+    const rootEl = h("div", cssPrefix).on("contextmenu", (evt) => {
+      evt.preventDefault();
+    });
     // create canvas element
     targetEl.appendChild(rootEl.el);
     this.sheet = new Sheet(rootEl, this.data);
@@ -162,10 +147,10 @@ export default class Spreadsheet {
     }
   }
 
-  addSheet(name?:string, active = true) {
-    const n = name || `sheet${this.sheetIndex}`;
+  addSheet(name?: string, active = true) {
+    const n = name || `sheet${String(this.sheetIndex)}`;
     const d = new DataProxy(n, this.options);
-    d.change = (...args:unknown[]) => {
+    d.change = (...args: unknown[]) => {
       this.sheet.trigger("change", ...args);
     };
     this.datas.push(d);
@@ -188,7 +173,7 @@ export default class Spreadsheet {
     }
   }
 
-  loadData(data:SheetData|SheetData[]) {
+  loadData(data: SheetData | SheetData[]) {
     const ds = Array.isArray(data) ? data : [data];
     if (this.bottombar !== null) {
       this.bottombar.clear();
@@ -216,23 +201,23 @@ export default class Spreadsheet {
    */
   exportValues() {
     const data = this.getData();
-    data.forEach((sheet, i)=>{
+    data.forEach((sheet, i) => {
       sheet.rows = this.datas[i].rows.getExportData();
     });
 
     return data;
   }
 
-  cellText(ri:number, ci:number, text:string, sheetIndex = 0) {
+  cellText(ri: number, ci: number, text: string, sheetIndex = 0) {
     this.datas[sheetIndex].setCellText(ri, ci, text, "finished");
     return this;
   }
 
-  cell(ri:number, ci:number, sheetIndex = 0) {
+  cell(ri: number, ci: number, sheetIndex = 0) {
     return this.datas[sheetIndex].getCell(ri, ci);
   }
 
-  cellStyle(ri:number, ci:number, sheetIndex = 0) {
+  cellStyle(ri: number, ci: number, sheetIndex = 0) {
     return this.datas[sheetIndex].getCellStyle(ri, ci);
   }
 
@@ -241,7 +226,10 @@ export default class Spreadsheet {
     return this;
   }
 
-  on(eventName:string, func:Function) {
+  on<
+    E extends keyof CellOnEventCallbackMap,
+    F extends CellOnEventCallbackMap[E],
+  >(eventName: E, func: F) {
     this.sheet.on(eventName, func);
     return this;
   }
@@ -251,27 +239,36 @@ export default class Spreadsheet {
     return validations.errors.size <= 0;
   }
 
-  change(cb:Function) {
+  /**
+   * Sheet change event
+   */
+  change(cb: (data: SheetData) => void) {
     this.sheet.on("change", cb);
     return this;
   }
 
-  freeze(sheetIndex:number, ri:number, ci:number) {
+  freeze(sheetIndex: number, ri: number, ci: number) {
     this.datas[sheetIndex].setFreeze(ri, ci);
     // this.sheet.freeze(ri, ci)
     return this;
   }
 
-  static locale(lang:string, message:Record<string,unknown>) {
+  static locale(
+    lang: "de" | "en" | "nl" | "zh-cn",
+    message: Record<string, unknown>
+  ) {
     locale(lang, message);
   }
 }
 
-export const spreadsheet = (el:Element, options = {}) => new Spreadsheet(el, options);
+export const spreadsheet = (el: Element, options = {}) =>
+  new Spreadsheet(el, options);
 
 if (window) {
-  //@ts-expect-error
+  //@ts-expect-error camel case
   window.x_spreadsheet = spreadsheet;
-  //@ts-expect-error
-  window.x_spreadsheet.locale = (lang, message) => locale(lang, message);
+  //@ts-expect-error camel case
+  window.x_spreadsheet.locale = (lang, message) => {
+    locale(lang, message);
+  };
 }

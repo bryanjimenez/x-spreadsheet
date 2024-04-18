@@ -3,17 +3,14 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import LicenseCheckerWebpackPlugin from "license-checker-webpack-plugin";
 
-
 // mimic CommonJS variables -- not needed if using CommonJS
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(path.dirname(__filename));
-
 
 export default function rspackConfig(
   /** @type string */ _env,
   /** @type string[] */ argv
 ) {
-
   return {
     context: __dirname,
     mode: "production",
@@ -93,5 +90,5 @@ export default function rspackConfig(
       }),
       new rspack.ProgressPlugin({}),
     ].filter(Boolean),
-  }
+  };
 }
