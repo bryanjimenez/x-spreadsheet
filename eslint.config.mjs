@@ -1,33 +1,9 @@
-import eslintJsPlugin from "@eslint/js";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
+// @ts-check
+
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
 import tsParser from "@typescript-eslint/parser";
 import prettierPlugin from "eslint-plugin-prettier";
-import importPlugin from "eslint-plugin-import";
-// importPlugin uses 'eslint-import-resolver-typescript'
-// import googlePlugin from "eslint-config-google";
-// import lambdaEslintConf from "./lambda/eslint.config.mjs";
-import fs from "fs";
-// import globals from "globals";
-import prettier from "prettier";
-
-// import jsdoc from "eslint-plugin-jsdoc";
-
-// eslint flat config info
-// https://eslint.org/blog/2022/08/new-config-system-part-2/
-
-/*
-module.exports = {
-  "extends": "airbnb-base",
-  "rules": {
-    "no-param-reassign": ["error", { "props": false }],
-    "class-methods-use-this": "off",
-    "no-restricted-syntax": ["error", "WithStatement"],
-    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
-    "no-console": "off"
-  },
-  "ignorePatterns": ["dist/**"],
-};
-*/
 
 const extraRules = {
   // Warn against template literal placeholder syntax in regular strings
@@ -136,122 +112,60 @@ const unUsedVarsIgnore = {
   ],
 };
 
-export default [
+export default tseslint.config(
+  eslint.configs.all,
+  ...tseslint.configs.recommended,
+  ...tseslint.configs.strictTypeChecked,
+
   {
-    ignores: [".*", "node_modules/", "dist/"],
+    ignores: [".*", "node_modules/", "dist/", "test/"],
   },
   {
-    files: ["src/**/*.ts"],
     languageOptions: {
       parser: tsParser,
 
       parserOptions: {
         project: "./tsconfig.json",
-        sourceType: "module",
-        ecmaVersion: "latest",
+        // sourceType: "module",
+        // ecmaVersion: "latest",
       },
       sourceType: "module",
       // globals: { ...globals.browser },
     },
-    plugins: {
-      "@typescript-eslint": tsPlugin,
-      // react: reactPlugin,
-      // "react-hooks": reactHookPlugin,
-      import: importPlugin,
-    },
-    settings: {
-      // react: {
-      //   version: "detect",
-      // },
-
-      "import/resolver": {
-        typescript: {
-          project: "./tsconfig.json",
-        },
-      },
-    },
+    plugins: {},
+    settings: {},
     rules: {
-      // ...tsPlugin.configs.all.rules,
-      ...tsPlugin.configs.strict.rules,
-      ...tsPlugin.configs["recommended"].rules,
-      ...tsPlugin.configs["eslint-recommended"].rules,
-      ...tsPlugin.configs["recommended-requiring-type-checking"].rules,
-
-      // ...reactPlugin.configs.recommended.rules,
-      // ...reactPlugin.configs["jsx-runtime"].rules,
-
-      // ...reactHookPlugin.configs.recommended.rules,
-
-      ...importPlugin.configs.recommended.rules,
-      ...importPlugin.configs.typescript.rules,
-
       ...extraRules,
+      ...unUsedVarsIgnore,
+
+      // turn back on later
+      "sort-imports": "off",
+      "no-magic-numbers": "off",
+      curly: "off",
+      "one-var": "off",
+      "multiline-comment-style": "off",
 
       "no-console": "warn",
+
+      // too strict
+      "sort-keys": "off",
+      "func-style": "off",
+      "id-length": "off",
+      "capitalized-comments": "off",
+      "max-statements": "off",
+      "no-ternary": "off",
+      "line-comment-position": "off",
+      "no-negated-condition": "off",
 
       // disable unsafe autofixing '?' optional chaining
       "@typescript-eslint/no-unnecessary-condition": "off",
 
       "@typescript-eslint/no-floating-promises": "warn",
-      // "react/no-array-index-key": "warn",
-      // "react/button-has-type": "warn",
-
-      // https://medium.com/weekly-webtips/how-to-sort-imports-like-a-pro-in-typescript-4ee8afd7258a
-      // https://github.com/import-js/eslint-plugin-import
-      "sort-imports": [
-        "error",
-        {
-          ignoreCase: false,
-          ignoreDeclarationSort: true, // don"t want to sort import lines, use eslint-plugin-import instead
-          ignoreMemberSort: false,
-          memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
-          allowSeparatedGroups: true,
-        },
-      ],
-
-      "import/order": [
-        "error",
-        {
-          groups: [
-            "builtin", // Built-in imports (come from NodeJS native) go first
-            "external", // <- External imports
-            "internal", // <- Absolute imports
-            ["sibling", "parent"], // <- Relative imports, the sibling and parent types they can be mingled together
-            "index", // <- index imports
-            "unknown", // <- unknown
-          ],
-          "newlines-between": "always",
-          alphabetize: {
-            /* sort in ascending order. Options: ["ignore", "asc", "desc"] */
-            order: "asc",
-            /* ignore case. Options: [true, false] */
-            caseInsensitive: true,
-          },
-        },
-      ],
-      ...unUsedVarsIgnore,
     },
     linterOptions: {
       // report when eslint-disable-next-line is unnecessary
       reportUnusedDisableDirectives: true,
     },
-  },
-  {
-    files: ["test/**/*.{js,ts}"],
-    languageOptions: {
-      parser: tsParser,
-      // globals: { ...globals.mocha },
-    },
-  },
-
-  {
-    // basic eslint for anything .js
-    files: ["**/*.{js}"],
-    languageOptions: {
-      parser: tsParser,
-      // globals: { ...globals.browser },
-    },
-    rules: eslintJsPlugin.configs.recommended.rules,
   },
   {
     // everything gets prettier
@@ -261,42 +175,6 @@ export default [
     rules: {
       ...prettierPlugin.configs.recommended.rules,
       "prettier/prettier": ["warn", { trailingComma: "es5" }],
-
-      // "jsdoc/require-description": "error",
-      // "jsdoc/check-values": "error"
     },
-  },
-  {
-    // json gets prettier
-    files: ["**/*.{json,css}"],
-
-    languageOptions: {
-      parser: {
-        parse: (text, info) => {
-          // When file is Json send it to prettier for formatting
-
-          // console.log(JSON.stringify(info))
-
-          prettier
-            .format(text, { filepath: info.filePath })
-            .then((pretty) => fs.createWriteStream(info.filePath).end(pretty));
-
-          // const [_filePath, fileExt] = info.filePath.split(".");
-
-          console.log("prettier < " + info.filePath);
-          // throw new Error("Sent to Prettier -> *." + fileExt);
-          // node_modules/eslint/lib/source-code/source-code.jsL326
-          return {
-            type: "Program",
-            body: [],
-            tokens: [],
-            comments: [],
-            loc: [],
-            range: {},
-            scopes: [],
-          };
-        },
-      },
-    },
-  },
-];
+  }
+);
