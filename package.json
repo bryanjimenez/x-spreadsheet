@@ -28,7 +28,7 @@
   },
   "scripts": {
     "dev": "rspack serve -c ./build/rspack.dev.js",
-    "prebuild": "rm -rf ./dist",
+    "pre-build": "rm -rf ./dist",
     "build": "rspack build -c ./build/rspack.prod.js",
     "post-build": "npm run build-dts; npm run build-locale",
     "build-locale": "rspack -c build/rspack.locale.js",
