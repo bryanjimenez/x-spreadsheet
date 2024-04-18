@@ -1,11 +1,16 @@
 # x-spreadsheet
 
-> A web-based Typescript spreadsheet
+> A Typescript spreadsheet
 
-A fork from https://github.com/myliang/x-spreadsheet
-using Typescript
-with Rspack.
+A fork from https://github.com/myliang/x-spreadsheet  
+using Typescript  
+with Rspack  
+as an ES module.
 
-## LICENSE
 
-MIT
+## TODO
+[ ] Decrease type errors  
+[ ] Increase test code coverage  
+[ ] Document api  
+[ ] Improvements for small screens/touch devices (navigation, menu, etc.)  
+
