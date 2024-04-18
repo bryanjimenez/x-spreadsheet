@@ -28,11 +28,11 @@
   },
   "scripts": {
     "dev": "rspack serve -c ./build/rspack.dev.js",
-    "prebuild": "rm -rf ./dist",
+    "pre-build": "rm -rf ./dist",
     "build": "rspack build -c ./build/rspack.prod.js",
     "post-build": "npm run build-dts; npm run build-locale",
     "build-locale": "rspack -c build/rspack.locale.js",
-    "build-dts": "tsc -p ./tsconfig.types.json",
+    "build-dts": "tsc -p ./tsconfig.types.json | cat",
     "test": "mocha -r ./test/require.mjs ./test/**/*",
     "coverage": "nyc npm run test > '/dev/null'; nyc report",
     "type": "tsc -b",
