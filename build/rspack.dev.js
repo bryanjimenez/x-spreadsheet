@@ -6,12 +6,10 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(path.dirname(__filename));
 
-
 export default function rspackConfig(
   /** @type string */ _env,
   /** @type string[] */ argv
 ) {
-
   return {
     context: __dirname,
     mode: "development",
@@ -87,6 +85,6 @@ export default function rspackConfig(
       host: "localhost",
       port: 3000,
       static: "../dist",
-    }
-  }
+    },
+  };
 }
