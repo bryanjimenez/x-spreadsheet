@@ -1,9 +1,9 @@
-import { CellRange } from './cell_range';
+import { CellRange } from "./cell_range";
 
 export default class Selector {
   range: CellRange;
-  ri:number;
-  ci:number;
+  ri: number;
+  ci: number;
   constructor() {
     this.range = new CellRange(0, 0, 0, 0);
     this.ri = 0;
@@ -14,7 +14,7 @@ export default class Selector {
     return this.range.multiple();
   }
 
-  setIndexes(ri:number, ci:number) {
+  setIndexes(ri: number, ci: number) {
     this.ri = ri;
     this.ci = ci;
   }

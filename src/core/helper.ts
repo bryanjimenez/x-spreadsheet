@@ -1,8 +1,11 @@
-function cloneDeep(obj: unknown) {
+export function cloneDeep<T>(obj: unknown): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
-function mergeDeep<T>(object:Record<string,unknown> = {}, ...sources:Record<string,unknown>[]):T {
+export function mergeDeep<T>(
+  object: Record<string, unknown> = {},
+  ...sources: Record<string, unknown>[]
+): T {
   sources.forEach((source) => {
     Object.keys(source).forEach((key) => {
       const v = source[key];
@@ -18,7 +21,7 @@ function mergeDeep<T>(object:Record<string,unknown> = {}, ...sources:Record<stri
         !Array.isArray(v) &&
         v instanceof Object
       ) {
-        object[key] = object[key] || {};
+        object[key] ??= {};
         mergeDeep(object[key], v);
       } else {
         object[key] = v;
@@ -27,9 +30,13 @@ function mergeDeep<T>(object:Record<string,unknown> = {}, ...sources:Record<stri
   });
   // console.log('::', object);
   return object;
-};
+}
 
-function equals<T extends Object>(obj1: T, obj2: T) {
+export function merge<T>(...sources: Record<string, unknown>[]) {
+  return mergeDeep<T>({}, ...sources);
+}
+
+export function equals<T extends object>(obj1: T, obj2: T) {
   const keys = Object.keys(obj1) as (keyof T)[];
   if (keys.length !== Object.keys(obj2).length) return false;
   for (let i = 0; i < keys.length; i += 1) {
@@ -63,10 +70,10 @@ function equals<T extends Object>(obj1: T, obj2: T) {
   objOrAry: obejct or Array
   cb: (value, index | key) => { return value }
 */
-const sum = (
+function sum(
   objOrAry: Record<string, number> | number[],
   cb = (value: number, index?: string) => value
-) => {
+) {
   let total = 0;
   let size = 0;
   Object.keys(objOrAry).forEach((key) => {
@@ -74,7 +81,7 @@ const sum = (
     size += 1;
   });
   return [total, size];
-};
+}
 
 function deleteProperty<T extends Record<string, unknown>>(
   obj: T,
@@ -85,7 +92,7 @@ function deleteProperty<T extends Record<string, unknown>>(
   return oldv;
 }
 
-function rangeReduceIf(
+export function rangeReduceIf(
   min: number,
   max: number,
   inits: number,
@@ -104,7 +111,11 @@ function rangeReduceIf(
   return [i, s - v, v];
 }
 
-function rangeSum(min: number, max: number, getv: (i: number) => number) {
+export function rangeSum(
+  min: number,
+  max: number,
+  getv: (i: number) => number
+) {
   let s = 0;
   for (let i = min; i < max; i += 1) {
     s += getv(i);
@@ -118,7 +129,7 @@ function rangeEach(min: number, max: number, cb: (i: number) => void) {
   }
 }
 
-function arrayEquals(a1: unknown[], a2: unknown[]) {
+export function arrayEquals(a1: unknown[], a2: unknown[]) {
   if (a1.length === a2.length) {
     for (let i = 0; i < a1.length; i += 1) {
       if (a1[i] !== a2[i]) return false;
@@ -132,13 +143,13 @@ function digits(a: unknown) {
   let ret = 0;
   let flag = false;
   for (let i = 0; i < v.length; i += 1) {
-    if (flag === true) ret += 1;
+    if (flag) ret += 1;
     if (v.charAt(i) === ".") flag = true;
   }
   return ret;
 }
 
-export function isNumber(x: unknown) {
+export function isNumber(x: unknown): x is number {
   return (
     (typeof x === "number" || (typeof x === "string" && x.trim() !== "")) &&
     !isNaN(x as number)
@@ -146,18 +157,30 @@ export function isNumber(x: unknown) {
 }
 
 function numberOp(type: "-" | "+" | "*" | "/", num1: number, num2: number) {
-    let ret = 0;
-    if (type === "-") {
+  let ret = 0;
+  switch (type) {
+    case "-":
       ret = num1 - num2;
-    } else if (type === "+") {
+      break;
+
+    case "+":
       ret = num1 + num2;
-    } else if (type === "*") {
+      break;
+
+    case "*":
       ret = num1 * num2;
-    } else if (type === "/") {
+      break;
+
+    case "/":
       ret = num1 / num2;
       if (digits(ret) > 5) return ret.toFixed(2);
-    }
-    return ret;
+      break;
+
+    default:
+      throw new Error("Unexpected operator");
+  }
+
+  return ret;
 }
 
 // export function numberCalc(type: "+" | "-" | "*" | "/", a1: number, a2: number): number;
@@ -166,7 +189,6 @@ export function numberCalc(
   a1: unknown,
   a2: unknown
 ) {
-
   if (!isNumber(a1) && a1 === "" && isNumber(a2)) {
     return numberOp(type, 0, Number(a2));
   }
@@ -183,22 +205,10 @@ export function numberCalc(
   const al2 = digits(a2);
   const num1 = Number(a1);
   const num2 = Number(a2);
-  let ret = 0;
-  if (type === "-" || type === "+" || type === "*" || type === "/") {
-    return numberOp(type, num1, num2);
+  const ret = 0;
+  if (!["+", "-", "*", "/"].includes(type)) {
+    return ret.toFixed(Math.max(al1, al2));
   }
-  return ret.toFixed(Math.max(al1, al2));
-}
 
-export default {
-  cloneDeep,
-  merge: <T>(...sources:Record<string,unknown>[]) => mergeDeep<T>({}, ...sources),
-  equals,
-  arrayEquals,
-  sum,
-  rangeEach,
-  rangeSum,
-  rangeReduceIf,
-  deleteProperty,
-  numberCalc,
-};
+  return numberOp(type, num1, num2);
+}
