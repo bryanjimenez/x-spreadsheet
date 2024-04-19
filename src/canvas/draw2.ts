@@ -1,14 +1,13 @@
 class Draw {
-
   el: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D
+  ctx: CanvasRenderingContext2D;
 
-  constructor(el:HTMLCanvasElement) {
+  constructor(el: HTMLCanvasElement) {
     this.el = el;
 
-    const ctx = el.getContext('2d');
-    if(!ctx){
-      throw new Error('Not a valid elment');
+    const ctx = el.getContext("2d");
+    if (!ctx) {
+      throw new Error("Not a valid elment");
     }
 
     this.ctx = ctx;
@@ -20,7 +19,7 @@ class Draw {
     return this;
   }
 
-  attr(m:unknown) {
+  attr(m: unknown) {
     Object.assign(this.ctx, m);
     return this;
   }
@@ -46,58 +45,56 @@ class Draw {
     return this;
   }
 
-  measureText(text:string) {
+  measureText(text: string) {
     return this.ctx.measureText(text);
   }
 
-  rect(x:number, y:number, width:number, height:number) {
+  rect(x: number, y: number, width: number, height: number) {
     this.ctx.rect(x, y, width, height);
     return this;
   }
 
-  scale(x:number, y:number) {
+  scale(x: number, y: number) {
     this.ctx.scale(x, y);
     return this;
   }
 
-  rotate(angle:number) {
+  rotate(angle: number) {
     this.ctx.rotate(angle);
     return this;
   }
 
-  translate(x:number, y:number) {
+  translate(x: number, y: number) {
     this.ctx.translate(x, y);
     return this;
   }
 
-  transform(a:number, b:number, c:number, d:number, e:number) {
+  transform(a: number, b: number, c: number, d: number, e: number) {
     //@ts-expect-error this.ctx.transform 6th variable
     this.ctx.transform(a, b, c, d, e);
     return this;
   }
 
-  fillRect(x:number, y:number, w:number, h:number) {
+  fillRect(x: number, y: number, w: number, h: number) {
     this.ctx.fillRect(x, y, w, h);
     return this;
   }
 
-  strokeRect(x:number, y:number, w:number, h:number) {
+  strokeRect(x: number, y: number, w: number, h: number) {
     this.ctx.strokeRect(x, y, w, h);
     return this;
   }
 
-  fillText(text:string, x:number, y:number, maxWidth:number) {
+  fillText(text: string, x: number, y: number, maxWidth: number) {
     this.ctx.fillText(text, x, y, maxWidth);
     return this;
   }
 
-  strokeText(text:string, x:number, y:number, maxWidth:number) {
+  strokeText(text: string, x: number, y: number, maxWidth: number) {
     this.ctx.strokeText(text, x, y, maxWidth);
     return this;
   }
 }
 
 export default {};
-export {
-  Draw,
-};
+export { Draw };
