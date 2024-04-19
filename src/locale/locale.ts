@@ -1,18 +1,21 @@
 /* global window */
-import en from './en';
+import en from "./en";
 
 // Defines the fallback language as English
-let $languages = ['en'];
-const $messages:Record<string,unknown> = {
+let $languages = ["en"];
+const $messages: Record<string, unknown> = {
   en,
 };
 
 /**
  * Walks down the language object looking for the value of `key`
- * @param key 
- * @param messages 
+ * @param key
+ * @param messages
  */
-function translate(key:string, messages:Record<string,unknown>): string | undefined {
+function translate(
+  key: string,
+  messages: Record<string, unknown>
+): string | undefined {
   if (messages) {
     // Return the translation from the first language in the languages array
     // that has a value for the provided key.
@@ -22,11 +25,11 @@ function translate(key:string, messages:Record<string,unknown>): string | undefi
       let message = messages[lang];
 
       // Splits the key at '.' except where escaped as '\.'
-      const keys = key.match(/(?:\\.|[^.])+/g) ?? [];
+      const keys = key.match(/(?:\\.|[^.])+/gu) ?? [];
 
       for (let i = 0; i < keys.length; i += 1) {
         const property = keys[i];
-        const value = message[property];
+        const value: string = message[property];
 
         // If value doesn't exist, try next language
         if (!value) break;
@@ -44,32 +47,32 @@ function translate(key:string, messages:Record<string,unknown>): string | undefi
 
 /**
  * Translate a `key` (term)
- * @param key 
+ * @param key
  */
-function t(key:string) {
+function t(key: string) {
   let v = translate(key, $messages);
 
   // if (!v && window && 'x_spreadsheet' in window && window.x_spreadsheet.$messages) {
   if (!v && window && window.x_spreadsheet && window.x_spreadsheet.$messages) {
-      v = translate(key, window.x_spreadsheet.$messages);
+    v = translate(key, window.x_spreadsheet.$messages);
   }
-  return v || '';
+  return v || "";
 }
 
 /**
  * Calendar items returns array
- * @param key 
+ * @param key
  * @returns Array of items
  */
-export function ct(key:string){
-  return t(key) as string[]
+export function ct(key: string) {
+  return t(key) as string[];
 }
 
 /**
  * Return a translation function for `key`
- * @param key 
+ * @param key
  */
-function tf(key:string) {
+function tf(key: string) {
   return () => t(key);
 }
 
@@ -78,7 +81,11 @@ function tf(key:string) {
 // to find a translation. This allows the use of other languages as a fallback
 // if lang is missing some keys. The language array is preloaded with English.
 // To set the languages array to only include lang, set clearLangList to true.
-function locale(lang:string, message:Record<string,unknown>, clearLangList = false) {
+function locale(
+  lang: string,
+  message: Record<string, unknown>,
+  clearLangList = false
+) {
   if (clearLangList) {
     $languages = [lang];
   } else {
@@ -97,8 +104,4 @@ export default {
   t,
 };
 
-export {
-  locale,
-  t,
-  tf,
-};
+export { locale, t, tf };
