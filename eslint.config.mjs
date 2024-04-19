@@ -5,6 +5,45 @@ import tseslint from "typescript-eslint";
 import tsParser from "@typescript-eslint/parser";
 import prettierPlugin from "eslint-plugin-prettier";
 
+/** Temporarily ignore these */
+const temporaryRules = {
+  // turn back on later
+  "sort-imports": "off",
+  "no-magic-numbers": "off",
+  "curly": "off",
+  "one-var": "off",
+  "multiline-comment-style": "off",
+}
+
+/** Ignore these, they're too strict */
+const tooStrict = {
+  "sort-keys": "off",
+  "func-style": "off",
+  "id-length": "off",
+  "capitalized-comments": "off",
+  "no-inline-comments":"off",
+  "max-statements": "off",
+  "max-params":"off",
+  "max-lines":"off",
+  "max-lines-per-function":"off",
+  "no-ternary": "off",
+  "line-comment-position": "off",
+  "no-negated-condition": "off",
+  "no-undefined":"off",
+}
+
+/** Warn these, don't show as error */
+const commonWarnings = {
+  "@typescript-eslint/no-unsafe-argument":"warn",  // typescript unknown
+  "@typescript-eslint/no-floating-promises": "warn",
+
+  "no-warning-comments":"warn",
+  "camelcase":"warn",
+  "max-depth":"warn",
+  "no-console": "warn",
+  "max-classes-per-file":"warn",
+}
+
 const extraRules = {
   // Warn against template literal placeholder syntax in regular strings
   "no-template-curly-in-string": "warn",
@@ -138,29 +177,12 @@ export default tseslint.config(
       ...extraRules,
       ...unUsedVarsIgnore,
 
-      // turn back on later
-      "sort-imports": "off",
-      "no-magic-numbers": "off",
-      curly: "off",
-      "one-var": "off",
-      "multiline-comment-style": "off",
-
-      "no-console": "warn",
-
-      // too strict
-      "sort-keys": "off",
-      "func-style": "off",
-      "id-length": "off",
-      "capitalized-comments": "off",
-      "max-statements": "off",
-      "no-ternary": "off",
-      "line-comment-position": "off",
-      "no-negated-condition": "off",
+      ...temporaryRules,
+      ...tooStrict,
+      ...commonWarnings,
 
       // disable unsafe autofixing '?' optional chaining
       "@typescript-eslint/no-unnecessary-condition": "off",
-
-      "@typescript-eslint/no-floating-promises": "warn",
     },
     linterOptions: {
       // report when eslint-disable-next-line is unnecessary
