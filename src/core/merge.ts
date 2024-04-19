@@ -1,21 +1,21 @@
-import { CellRange, type CellRangePoints } from './cell_range';
+import { CellRange, type CellRangePoints } from "./cell_range";
 
-class Merges {
-  _:CellRange[];
+export class Merges {
+  _: CellRange[];
 
-  constructor(d:CellRange[] = []) {
+  constructor(d: CellRange[] = []) {
     this._ = d;
   }
 
-  forEach(cb:(...arg:unknown[])=>void) {
+  forEach(cb: (...arg: unknown[]) => void) {
     this._.forEach(cb);
   }
 
-  deleteWithin(cr:CellRangePoints) {
-    this._ = this._.filter(it => !it.within(cr));
+  deleteWithin(cr: CellRangePoints) {
+    this._ = this._.filter((it) => !it.within(cr));
   }
 
-  getFirstIncludes(ri:number, ci:number) {
+  getFirstIncludes(ri: number, ci: number) {
     for (let i = 0; i < this._.length; i += 1) {
       const it = this._[i];
       if (it.includes(ri, ci)) {
@@ -25,11 +25,11 @@ class Merges {
     return null;
   }
 
-  filterIntersects(cellRange:CellRangePoints) {
-    return new Merges(this._.filter(it => it.intersects(cellRange)));
+  filterIntersects(cellRange: CellRangePoints) {
+    return new Merges(this._.filter((it) => it.intersects(cellRange)));
   }
 
-  intersects(cellRange:CellRangePoints) {
+  intersects(cellRange: CellRangePoints) {
     for (let i = 0; i < this._.length; i += 1) {
       const it = this._[i];
       if (it.intersects(cellRange)) {
@@ -40,7 +40,7 @@ class Merges {
     return false;
   }
 
-  union(cellRange:CellRangePoints) {
+  union(cellRange: CellRangePoints) {
     let cr = cellRange;
     this._.forEach((it) => {
       if (it.intersects(cr)) {
@@ -50,19 +50,22 @@ class Merges {
     return cr;
   }
 
-  add(cr:CellRangePoints) {
+  add(cr: CellRangePoints) {
     this.deleteWithin(cr);
     this._.push(cr);
   }
 
   // type: row | column
-  shift(type:'row'|'column', index:number, n:number, cbWithin:Function) {
+  shift(
+    type: "row" | "column",
+    index: number,
+    n: number,
+    cbWithin: (sri: number, sci: number, noffset: number, i: number) => void
+  ) {
     this._.forEach((cellRange) => {
-      const {
-        sri, sci, eri, eci,
-      } = cellRange;
+      const { sri, sci, eri, eci } = cellRange;
       const range = cellRange;
-      if (type === 'row') {
+      if (type === "row") {
         if (sri >= index) {
           range.sri += n;
           range.eri += n;
@@ -70,7 +73,7 @@ class Merges {
           range.eri += n;
           cbWithin(sri, sci, n, 0);
         }
-      } else if (type === 'column') {
+      } else if (type === "column") {
         if (sci >= index) {
           range.sci += n;
           range.eci += n;
@@ -82,7 +85,7 @@ class Merges {
     });
   }
 
-  move(cellRange:CellRangePoints, rn:number, cn:number) {
+  move(cellRange: CellRangePoints, rn: number, cn: number) {
     this._.forEach((it1) => {
       const it = it1;
       if (it.within(cellRange)) {
@@ -94,17 +97,12 @@ class Merges {
     });
   }
 
-  setData(merges:string[]) {
-    this._ = merges.map(merge => CellRange.valueOf(merge));
+  setData(merges: string[]) {
+    this._ = merges.map((merge) => CellRange.valueOf(merge));
     return this;
   }
 
   getData() {
-    return this._.map(merge => merge.toString());
+    return this._.map((merge) => merge.toString());
   }
 }
-
-export default {};
-export {
-  Merges,
-};

@@ -1,25 +1,25 @@
 // docs
 
 interface BaseFont {
-  key:string;
-  title:string;
+  key: string;
+  title: string;
 }
 
 interface FontSize {
   pt: number;
   px: number;
 }
-const baseFonts:BaseFont[] = [
-  { key: 'Arial', title: 'Arial' },
-  { key: 'Helvetica', title: 'Helvetica' },
-  { key: 'Source Sans Pro', title: 'Source Sans Pro' },
-  { key: 'Comic Sans MS', title: 'Comic Sans MS' },
-  { key: 'Courier New', title: 'Courier New' },
-  { key: 'Verdana', title: 'Verdana' },
-  { key: 'Lato', title: 'Lato' },
+export const baseFonts: BaseFont[] = [
+  { key: "Arial", title: "Arial" },
+  { key: "Helvetica", title: "Helvetica" },
+  { key: "Source Sans Pro", title: "Source Sans Pro" },
+  { key: "Comic Sans MS", title: "Comic Sans MS" },
+  { key: "Courier New", title: "Courier New" },
+  { key: "Verdana", title: "Verdana" },
+  { key: "Lato", title: "Lato" },
 ];
 
-const fontSizes:FontSize[] = [
+export const fontSizes: FontSize[] = [
   { pt: 7.5, px: 10 },
   { pt: 8, px: 11 },
   { pt: 9, px: 12 },
@@ -41,7 +41,7 @@ const fontSizes:FontSize[] = [
   // { pt: 72, px: 95.6 },
 ];
 
-function getFontSizePxByPt(pt:number) {
+export function getFontSizePxByPt(pt: number) {
   for (let i = 0; i < fontSizes.length; i += 1) {
     const fontSize = fontSizes[i];
     if (fontSize.pt === pt) {
@@ -54,18 +54,10 @@ function getFontSizePxByPt(pt:number) {
 /**
  * transform baseFonts to map
  */
-function fonts(ary:BaseFont[] = []) {
-  const map:Record<string,unknown> = {};
+export function fonts(ary: BaseFont[] = []) {
+  const map: Record<string, unknown> = {};
   baseFonts.concat(ary).forEach((f) => {
     map[f.key] = f;
   });
   return map;
 }
-
-export default {};
-export {
-  fontSizes,
-  fonts,
-  baseFonts,
-  getFontSizePxByPt,
-};

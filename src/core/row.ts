@@ -1,8 +1,8 @@
 import { type CellData, type RowList } from "..";
 import { expr2expr } from "./alphabet";
 import _cell from "./cell";
-import type CellRange from "./cell_range";
-import helper from "./helper";
+import { type CellRange } from "./cell_range";
+import { rangeSum, cloneDeep } from "./helper";
 import { formulam } from "./formula";
 import { type CopyType } from "./data_proxy";
 
@@ -10,9 +10,9 @@ import { type CopyType } from "./data_proxy";
  * Data for representing a row
  */
 export interface RowData {
-  height?:number;
-  hide?:boolean;
-  style?:string;
+  height?: number;
+  hide?: boolean;
+  style?: string;
   cells: {
     [key: string]: CellData;
   };
@@ -23,7 +23,7 @@ class Rows {
   len: number;
   height: number;
   hide?: boolean;
-  cells?: Record<string,CellData>
+  cells?: Record<string, CellData>;
 
   constructor({ len, height }: { len: number; height: number }) {
     this._ = {};
@@ -63,7 +63,7 @@ class Rows {
 
   setHide(ri: number, v: boolean) {
     const row = this.getOrNew(ri);
-    if (v === true) row.hide = true;
+    if (v) row.hide = true;
     else delete row.hide;
   }
 
@@ -73,7 +73,7 @@ class Rows {
   }
 
   sumHeight(min: number, max: number, exceptSet?: Set<number>) {
-    return helper.rangeSum(min, max, (i: number) => {
+    return rangeSum(min, max, (i: number) => {
       if (exceptSet && exceptSet.has(i)) return 0;
       return this.getHeight(i);
     });
@@ -83,12 +83,12 @@ class Rows {
     return this.sumHeight(0, this.len);
   }
 
-  get(ri: number):RowData {
+  get(ri: number): RowData {
     return this._[ri];
   }
 
   getOrNew(ri: number) {
-    this._[ri] = this._[ri] || { cells: {} };
+    this._[ri] ??= { cells: {} };
     return this._[ri];
   }
 
@@ -112,20 +112,20 @@ class Rows {
 
   getCellOrNew(ri: number, ci: number) {
     const row = this.getOrNew(ri);
-    row.cells[ci] = row.cells[ci] || {};
+    row.cells[ci] ??= {};
     return row.cells[ci];
   }
 
   // what: all | text | format
-  setCell(ri: number, ci: number, cell:CellData, what = "all") {
+  setCell(ri: number, ci: number, cell: CellData, what = "all") {
     const row = this.getOrNew(ri);
     if (what === "all") {
       row.cells[ci] = cell;
     } else if (what === "text") {
-      row.cells[ci] = row.cells[ci] || {};
+      row.cells[ci] ??= {};
       row.cells[ci].text = cell.text;
     } else if (what === "format") {
-      row.cells[ci] = row.cells[ci] || {};
+      row.cells[ci] ??= {};
       row.cells[ci].style = cell.style;
       if (cell.merge) row.cells[ci].merge = cell.merge;
     }
@@ -137,7 +137,13 @@ class Rows {
   }
 
   // what: all | format | text
-  copyPaste(srcCellRange:CellRange, dstCellRange:CellRange, what: CopyType, autofill = false, cb:(ri:number, ci:number, cell:CellData)=>void = () => {}) {
+  copyPaste(
+    srcCellRange: CellRange,
+    dstCellRange: CellRange,
+    what: CopyType,
+    autofill = false,
+    cb: (ri: number, ci: number, cell: CellData) => void = () => {}
+  ) {
     const { sri, sci, eri, eci } = srcCellRange;
     const dsri = dstCellRange.sri;
     const dsci = dstCellRange.sci;
@@ -161,7 +167,7 @@ class Rows {
               for (let jj = dsci; jj <= deci; jj += cn) {
                 const nri = ii + (i - sri);
                 const nci = jj + (j - sci);
-                const ncell = helper.cloneDeep(this._[i].cells[j]);
+                const ncell = cloneDeep<CellData>(this._[i].cells[j]);
                 // ncell.text
                 if (autofill && ncell && ncell.text && ncell.text.length > 0) {
                   const { text } = ncell;
@@ -170,23 +176,26 @@ class Rows {
                     n -= dn + 1;
                   }
                   if (text[0] === "=") {
-                    ncell.text = text.replace(/[a-zA-Z]{1,3}\d+/g, (word:string) => {
-                      let [xn, yn] = [0, 0];
-                      if (sri === dsri) {
-                        xn = n - 1;
-                        // if (isAdd) xn -= 1;
-                      } else {
-                        yn = n - 1;
+                    ncell.text = text.replace(
+                      /[a-zA-Z]{1,3}\d+/gu,
+                      (word: string) => {
+                        let [xn, yn] = [0, 0];
+                        if (sri === dsri) {
+                          xn = n - 1;
+                          // if (isAdd) xn -= 1;
+                        } else {
+                          yn = n - 1;
+                        }
+                        if (/^\d+$/u.test(word)) return word;
+                        return expr2expr(word, xn, yn);
                       }
-                      if (/^\d+$/.test(word)) return word;
-                      return expr2expr(word, xn, yn);
-                    });
+                    );
                   } else if (
                     (rn <= 1 && cn > 1 && (dsri > eri || deri < sri)) ||
                     (cn <= 1 && rn > 1 && (dsci > eci || deci < sci)) ||
                     (rn <= 1 && cn <= 1)
                   ) {
-                    const result = /[\\.\d]+$/.exec(text);
+                    const result = /[\\.\d]+$/u.exec(text);
                     // console.log('result:', result);
                     if (result !== null) {
                       const index = Number(result[0]) + n - 1;
@@ -204,17 +213,17 @@ class Rows {
     }
   }
 
-  cutPaste(srcCellRange:CellRange, dstCellRange:CellRange) {
-    const ncellmm:Record<number,RowData> = {};
-    this.each((ri:string) => {
-      this.eachCells(ri, (ci:string) => {
+  cutPaste(srcCellRange: CellRange, dstCellRange: CellRange) {
+    const ncellmm: Record<number, RowData> = {};
+    this.each((ri: string) => {
+      this.eachCells(ri, (ci: string) => {
         let nri = parseInt(ri, 10);
         let nci = parseInt(ci, 10);
         if (srcCellRange.includes(nri, nci)) {
           nri = dstCellRange.sri + (nri - srcCellRange.sri);
           nci = dstCellRange.sci + (nci - srcCellRange.sci);
         }
-        ncellmm[nri] = ncellmm[nri] || { cells: {} };
+        ncellmm[nri] ??= { cells: {} };
         ncellmm[nri].cells[nci] = this._[nri].cells[ci];
       });
     });
@@ -222,7 +231,7 @@ class Rows {
   }
 
   // src: Array<Array<String>>
-  paste(src:string[][], dstCellRange:CellRange) {
+  paste(src: string[][], dstCellRange: CellRange) {
     if (src.length <= 0) return;
     const { sri, sci } = dstCellRange;
     src.forEach((row, i) => {
@@ -234,7 +243,7 @@ class Rows {
     });
   }
 
-  insert(sri:number, n = 1) {
+  insert(sri: number, n = 1) {
     const ndata: Record<number, RowData> = {};
     this.each((ri: string, row: RowData) => {
       let nri = parseInt(ri, 10);
@@ -242,7 +251,7 @@ class Rows {
         nri += n;
         this.eachCells(ri, (ci: string, cell) => {
           if (cell.text && cell.text[0] === "=") {
-            cell.text = cell.text.replace(/[a-zA-Z]{1,3}\d+/g, (word) =>
+            cell.text = cell.text.replace(/[a-zA-Z]{1,3}\d+/gu, (word) =>
               expr2expr(word, 0, n, (x, y) => y >= sri)
             );
           }
@@ -254,10 +263,10 @@ class Rows {
     this.len += n;
   }
 
-  delete(sri:number, eri:number) {
+  delete(sri: number, eri: number) {
     const n = eri - sri + 1;
-    const ndata:Record<number,RowData> = {};
-    this.each((ri:string, row:RowData) => {
+    const ndata: Record<number, RowData> = {};
+    this.each((ri: string, row: RowData) => {
       const nri = parseInt(ri, 10);
       if (nri < sri) {
         ndata[nri] = row;
@@ -265,7 +274,7 @@ class Rows {
         ndata[nri - n] = row;
         this.eachCells(ri, (ci, cell) => {
           if (cell.text && cell.text[0] === "=") {
-            cell.text = cell.text.replace(/[a-zA-Z]{1,3}\d+/g, (word) =>
+            cell.text = cell.text.replace(/[a-zA-Z]{1,3}\d+/gu, (word) =>
               expr2expr(word, 0, -n, (x, y) => y > eri)
             );
           }
@@ -276,15 +285,15 @@ class Rows {
     this.len -= n;
   }
 
-  insertColumn(sci:number, n = 1) {
-    this.each((ri:string, row:RowData) => {
-      const rndata:Record<number,CellData> = {};
+  insertColumn(sci: number, n = 1) {
+    this.each((ri: string, row: RowData) => {
+      const rndata: Record<number, CellData> = {};
       this.eachCells(ri, (ci, cell) => {
         let nci = parseInt(ci, 10);
         if (nci >= sci) {
           nci += n;
           if (cell.text && cell.text[0] === "=") {
-            cell.text = cell.text.replace(/[a-zA-Z]{1,3}\d+/g, (word) =>
+            cell.text = cell.text.replace(/[a-zA-Z]{1,3}\d+/gu, (word) =>
               expr2expr(word, n, 0, (x) => x >= sci)
             );
           }
@@ -295,10 +304,10 @@ class Rows {
     });
   }
 
-  deleteColumn(sci:number, eci:number) {
+  deleteColumn(sci: number, eci: number) {
     const n = eci - sci + 1;
-    this.each((ri:string, row:RowData) => {
-      const rndata:Record<number,CellData> = {};
+    this.each((ri: string, row: RowData) => {
+      const rndata: Record<number, CellData> = {};
       this.eachCells(ri, (ci, cell) => {
         const nci = parseInt(ci, 10);
         if (nci < sci) {
@@ -306,7 +315,7 @@ class Rows {
         } else if (nci > eci) {
           rndata[nci - n] = cell;
           if (cell.text && cell.text[0] === "=") {
-            cell.text = cell.text.replace(/[a-zA-Z]{1,3}\d+/g, (word) =>
+            cell.text = cell.text.replace(/[a-zA-Z]{1,3}\d+/gu, (word) =>
               expr2expr(word, -n, 0, (x) => x > eci)
             );
           }
@@ -317,8 +326,8 @@ class Rows {
   }
 
   // what: all | text | format | merge
-  deleteCells(cellRange:CellRange, what = "all") {
-    cellRange.each((i:number, j:number) => {
+  deleteCells(cellRange: CellRange, what = "all") {
+    cellRange.each((i: number, j: number) => {
       this.deleteCell(i, j, what);
     });
   }
@@ -347,7 +356,7 @@ class Rows {
   maxCell() {
     const keys = Object.keys(this._);
     const ri = keys[keys.length - 1];
-    const nri = parseInt(ri,10)
+    const nri = parseInt(ri, 10);
     const col = this._[nri];
     if (col) {
       const { cells } = col;
@@ -358,14 +367,15 @@ class Rows {
     return [0, 0];
   }
 
-  each(cb:Function) {
+  each(cb: (ri: string, row: RowData) => void) {
     Object.entries(this._).forEach(([ri, row]) => {
+      // TODO: let nri = parseInt(ri, 10);
       cb(ri, row);
     });
   }
 
-  eachCells(ri: string, cb: (i:string, cell: CellData)=>void) {
-    const nri = parseInt(ri,10);
+  eachCells(ri: string, cb: (i: string, cell: CellData) => void) {
+    const nri = parseInt(ri, 10);
     if (this._[nri] && this._[nri].cells) {
       Object.entries(this._[nri].cells).forEach(([ci, cell]) => {
         cb(ci, cell);
@@ -373,7 +383,7 @@ class Rows {
     }
   }
 
-  setData(d:RowList) {
+  setData(d: RowList) {
     if (d.len) {
       this.len = d.len;
       delete d.len;
@@ -381,9 +391,9 @@ class Rows {
     this._ = d;
   }
 
-  getData() {
+  getData(): RowList {
     const { len } = this;
-    return Object.assign({ len }, this._);
+    return { len, ...this._ };
   }
 
   /**
@@ -392,16 +402,20 @@ class Rows {
   getExportData() {
     const { len } = this;
 
-    const data = Object.assign({ len }, this._);
+    const data = { len, ...this._ };
 
     // Find all formulas and set 'text' to formula rendered val
-    Object.keys(this._).forEach((ri)=>{
-      const nri = parseInt(ri,10)
+    Object.keys(this._).forEach((ri) => {
+      const nri = parseInt(ri, 10);
       if (this._[nri] && this._[nri].cells) {
         Object.entries(this._[nri].cells).forEach(([ci, cell]) => {
-          if(cell.text?.startsWith("=")){
+          if (cell.text?.startsWith("=")) {
             // console.log("FORMULA: "+cell.text)
-            const renderedText = _cell.render(cell.text || '', formulam, (y:number, x:number) => (this.getCell(x,y)?.text));
+            const renderedText = _cell.render(
+              cell.text || "",
+              formulam,
+              (y: number, x: number) => this.getCell(x, y)?.text
+            );
 
             data[nri].cells[ci].text = renderedText;
             data[nri].cells[ci].formula = cell.text;
