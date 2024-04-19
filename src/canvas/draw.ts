@@ -272,7 +272,7 @@ class Draw {
     textWrap: text wrapping
   */
   text(
-    mtxt: string,
+    mtxt: string | number,
     box: DrawBox,
     attr: Partial<DefaultSettings["style"]>,
     textWrap = true
@@ -292,7 +292,7 @@ class Draw {
       fillStyle: color,
       strokeStyle: color,
     });
-    const txts = mtxt.split("\n");
+    const txts = String(mtxt).split("\n");
     const biw = box.innerWidth();
     const ntxts: string[] = [];
     txts.forEach((it) => {
