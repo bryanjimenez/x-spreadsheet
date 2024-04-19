@@ -1,23 +1,41 @@
-import { xy2expr, expr2xy } from './alphabet';
+import { xy2expr, expr2xy } from "./alphabet";
 
 export type CellRef = string;
 
 export interface CellRangePoints {
-  sci:number;
+  sci: number;
   sri: number;
-  eci:number;
+  eci: number;
   eri: number;
 }
 
-class CellRange {
+export class CellRange {
   sri: number;
   sci: number;
-  eri:number;
+  eri: number;
   eci: number;
-  w:number;
-  h:number;
+  w: number;
+  h: number;
 
-  constructor(sri:number, sci:number, eri:number, eci:number, w = 0, h = 0) {
+  static valueOf(ref: CellRef) {
+    // B1:B8, B1 => 1 x 1 cell range
+    const refs = ref.split(":");
+    const [sci, sri] = expr2xy(refs[0]);
+    let [eri, eci] = [sri, sci];
+    if (refs.length > 1) {
+      [eci, eri] = expr2xy(refs[1]);
+    }
+    return new CellRange(sri, sci, eri, eci);
+  }
+
+  constructor(
+    sri: number,
+    sci: number,
+    eri: number,
+    eci: number,
+    w = 0,
+    h = 0
+  ) {
     this.sri = sri;
     this.sci = sci;
     this.eri = eri;
@@ -26,7 +44,7 @@ class CellRange {
     this.h = h;
   }
 
-  set(sri:number, sci:number, eri:number, eci:number) {
+  set(sri: number, sci: number, eri: number, eci: number) {
     this.sri = sri;
     this.sci = sci;
     this.eri = eri;
@@ -39,23 +57,22 @@ class CellRange {
 
   // cell-index: ri, ci
   // cell-ref: A10
-  includes(...args:[CellRef]|[number,number]) {
+  includes(...args: [CellRef] | [number, number]) {
     let [ri, ci] = [0, 0];
     if (args.length === 1) {
       [ci, ri] = expr2xy(args[0]);
     } else if (args.length === 2) {
       [ri, ci] = args;
     }
-    const {
-      sri, sci, eri, eci,
-    } = this;
+    const { sri, sci, eri, eci } = this;
     return sri <= ri && ri <= eri && sci <= ci && ci <= eci;
   }
 
-  each(cb:Function, rowFilter:(i:number)=>boolean = () => true) {
-    const {
-      sri, sci, eri, eci,
-    } = this;
+  each(
+    cb: (i: number, j: number) => void,
+    rowFilter: (i: number) => boolean = () => true
+  ) {
+    const { sri, sci, eri, eci } = this;
     for (let i = sri; i <= eri; i += 1) {
       if (rowFilter(i)) {
         for (let j = sci; j <= eci; j += 1) {
@@ -65,47 +82,53 @@ class CellRange {
     }
   }
 
-  contains(other:CellRangePoints) {
-    return this.sri <= other.sri
-      && this.sci <= other.sci
-      && this.eri >= other.eri
-      && this.eci >= other.eci;
+  contains(other: CellRangePoints) {
+    return (
+      this.sri <= other.sri &&
+      this.sci <= other.sci &&
+      this.eri >= other.eri &&
+      this.eci >= other.eci
+    );
   }
 
   // within
-  within(other:CellRangePoints) {
-    return this.sri >= other.sri
-      && this.sci >= other.sci
-      && this.eri <= other.eri
-      && this.eci <= other.eci;
+  within(other: CellRangePoints) {
+    return (
+      this.sri >= other.sri &&
+      this.sci >= other.sci &&
+      this.eri <= other.eri &&
+      this.eci <= other.eci
+    );
   }
 
   // disjoint
-  disjoint(other:CellRangePoints) {
-    return this.sri > other.eri
-      || this.sci > other.eci
-      || other.sri > this.eri
-      || other.sci > this.eci;
+  disjoint(other: CellRangePoints) {
+    return (
+      this.sri > other.eri ||
+      this.sci > other.eci ||
+      other.sri > this.eri ||
+      other.sci > this.eci
+    );
   }
 
   // intersects
-  intersects(other:CellRangePoints) {
-    return this.sri <= other.eri
-      && this.sci <= other.eci
-      && other.sri <= this.eri
-      && other.sci <= this.eci;
+  intersects(other: CellRangePoints) {
+    return (
+      this.sri <= other.eri &&
+      this.sci <= other.eci &&
+      other.sri <= this.eri &&
+      other.sci <= this.eci
+    );
   }
 
   // union
-  union(other:CellRangePoints) {
-    const {
-      sri, sci, eri, eci,
-    } = this;
+  union(other: CellRangePoints) {
+    const { sri, sci, eri, eci } = this;
     return new CellRange(
       other.sri < sri ? other.sri : sri,
       other.sci < sci ? other.sci : sci,
       other.eri > eri ? other.eri : eri,
-      other.eci > eci ? other.eci : eci,
+      other.eci > eci ? other.eci : eci
     );
   }
 
@@ -114,14 +137,12 @@ class CellRange {
 
   // Returns Array<CellRange> that represents that part of this that does not intersect with other
   // difference
-  difference(other:CellRangePoints) {
-    const ret:CellRange[] = [];
-    const addRet = (sri:number, sci:number, eri:number, eci:number) => {
+  difference(other: CellRangePoints) {
+    const ret: CellRange[] = [];
+    const addRet = (sri: number, sci: number, eri: number, eci: number) => {
       ret.push(new CellRange(sri, sci, eri, eci));
     };
-    const {
-      sri, sci, eri, eci,
-    } = this;
+    const { sri, sci, eri, eci } = this;
     const dsr = other.sri - sri;
     const dsc = other.sci - sci;
     const der = eri - other.eri;
@@ -184,16 +205,11 @@ class CellRange {
   }
 
   size() {
-    return [
-      this.eri - this.sri + 1,
-      this.eci - this.sci + 1,
-    ];
+    return [this.eri - this.sri + 1, this.eci - this.sci + 1];
   }
 
-  toString():CellRef {
-    const {
-      sri, sci, eri, eci,
-    } = this;
+  toString(): CellRef {
+    const { sri, sci, eri, eci } = this;
     let ref = xy2expr(sci, sri);
     if (this.multiple()) {
       ref = `${ref}:${xy2expr(eci, eri)}`;
@@ -202,9 +218,7 @@ class CellRange {
   }
 
   clone() {
-    const {
-      sri, sci, eri, eci, w, h,
-    } = this;
+    const { sri, sci, eri, eci, w, h } = this;
     return new CellRange(sri, sci, eri, eci, w, h);
   }
 
@@ -214,27 +228,12 @@ class CellRange {
   }
   */
 
-  equals(other:CellRangePoints) {
-    return this.eri === other.eri
-      && this.eci === other.eci
-      && this.sri === other.sri
-      && this.sci === other.sci;
-  }
-
-  static valueOf(ref:CellRef) {
-    // B1:B8, B1 => 1 x 1 cell range
-    const refs = ref.split(':');
-    const [sci, sri] = expr2xy(refs[0]);
-    let [eri, eci] = [sri, sci];
-    if (refs.length > 1) {
-      [eci, eri] = expr2xy(refs[1]);
-    }
-    return new CellRange(sri, sci, eri, eci);
+  equals(other: CellRangePoints) {
+    return (
+      this.eri === other.eri &&
+      this.eci === other.eci &&
+      this.sri === other.sri &&
+      this.sci === other.sci
+    );
   }
 }
-
-export default CellRange;
-
-export {
-  CellRange,
-};
