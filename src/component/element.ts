@@ -285,6 +285,7 @@ class Element<T extends HTMLElement> {
   // css( propertyName )
   // css( propertyName, value )
   // css( properties )
+  css(name: string, value: string):this
   css(name: string, value?: string) {
     if (value === undefined && typeof name !== "string") {
       (Object.keys(name) as (keyof CSSStyleDeclaration)[]).forEach((k) => {
