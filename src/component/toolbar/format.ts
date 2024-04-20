@@ -1,14 +1,19 @@
-import DropdownItem from './dropdown_item';
-import DropdownFormat from '../dropdown_format';
+import DropdownItem from "./dropdown_item";
+import DropdownFormat from "../dropdown_format";
 
 export default class Format extends DropdownItem<DropdownFormat> {
   constructor() {
-    super('format');
+    super("format");
   }
 
-  getValue(it:unknown):string {
-    if(!it || typeof it !== "object" ||  !('key' in it) || typeof it.key !=="string" ){
-      throw new Error("Expected Format name")
+  getValue(it: unknown): string {
+    if (
+      !it ||
+      typeof it !== "object" ||
+      !("key" in it) ||
+      typeof it.key !== "string"
+    ) {
+      throw new Error("Expected Format name");
     }
     return it.key;
   }

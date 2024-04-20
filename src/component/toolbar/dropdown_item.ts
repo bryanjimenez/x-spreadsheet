@@ -1,13 +1,13 @@
-import type Dropdown from '../dropdown';
-import Item from './item';
+import type Dropdown from "../dropdown";
+import Item from "./item";
 
-export default class DropdownItem<T extends Dropdown > extends Item {
+export default class DropdownItem<T extends Dropdown> extends Item {
   //DropdownFormat|DropdownFont|DropdownFontSize|DropdownColor|DropdownBorder|DropdownAlign|DropdownFormula|DropdownMore
-  declare dd:T
+  declare dd: T;
   //@ts-expect-error overriding signature
-  dropdown():T {}
+  dropdown(): T {}
 
-  getValue(v:unknown) {
+  getValue(v: unknown) {
     // dropdown value (color, alignment, etc.)
     // { mode:BorderType, style:string, color:string }
     // if(typeof v !=="string"){
@@ -20,13 +20,13 @@ export default class DropdownItem<T extends Dropdown > extends Item {
     const { tag } = this;
     // this.dropdown is from inherited subobject's
     this.dd = this.dropdown();
-    this.dd.change = (it:unknown) => this.change(tag, this.getValue(it));
-    return super.element().child(
-      this.dd,
-    );
+    this.dd.change = (it: unknown) => {
+      this.change(tag, this.getValue(it));
+    };
+    return super.element().child(this.dd);
   }
 
-  setState(v:string) {
+  setState(v: string) {
     if (v) {
       this.value = v;
       this.dd.setTitle(v);
