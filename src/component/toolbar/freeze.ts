@@ -1,7 +1,7 @@
-import ToggleItem from './toggle_item';
+import ToggleItem from "./toggle_item";
 
 export default class Freeze extends ToggleItem {
   constructor() {
-    super('freeze');
+    super("freeze");
   }
 }

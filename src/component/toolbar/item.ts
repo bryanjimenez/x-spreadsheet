@@ -9,7 +9,7 @@ export default class Item {
   shortcut?: string;
   value?: string;
   el: Element<HTMLDivElement>;
-  change: (...args:unknown[]) => void;
+  change: (...args: unknown[]) => void;
   // tooltip
   // tag: the subclass type
   // shortcut: shortcut key
@@ -17,7 +17,7 @@ export default class Item {
     this.tip = "";
     if (tag)
       this.tip = t(
-        `toolbar.${tag.replace(/-[a-z]/g, (c) => c[1].toUpperCase())}`
+        `toolbar.${tag.replace(/-[a-z]/gu, (c) => c[1].toUpperCase())}`
       );
     if (shortcut) this.tip += ` (${shortcut})`;
     this.tag = tag;
@@ -30,15 +30,13 @@ export default class Item {
   element() {
     const { tip } = this;
 
-    const el = 
-    h("div", `${cssPrefix}-toolbar-btn`)
+    const el = h("div", `${cssPrefix}-toolbar-btn`);
 
-    const handler:EventListener = (evt) => {
+    const handler: EventListener = (evt) => {
       if (this.tip && evt.target) tooltip(this.tip, evt.target);
-    }
+    };
 
-    el.on("mouseenter", handler)
-      .attr("data-tooltip", tip);
+    el.on("mouseenter", handler).attr("data-tooltip", tip);
 
     return el;
   }

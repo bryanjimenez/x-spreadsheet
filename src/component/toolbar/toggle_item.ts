@@ -7,15 +7,18 @@ export default class ToggleItem extends Item {
     return super
       .element()
       .child(new Icon(tag))
-      .on("click", () => this.click());
+      .on("click", () => {
+        this.click();
+      });
   }
 
   click() {
+    console.log("toggle item");
     this.change(this.tag, this.toggle());
   }
 
   setState(active?: boolean) {
-    if(typeof this.el === 'string' || !this.el){
+    if (typeof this.el === "string" || !this.el) {
       return null;
     }
 
@@ -23,7 +26,7 @@ export default class ToggleItem extends Item {
   }
 
   toggle() {
-    if(typeof this.el === 'string' || !this.el){
+    if (typeof this.el === "string" || !this.el) {
       return null;
     }
 
@@ -31,7 +34,7 @@ export default class ToggleItem extends Item {
   }
 
   active() {
-    if(typeof this.el === 'string' || !this.el){
+    if (typeof this.el === "string" || !this.el) {
       return null;
     }
     return this.el.hasClass("active");
