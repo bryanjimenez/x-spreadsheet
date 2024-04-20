@@ -1,6 +1,11 @@
 import Dropdown from "./dropdown";
 import { type Element, h } from "./element";
-import { type HTMLEvent, type HTMLInputEvent, bindClickoutside, unbindClickoutside } from "./event";
+import {
+  type HTMLEvent,
+  type HTMLInputEvent,
+  bindClickoutside,
+  unbindClickoutside,
+} from "./event";
 import FormInput from "./form_input";
 import Icon from "./icon";
 import { cssPrefix } from "../config";
@@ -8,18 +13,17 @@ import { cssPrefix } from "../config";
 // import { xtoast } from './message';
 import { tf } from "../locale/locale";
 import { type Offset } from "./selector";
-import { type DefaultSettings } from "../core/data_proxy";
 
 class DropdownMore extends Dropdown {
-  contentClick: Function
-  constructor(click:Function) {
+  contentClick: (index: number) => void;
+  constructor(click: (index: number) => void) {
     const icon = new Icon("ellipsis");
     super(icon, "auto", false, "top-left");
     this.contentClick = click;
   }
 
-  reset(items:string[]) {
-    const eles = items.map((it, i) =>
+  reset(items: string[]) {
+    const eles = items.map<Element<HTMLDivElement>>((it, i) =>
       h("div", `${cssPrefix}-item`)
         .css("width", "150px")
         .css("font-weight", "normal")
@@ -37,10 +41,9 @@ class DropdownMore extends Dropdown {
 
 const menuItems = [{ key: "delete", title: tf("contextmenu.deleteSheet") }];
 
-
 class ContextMenu {
   el: Element<HTMLDivElement>;
-  itemClick: Function;
+  itemClick: (key: string) => void;
 
   constructor() {
     this.el = h("div", `${cssPrefix}-contextmenu`)
@@ -50,7 +53,7 @@ class ContextMenu {
     this.itemClick = () => {};
   }
 
-  private buildMenuItem(item: typeof menuItems[0]) {
+  private buildMenuItem(item: (typeof menuItems)[0]) {
     return h("div", `${cssPrefix}-item`)
       .child(item.title())
       .on("click", () => {
@@ -58,7 +61,7 @@ class ContextMenu {
         this.hide();
       });
   }
-  
+
   private buildMenu() {
     return menuItems.map((it) => this.buildMenuItem(it));
   }
@@ -69,7 +72,7 @@ class ContextMenu {
     unbindClickoutside(el);
   }
 
-  setOffset(offset:Offset) {
+  setOffset(offset: Offset) {
     const { el } = this;
     el.offset(offset);
     el.show();
@@ -78,10 +81,10 @@ class ContextMenu {
 }
 
 class Bottombar {
-  addFunc?: Function
-  swapFunc: (index:number)=>void;
-  deleteFunc?: Function;
-  updateFunc: (index:number,value:string)=>void;
+  addFunc?: () => void;
+  swapFunc: (index: number) => void;
+  deleteFunc?: (key: string) => void;
+  updateFunc: (index: number, value: string) => void;
   dataNames: string[];
   activeEl: Element<HTMLElement> | null;
   deleteEl: Element<HTMLElement> | null;
@@ -92,12 +95,11 @@ class Bottombar {
   menuEl: Element<HTMLElement>;
   contextMenu: ContextMenu;
 
-
   constructor(
     addFunc = () => {},
-    swapFunc:(index:number)=>void = () => {},
+    swapFunc: (index: number) => void = () => {},
     deleteFunc = () => {},
-    updateFunc:(index:number,value:string)=>void = () => {}
+    updateFunc: (index: number, value: string) => void = () => {}
   ) {
     this.swapFunc = swapFunc;
     this.updateFunc = updateFunc;
@@ -105,7 +107,7 @@ class Bottombar {
     this.activeEl = null;
     this.deleteEl = null;
     this.items = [];
-    this.moreEl = new DropdownMore((i:number) => {
+    this.moreEl = new DropdownMore((i: number) => {
       this.clickSwap2(this.items[i]);
     });
     this.contextMenu = new ContextMenu();
@@ -122,14 +124,18 @@ class Bottombar {
       ))
     );
   }
-  addItem<T extends {mode?:string}>(name:string, active:boolean, options:T) {
+  addItem<T extends { mode?: string }>(
+    name: string,
+    active: boolean,
+    options: T
+  ) {
     this.dataNames.push(name);
     const item = h("li", active ? "active" : "").child(name);
     item
       .on("click", () => {
         this.clickSwap2(item);
       })
-      .on("contextmenu", ({target}:HTMLEvent) => {
+      .on("contextmenu", ({ target }: HTMLEvent) => {
         if (options.mode === "read") return;
         const { offsetLeft, offsetHeight } = target;
         this.contextMenu.setOffset({
@@ -143,7 +149,7 @@ class Bottombar {
         const v = item.html();
         const input = new FormInput("auto", "");
         input.val(v);
-        input.input.on("blur", ({ target }:HTMLInputEvent) => {
+        input.input.on("blur", ({ target }: HTMLInputEvent) => {
           const { value } = target;
           const nindex = this.dataNames.findIndex((it) => it === v);
           this.renameItem(nindex, value);
@@ -165,7 +171,7 @@ class Bottombar {
     this.moreEl.reset(this.dataNames);
   }
 
-  renameItem(index:number, value:string) {
+  renameItem(index: number, value: string) {
     this.dataNames.splice(index, 1, value);
     this.moreEl.reset(this.dataNames);
     this.items[index].html("").child(value);
@@ -183,7 +189,7 @@ class Bottombar {
 
   deleteItem() {
     const { activeEl, deleteEl } = this;
-    if (this.items.length > 1 && deleteEl!==null) {
+    if (this.items.length > 1 && deleteEl !== null) {
       const index = this.items.findIndex((it) => it === deleteEl);
       this.items.splice(index, 1);
       this.dataNames.splice(index, 1);
@@ -200,7 +206,7 @@ class Bottombar {
     return [-1];
   }
 
-  clickSwap2(item:Element<HTMLElement>) {
+  clickSwap2(item: Element<HTMLElement>) {
     const index = this.items.findIndex((it) => it === item);
     this.clickSwap(item);
     if (this.activeEl !== null) {
@@ -209,7 +215,7 @@ class Bottombar {
     this.swapFunc(index);
   }
 
-  clickSwap(item:Element<HTMLElement>) {
+  clickSwap(item: Element<HTMLElement>) {
     if (this.activeEl !== null) {
       this.activeEl.toggle();
     }

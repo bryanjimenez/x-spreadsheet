@@ -1,28 +1,30 @@
-import { type Element, h } from './element';
-import { bindClickoutside, unbindClickoutside } from './event';
-import { cssPrefix } from '../config';
-import { type Formula } from '../core/formula';
-
+import { type Element, h } from "./element";
+import { bindClickoutside, unbindClickoutside } from "./event";
+import { cssPrefix } from "../config";
+import { type Formula } from "../core/formula";
 
 export default class Suggest {
   filterItems: Element<HTMLDivElement>[];
   items: Formula[];
   el: Element<HTMLDivElement>;
-  itemClick: (arg: Formula)=>void;
+  itemClick: (arg: Formula) => void;
   // itemClick: (...arg:unknown[])=>void;
   itemIndex: number;
 
-  constructor(items: Formula[], itemClick:(arg: Formula)=>void, width = '200px') {
+  constructor(
+    items: Formula[],
+    itemClick: (arg: Formula) => void,
+    width = "200px"
+  ) {
     this.filterItems = [];
     this.items = items;
-    this.el = h('div', `${cssPrefix}-suggest`).css('width', width).hide();
+    this.el = h("div", `${cssPrefix}-suggest`).css("width", width).hide();
     this.itemClick = itemClick;
     this.itemIndex = -1;
   }
 
-  setOffset(v:Record<string,number>) {
-    this.el.cssRemoveKeys('top', 'bottom')
-      .offset(v);
+  setOffset(v: Record<string, number>) {
+    this.el.cssRemoveKeys("top", "bottom").offset(v);
   }
 
   hide() {
@@ -33,21 +35,21 @@ export default class Suggest {
     unbindClickoutside(this.el.parent());
   }
 
-  setItems(items:Formula[]) {
+  setItems(items: Formula[]) {
     this.items = items;
     // this.search('');
   }
 
-  search(word:string) {
+  search(word: string) {
     let { items } = this;
-    if (!/^\s*$/.test(word)) {
-      items = items.filter(it => it.key.startsWith(word.toUpperCase()));
+    if (!/^\s*$/u.test(word)) {
+      items = items.filter((it) => it.key.startsWith(word.toUpperCase()));
     }
 
     const filteredItems = items.map((it) => {
-      const item = h('div', `${cssPrefix}-item`)
+      const item = h("div", `${cssPrefix}-item`)
         .child(it.title())
-        .on('click.stop', () => {
+        .on("click.stop", () => {
           this.itemClick(it);
           this.hide();
         });
@@ -60,15 +62,21 @@ export default class Suggest {
     }
 
     const { el } = this;
-    el.html('').children(...filteredItems).show();
-    bindClickoutside(el.parent(), () => { this.hide(); });
+    el.html("")
+      .children(...filteredItems)
+      .show();
+    bindClickoutside(el.parent(), () => {
+      this.hide();
+    });
   }
 
-  bindInputEvents(input:Element<HTMLTextAreaElement>  ) {
-    input.on('keydown', (evt:KeyboardEvent) => this.inputKeydownHandler(evt));
+  bindInputEvents(input: Element<HTMLTextAreaElement>) {
+    input.on("keydown", (evt: KeyboardEvent) => {
+      this.inputKeydownHandler(evt);
+    });
   }
 
-  private inputKeydownHandler(evt:KeyboardEvent) {
+  private inputKeydownHandler(evt: KeyboardEvent) {
     const { keyCode } = evt;
     if (evt.ctrlKey) {
       evt.stopPropagation();
@@ -98,7 +106,7 @@ export default class Suggest {
     }
   }
 
-  private inputMovePrev(evt:Event) {
+  private inputMovePrev(evt: Event) {
     evt.preventDefault();
     evt.stopPropagation();
     const { filterItems } = this;
@@ -110,8 +118,8 @@ export default class Suggest {
     }
     filterItems[this.itemIndex].toggle();
   }
-  
-  private inputMoveNext(evt:Event) {
+
+  private inputMoveNext(evt: Event) {
     evt.stopPropagation();
     const { filterItems } = this;
     if (filterItems.length <= 0) return;
@@ -122,8 +130,8 @@ export default class Suggest {
     }
     filterItems[this.itemIndex].toggle();
   }
-  
-  private inputEnter(evt:KeyboardEvent) {
+
+  private inputEnter(evt: KeyboardEvent) {
     evt.preventDefault();
     const { filterItems } = this;
     if (filterItems.length <= 0) return;
