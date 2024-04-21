@@ -2,12 +2,11 @@
 /* global window */
 import { type Offset } from "./selector";
 
-
 class Element<T extends HTMLElement> {
   el: T;
   value?: string;
-  xclickoutside?: (evt:MouseEvent)=>void;
-  dataV: Record<string,string>;
+  xclickoutside?: (evt: MouseEvent) => void;
+  dataV: Record<string, string>;
 
   constructor(tag: string | Node | Element<T> | HTMLElement, className = "") {
     if (typeof tag === "string") {
@@ -19,9 +18,9 @@ class Element<T extends HTMLElement> {
     this.dataV = {};
   }
 
-  data(key:string, value:string): this
-  data(key:string): string
-  data(key: string, value?: string): this|string {
+  data(key: string, value: string): this;
+  data(key: string): string;
+  data(key: string, value?: string): this | string {
     if (value !== undefined) {
       this.dataV[key] = value;
       return this;
@@ -29,7 +28,7 @@ class Element<T extends HTMLElement> {
     return this.dataV[key];
   }
 
-  on<T extends Event>(eventNames: string, handler: ({target}:T)=>void) {
+  on<T extends Event>(eventNames: string, handler: ({ target }: T) => void) {
     const [fen, ...oen] = eventNames.split(".");
     let eventName = fen;
     if (
@@ -38,7 +37,7 @@ class Element<T extends HTMLElement> {
     ) {
       eventName = "DOMMouseScroll";
     }
-    this.el.addEventListener(eventName, (evt:Event) => {
+    this.el.addEventListener(eventName, (evt: Event) => {
       handler(evt);
       for (let i = 0; i < oen.length; i += 1) {
         const k = oen[i];
@@ -60,7 +59,7 @@ class Element<T extends HTMLElement> {
   /**
    * getOffset
    */
-  offset():{
+  offset(): {
     top: number;
     left: number;
     height: number;
@@ -68,9 +67,9 @@ class Element<T extends HTMLElement> {
   };
   /**
    * setOffset
-   * @param value 
+   * @param value
    */
-  offset(value: Offset):this;
+  offset(value: Offset): this;
   offset(value?: Offset) {
     if (value !== undefined) {
       const keys = Object.keys(value) as (keyof Offset)[];
@@ -88,7 +87,7 @@ class Element<T extends HTMLElement> {
     };
   }
 
-  scroll<T extends {left?:number, top?:number}>(v?:T) {
+  scroll<T extends { left?: number; top?: number }>(v?: T) {
     const { el } = this;
     if (v !== undefined) {
       if (v.left !== undefined) {
@@ -110,8 +109,8 @@ class Element<T extends HTMLElement> {
     return new Element(n);
   }
 
-  children():NodeListOf<ChildNode>
-  children(...eles: unknown[]):this
+  children(): NodeListOf<ChildNode>;
+  children(...eles: unknown[]): this;
   children(...eles: unknown[]) {
     if (arguments.length === 0) {
       return this.el.childNodes;
@@ -157,7 +156,6 @@ class Element<T extends HTMLElement> {
   */
 
   child(arg: unknown) {
-
     let ele = arg;
     if (typeof arg === "string") {
       ele = document.createTextNode(arg);
@@ -222,11 +220,11 @@ class Element<T extends HTMLElement> {
   // key, value
   // key
   // {k, v}...
-  attr(key: string ): string;
-  attr(key: Record<string,unknown>): this;
+  attr(key: string): string;
+  attr(key: Record<string, unknown>): this;
   attr(key: string, value: string): this;
   attr(key: string | Record<string, unknown>, value?: string) {
-    if (value !== undefined && typeof key === 'string') {
+    if (value !== undefined && typeof key === "string") {
       this.el.setAttribute(key, value);
     } else {
       if (typeof key === "string") {
@@ -244,8 +242,8 @@ class Element<T extends HTMLElement> {
     return this;
   }
 
-  html():string
-  html(content:string):this
+  html(): string;
+  html(content: string): this;
   html(content?: string) {
     if (content !== undefined) {
       this.el.innerHTML = content;
@@ -258,12 +256,12 @@ class Element<T extends HTMLElement> {
   /**
    * getValue
    */
-  val():string;
+  val(): string;
   /**
    * setValue
-   * @param v 
+   * @param v
    */
-  val(v:string):this;
+  val(v: string): this;
   // implementation
   val(v?: string) {
     if (v !== undefined) {
@@ -285,7 +283,7 @@ class Element<T extends HTMLElement> {
   // css( propertyName )
   // css( propertyName, value )
   // css( properties )
-  css(name: string, value: string):this
+  css(name: string, value: string): this;
   css(name: string, value?: string) {
     if (value === undefined && typeof name !== "string") {
       (Object.keys(name) as (keyof CSSStyleDeclaration)[]).forEach((k) => {
@@ -315,7 +313,9 @@ class Element<T extends HTMLElement> {
   }
 }
 
-const h = <T extends HTMLElement = HTMLDivElement>(tag: string | HTMLElement, className = "") =>
-  new Element<T>(tag, className);
+const h = <T extends HTMLElement = HTMLDivElement>(
+  tag: string | HTMLElement,
+  className = ""
+) => new Element<T>(tag, className);
 
 export { Element, h };
