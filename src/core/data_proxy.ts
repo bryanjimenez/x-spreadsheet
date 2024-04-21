@@ -19,9 +19,10 @@ import {
   type ToolBarChangeType,
 } from "../component/toolbar/index";
 import { type HAlign, type VAlign, type LineType } from "../canvas/draw";
-import type Validator from "./validator";
 import { type BorderType } from "../component/border_palette";
 import { SelectType } from "../component/form_select";
+import type Validator from "./validator";
+import { type OperatorType, type ValidatorType } from "./validator";
 
 interface BSS {
   top?: string[];
@@ -436,7 +437,16 @@ export default class DataProxy {
     return { ci: ci - 1, left, width };
   }
 
-  addValidation(mode: any, ref: any, validator: any) {
+  addValidation(
+    mode: any,
+    ref: any,
+    validator: {
+      type: ValidatorType;
+      required: boolean;
+      value: string;
+      operator: OperatorType;
+    }
+  ) {
     // console.log('mode:', mode, ', ref:', ref, ', validator:', validator);
     this.changeData(() => {
       this.validations.add(mode, ref, validator);
@@ -540,7 +550,7 @@ export default class DataProxy {
     this.clipboard.cut(this.selector.range);
   }
 
-  paste(what: CopyType = "all", error = (msg: string) => {}) {
+  paste(what: CopyType = "all", error = (_msg: string) => {}) {
     // console.log('sIndexes:', sIndexes);
     const { clipboard, selector } = this;
     if (clipboard.isClear()) return false;
@@ -704,15 +714,15 @@ export default class DataProxy {
           if (rn > 1) {
             for (let i = sci; i <= eci; i += 1) {
               const cell = rows.getCellOrNew(eri + 1, i);
-              cell.text = `=${value}(${xy2expr(i, sri)}:${xy2expr(i, eri)})`;
+              cell.text = `=${String(value)}(${xy2expr(i, sri)}:${xy2expr(i, eri)})`;
             }
           } else if (cn > 1) {
             const cell = rows.getCellOrNew(ri, eci + 1);
-            cell.text = `=${value}(${xy2expr(sci, ri)}:${xy2expr(eci, ri)})`;
+            cell.text = `=${String(value)}(${xy2expr(sci, ri)}:${xy2expr(eci, ri)})`;
           }
         } else {
           const cell = rows.getCellOrNew(ri, ci);
-          cell.text = `=${value}()`;
+          cell.text = `=${String(value)}()`;
         }
       } else {
         selector.range.each((ri: number, ci: number) => {
@@ -877,10 +887,10 @@ export default class DataProxy {
       height = rows.totalHeight();
     }
     if (ri >= 0 || ci >= 0) {
-      const merge = merges.getFirstIncludes(ri, ci);
-      if (merge) {
-        ri = merge.sri;
-        ci = merge.sci;
+      const m = merges.getFirstIncludes(ri, ci);
+      if (m) {
+        ri = m.sri;
+        ci = m.sci;
         ({ left, top, width, height } = this.cellRect(ri, ci));
       }
     }
@@ -1085,7 +1095,7 @@ export default class DataProxy {
     });
   }
 
-  scrollx(x: number, cb: () => void) {
+  scrollx(x: number, cbFn: () => void) {
     const { scroll, freeze, cols } = this;
     const [, fci] = freeze;
     const [ci, left, width] = rangeReduceIf(fci, cols.len, 0, 0, x, (i) =>
@@ -1097,11 +1107,11 @@ export default class DataProxy {
     if (scroll.x !== x1) {
       scroll.ci = x > 0 ? ci : 0;
       scroll.x = x1;
-      cb();
+      cbFn();
     }
   }
 
-  scrolly(y: number, cb: () => void) {
+  scrolly(y: number, cbFn: () => void) {
     const { scroll, freeze, rows } = this;
     const [fri] = freeze;
     const [ri, top, height] = rangeReduceIf(fri, rows.len, 0, 0, y, (i) =>
@@ -1113,7 +1123,7 @@ export default class DataProxy {
     if (scroll.y !== y1) {
       scroll.ri = y > 0 ? ri : 0;
       scroll.y = y1;
-      cb();
+      cbFn();
     }
   }
 
@@ -1172,7 +1182,7 @@ export default class DataProxy {
     const cell = rows.getCell(ri, ci);
     const cellStyle =
       cell && cell.style !== undefined ? styles[cell.style] : {};
-    return merge(this.defaultStyle(), cellStyle);
+    return merge<DefaultSettings["style"]>(this.defaultStyle(), cellStyle);
   }
 
   getSelectedCellStyle() {
@@ -1333,7 +1343,7 @@ export default class DataProxy {
   rowEach(
     min: number,
     max: number,
-    cb: (i: number, y: number, h: number) => void
+    cbFn: (i: number, y: number, h: number) => void
   ) {
     let y = 0;
     const { rows } = this;
@@ -1352,7 +1362,7 @@ export default class DataProxy {
       } else {
         const rowHeight = rows.getHeight(i);
         if (rowHeight > 0) {
-          cb(i, y, rowHeight);
+          cbFn(i, y, rowHeight);
           y += rowHeight;
           if (y > this.viewHeight()) break;
         }
@@ -1363,14 +1373,14 @@ export default class DataProxy {
   colEach(
     min: number,
     max: number,
-    cb: (i: number, x: number, w: number) => void
+    cbFn: (i: number, x: number, w: number) => void
   ) {
     let x = 0;
     const { cols } = this;
     for (let i = min; i <= max; i += 1) {
       const colWidth = cols.getWidth(i);
       if (colWidth > 0) {
-        cb(i, x, colWidth);
+        cbFn(i, x, colWidth);
         x += colWidth;
         if (x > this.viewWidth()) break;
       }
@@ -1392,9 +1402,9 @@ export default class DataProxy {
     return styles.length - 1;
   }
 
-  changeData(cb: () => void) {
+  changeData(cbFn: () => void) {
     this.history.add(this.getData());
-    cb();
+    cbFn();
     this.change(this.getData());
   }
 
@@ -1417,17 +1427,16 @@ export default class DataProxy {
           this.freeze = [y, x];
         }
       } else if (property === "autofilter") {
-        const {autofilter} = d
+        const { autofilter } = d;
 
-        if(
+        if (
           !Array.isArray(autofilter.filters) ||
           typeof autofilter.ref !== "string"
-        ){
+        ) {
           // throw new Error(`Expected autofilter init object ${JSON.stringify(autofilter)}`)
-          return this
+          return this;
         }
         this.autoFilter.setData(autofilter);
-        
       } else if (d[property] !== undefined) {
         this[property] = d[property];
       }
