@@ -17,7 +17,7 @@ interface BaseFormats {
   title: () => string;
   label?: string;
   type: "string" | "number" | "date";
-  render: Function;
+  render: (arg: any) => string;
 }
 
 export const baseFormats: BaseFormats[] = [
@@ -98,7 +98,7 @@ export const baseFormats: BaseFormats[] = [
   },
 ];
 
-export const formatm = baseFormats.reduce(
+export const formatm = baseFormats.reduce<Record<string, BaseFormats>>(
   (acc, f) => ({ ...acc, [f.key]: f }),
   {}
 );
