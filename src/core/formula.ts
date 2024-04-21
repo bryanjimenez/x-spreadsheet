@@ -5,7 +5,7 @@ import { numberCalc } from "./helper";
 // TODO: map key and render types
 export interface Formula {
   key: string;
-  title: (arg?:unknown)=>string;
+  title: (arg?: unknown) => string;
   render: Function;
   operator?: string;
 }
@@ -78,5 +78,7 @@ export const baseFormulas: Formula[] = [
   */
 ];
 
-export const formulam = baseFormulas.reduce<Record<string,Formula>>((acc,f)=>({...acc,[f.key]:f}),{});
-
+export const formulam = baseFormulas.reduce<Record<string, Formula>>(
+  (acc, f) => ({ ...acc, [f.key]: f }),
+  {}
+);

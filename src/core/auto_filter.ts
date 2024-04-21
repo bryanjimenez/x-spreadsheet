@@ -82,9 +82,9 @@ export default class AutoFilter {
     filters,
     sort,
   }: {
-    ref: AutoFilter['ref'];
-    filters: AutoFilter['filters'];
-    sort: AutoFilter['sort'];
+    ref: AutoFilter["ref"];
+    filters: AutoFilter["filters"];
+    sort: AutoFilter["sort"];
   }) {
     if (this.active()) {
       this.ref = ref;
@@ -213,9 +213,9 @@ export default class AutoFilter {
   }
 
   active() {
-    if(this.ref === undefined){
+    if (this.ref === undefined) {
       // TODO: initialized as undefined?
-      console.error("AutoFilter.ref === undefined")
+      console.error("AutoFilter.ref === undefined");
       return false;
     }
     return this.ref !== null;
