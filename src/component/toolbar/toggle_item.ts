@@ -13,7 +13,6 @@ export default class ToggleItem extends Item {
   }
 
   click() {
-    console.log("toggle item");
     this.change(this.tag, this.toggle());
   }
 
