@@ -157,7 +157,7 @@ export default tseslint.config(
   ...tseslint.configs.strictTypeChecked,
 
   {
-    ignores: [".*", "node_modules/", "dist/", "test/"],
+    ignores: [".*", "node_modules/", "dist/"],
   },
   {
     languageOptions: {
