@@ -94,7 +94,7 @@ interface CellOnEventCallbackMap {
   ) => void;
 }
 
-export default class Spreadsheet {
+export class Spreadsheet {
   options: Partial<DefaultSettings>;
   sheetIndex: number;
   datas: DataProxy[];
