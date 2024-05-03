@@ -13,7 +13,7 @@ import SortFilter from "./sort_filter";
 import Table from "./table";
 import Toolbar from "./toolbar/index";
 import { cssPrefix } from "../config";
-import { formulas } from "../core/formula";
+import { baseFormulas } from "../core/formula";
 import DataProxy from "../core/data_proxy";
 import { type ToolBarChangeType } from "./toolbar";
 import { type Operator } from "../core/auto_filter";
@@ -80,7 +80,7 @@ class Sheet {
     this.horizontalScrollbar = new Scrollbar(false);
     // editor
     this.editor = new Editor(
-      formulas,
+      baseFormulas,
       () => this.getTableOffset(),
       data.rows.height
     );
