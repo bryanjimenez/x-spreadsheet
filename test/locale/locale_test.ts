@@ -28,7 +28,7 @@ const localeTest2Messages = {
   },
 };
 
-describe("locale", () => {
+describe("[locale.ts](src/locale/locale.ts)", () => {
   describe(".t()", () => {
     it("should return an empty string when the value has no available translation", () => {
       assert.equal(t("something.not.defined"), "");

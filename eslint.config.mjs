@@ -30,6 +30,7 @@ const tooStrict = {
   "line-comment-position": "off",
   "no-negated-condition": "off",
   "no-undefined":"off",
+  "func-names": "off",
 }
 
 /** Warn these, don't show as error */
