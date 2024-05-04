@@ -1,4 +1,4 @@
-import Validator, { type OperatorType, type ValidatorType } from "./validator";
+import { Validator, type OperatorType, type ValidatorType } from "./validator";
 import { CellRange } from "./cell_range";
 import { SelectType } from "../component/form_select";
 

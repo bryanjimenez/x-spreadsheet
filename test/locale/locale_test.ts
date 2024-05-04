@@ -5,6 +5,7 @@ import { locale, t, tf } from "../../src/locale/locale";
 // Add window global if it doesn't exist
 // Some tests depend on this global variable's existence
 if (typeof window === "undefined") {
+  //@ts-expect-error
   global.window = {};
 }
 
@@ -81,6 +82,7 @@ describe("[locale.ts](src/locale/locale.ts)", () => {
 
       // Depends on existence of window global variable
       // Supply a fallback locale test 2 message dictionary (from locale test 1)
+      //@ts-expect-error x_spreadsheet does not exist in window
       window.x_spreadsheet = {
         $messages: {
           TEST_2: localeTest1Messages,

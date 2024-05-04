@@ -5,7 +5,7 @@ export default class Scrollbar {
   el: Element<HTMLDivElement>;
   contentEl: Element<HTMLDivElement>;
   vertical: boolean;
-  moveFn: (arg: unknown) => void;
+  moveFn: ((arg: number, ...arg1: unknown[]) => void) | null;
 
   constructor(vertical: boolean) {
     this.vertical = vertical;

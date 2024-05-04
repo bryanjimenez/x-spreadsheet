@@ -5,7 +5,7 @@ import Datepicker from "./datepicker";
 import { cssPrefix } from "../config";
 import { type Formula } from "../core/formula";
 import { type CellData } from "..";
-import type Validator from "../core/validator";
+import { type Validator } from "../core/validator";
 
 function dateFormat(d: Date) {
   const month = d.getMonth() + 1;
@@ -321,13 +321,13 @@ export default class Editor {
     }
   }
 
-  setCell(cell: CellData, validator: Validator) {
+  setCell(cell?: CellData, validator?: Validator) {
     if (cell && cell.editable === false) return;
 
     // console.log('::', validator);
     const { el, datepicker, suggest } = this;
     el.show();
-    this.cell = cell;
+    this.cell = cell ?? null;
     const text = (cell && cell.text) || "";
     this.setText(text);
 

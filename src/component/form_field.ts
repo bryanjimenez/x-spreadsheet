@@ -1,13 +1,17 @@
 import { type Element, h } from "./element";
 import { cssPrefix } from "../config";
 import { t } from "../locale/locale";
-import type FormInput from "./form_input";
+import FormInput from "./form_input";
 import type FormSelect from "./form_select";
 import { type ValidatorType } from "../core/validator";
 
 const patterns = {
-  number: /(^\d+$)|(^\d+(\.\d{0,4})?$)/,
-  date: /^\d{4}-\d{1,2}-\d{1,2}$/,
+  number: /(^\d+$)|(^\d+(\.\d{0,4})?$)/u,
+  date: /^\d{4}-\d{1,2}-\d{1,2}$/u,
+  // unused, but valid ValidatorType
+  list: { test: () => false },
+  phone: { test: () => false },
+  email: { test: () => false },
 };
 
 export interface Rule {
@@ -18,7 +22,7 @@ export interface Rule {
 
 // rule: { required: false, type, pattern: // }
 export default class FormField {
-  label: string;
+  label: string | Element<HTMLElement>;
   rule: Rule;
   tip: Element<HTMLDivElement>;
   input: FormSelect | FormInput;
@@ -34,7 +38,7 @@ export default class FormField {
     this.rule = rule;
     if (label) {
       this.label = h("label", "label")
-        .css("width", `${labelWidth}px`)
+        .css("width", `${String(labelWidth)}px`)
         .html(label);
     }
     this.tip = h("div", "tip").child("tip").hide();
@@ -62,7 +66,7 @@ export default class FormField {
   /** setVal */
   val(v: string): Element<HTMLInputElement>;
   val(v?: string) {
-    let o;
+    let o
     if (v === undefined) {
       o = this.input.val();
     } else {
@@ -73,7 +77,9 @@ export default class FormField {
   }
 
   hint(hint: string) {
-    this.input.hint(hint);
+    if (this.input instanceof FormInput) {
+      this.input.hint(hint);
+    }
   }
 
   validate() {
@@ -86,14 +92,17 @@ export default class FormField {
         return false;
       }
     }
-    if (rule.type || rule.pattern) {
-      const pattern = rule.pattern ?? patterns[rule.type];
-      if (!pattern.test(v)) {
-        tip.html(t("validation.notMatch"));
-        el.addClass("error");
-        return false;
-      }
+
+    const primary = rule.pattern;
+    const secondary = rule.type && patterns[rule.type];
+    const pattern = primary ?? secondary;
+
+    if (pattern !== undefined && !pattern.test(v)) {
+      tip.html(t("validation.notMatch"));
+      el.addClass("error");
+      return false;
     }
+
     el.removeClass("error");
     return true;
   }

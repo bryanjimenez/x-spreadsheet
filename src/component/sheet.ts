@@ -582,8 +582,8 @@ class Sheet {
   private selectorMove(multiple: boolean, direction: Direction) {
     const { selector, data } = this;
     const { rows, cols } = data;
-    let [ri, ci] = selector.indexes;
-    const { eri, eci } = selector.range;
+    let [ri, ci] = selector.indexes ?? [];
+    const { eri, eci } = selector.range ?? {};
     if (multiple) {
       if (selector.moveIndexes === undefined) {
         throw new Error("Expected moveIndexes row and column");
@@ -592,15 +592,15 @@ class Sheet {
     }
     // console.log('selector.move:', ri, ci);
     if (direction === "left") {
-      if (ci > 0) ci -= 1;
+      if (ci && ci > 0) ci -= 1;
     } else if (direction === "right") {
       if (eci !== ci) ci = eci;
-      if (ci < cols.len - 1) ci += 1;
+      if (ci && ci < cols.len - 1) ci += 1;
     } else if (direction === "up") {
-      if (ri > 0) ri -= 1;
+      if (ri && ri > 0) ri -= 1;
     } else if (direction === "down") {
       if (eri !== ri) ri = eri;
-      if (ri < rows.len - 1) ri += 1;
+      if (ri && ri < rows.len - 1) ri += 1;
     } else if (direction === "row-first") {
       ci = 0;
     } else if (direction === "row-last") {
@@ -610,7 +610,7 @@ class Sheet {
     } else if (direction === "col-last") {
       ri = rows.len - 1;
     }
-    if (multiple) {
+    if (multiple && ri && ci) {
       selector.moveIndexes = [ri, ci];
     }
     this.selectorSet(multiple, ri, ci);
@@ -1011,8 +1011,8 @@ class Sheet {
   ) {
     const { ri } = cRect;
     const { table, selector, data } = this;
-    const { sri, eri } = selector.range;
-    if (ri >= sri && ri <= eri) {
+    const { sri, eri } = selector.range ?? {};
+    if (sri && eri && ri >= sri && ri <= eri) {
       for (let row = sri; row <= eri; row += 1) {
         data.rows.setHeight(row, distance);
       }
@@ -1032,8 +1032,8 @@ class Sheet {
   ) {
     const { ci } = cRect;
     const { table, selector, data } = this;
-    const { sci, eci } = selector.range;
-    if (ci >= sci && ci <= eci) {
+    const { sci, eci } = selector.range ?? {};
+    if (sci && eci && ci >= sci && ci <= eci) {
       for (let col = sci; col <= eci; col += 1) {
         data.cols.setWidth(col, distance);
       }

@@ -252,15 +252,7 @@ class Element<T extends HTMLElement> {
     return this.el.innerHTML;
   }
 
-  // overload function signatures
-  /**
-   * getValue
-   */
   val(): string;
-  /**
-   * setValue
-   * @param v
-   */
   val(v: string): this;
   // implementation
   val(v?: string) {
@@ -283,6 +275,7 @@ class Element<T extends HTMLElement> {
   // css( propertyName )
   // css( propertyName, value )
   // css( properties )
+  css(name: string): string;
   css(name: string, value: string): this;
   css(name: string, value?: string) {
     if (value === undefined && typeof name !== "string") {

@@ -6,7 +6,7 @@ import Button from "./button";
 import { t } from "../locale/locale";
 import { h } from "./element";
 import { cssPrefix } from "../config";
-import Validator, { type OperatorType, ValidatorType } from "../core/validator";
+import { Validator, type OperatorType, ValidatorType } from "../core/validator";
 import { type CellRef } from "../core/cell_range";
 
 const fieldLabelWidth = 100;
@@ -36,7 +36,7 @@ export default class ModalValidation extends Modal {
     );
     const rf = new FormField(new FormInput("120px", "E3 or E3:F12"), {
       required: true,
-      pattern: /^([A-Z]{1,2}[1-9]\d*)(:[A-Z]{1,2}[1-9]\d*)?$/,
+      pattern: /^([A-Z]{1,2}[1-9]\d*)(:[A-Z]{1,2}[1-9]\d*)?$/u,
     });
     const cf = new FormField(
       new FormSelect(
@@ -116,7 +116,9 @@ export default class ModalValidation extends Modal {
   showVf(it: ValidatorType) {
     const hint = it === "date" ? "2018-11-12" : "10";
     const { vf } = this;
-    vf.input.hint(hint);
+    if (vf.input instanceof FormInput) {
+      vf.input.hint(hint);
+    }
     vf.show();
   }
 
@@ -150,7 +152,7 @@ export default class ModalValidation extends Modal {
     }
   }
 
-  criteriaOperatorSelected(it: OperatorType) {
+  criteriaOperatorSelected(it?: OperatorType) {
     if (!it) return;
     const { minvf, maxvf, vf } = this;
     if (it === "be" || it === "nbe") {

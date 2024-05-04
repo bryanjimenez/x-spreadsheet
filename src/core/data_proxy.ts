@@ -21,8 +21,11 @@ import {
 import { type HAlign, type VAlign, type LineType } from "../canvas/draw";
 import { type BorderType } from "../component/border_palette";
 import { SelectType } from "../component/form_select";
-import type Validator from "./validator";
-import { type OperatorType, type ValidatorType } from "./validator";
+import {
+  type Validator,
+  type OperatorType,
+  type ValidatorType,
+} from "./validator";
 
 interface BSS {
   top?: string[];
@@ -463,7 +466,7 @@ export default class DataProxy {
   getSelectedValidator() {
     const { ri, ci } = this.selector;
     const v = this.validations.get(ri, ci);
-    return v ? v.validator : null;
+    return v ? v.validator : undefined;
   }
 
   getSelectedValidation() {
@@ -797,7 +800,7 @@ export default class DataProxy {
         nri = value;
       }
     }
-    return this.rows.getCell(nri, ci);
+    return this.rows.getCell(nri, ci) ?? undefined;
   }
 
   xyInSelectedRect(x: number, y: number) {
