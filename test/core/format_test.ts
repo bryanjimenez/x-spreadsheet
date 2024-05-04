@@ -14,8 +14,17 @@ describe("formatm", () => {
     it("number: should return 11,000.20 when the value is 11000.20", () => {
       assert.equal(gformats.number.render("11000.20"), "11,000.20");
     });
-    it("number: should return 110,00.20 (NOT MODIFIED when encounter ileagal input) when the value is 110,00.20", () => {
+    it("number: should return 110,00.20 (NOT MODIFIED when encounter illeagal input) when the value is 110,00.20", () => {
       assert.equal(gformats.number.render("110,00.20"), "110,00.20");
+    });
+    it("number: returns 110.00 when input is 110", () => {
+      assert.equal(gformats.number.render("110"), "110.00");
+    });
+    it("number: returns -110.00 when input is -110", () => {
+      assert.equal(gformats.number.render("-110"), "-110.00");
+    });
+    it("number: returns 1,234,567,890.00 when input is 1234567890", () => {
+      assert.equal(gformats.number.render("1234567890"), "1,234,567,890.00");
     });
     it("percent: should return 50.456% when the value is 50.456", () => {
       assert.equal(gformats.percent.render("50.456"), "50.456%");

@@ -1,4 +1,4 @@
-import { CellRange, type CellRangePoints } from "./cell_range";
+import { CellRange } from "./cell_range";
 
 export class Merges {
   _: CellRange[];
@@ -7,11 +7,11 @@ export class Merges {
     this._ = d;
   }
 
-  forEach(cb: (...arg: unknown[]) => void) {
+  forEach(cb: (cr: CellRange, ...arg: unknown[]) => void) {
     this._.forEach(cb);
   }
 
-  deleteWithin(cr: CellRangePoints) {
+  deleteWithin(cr: CellRange) {
     this._ = this._.filter((it) => !it.within(cr));
   }
 
@@ -25,11 +25,11 @@ export class Merges {
     return null;
   }
 
-  filterIntersects(cellRange: CellRangePoints) {
+  filterIntersects(cellRange: CellRange) {
     return new Merges(this._.filter((it) => it.intersects(cellRange)));
   }
 
-  intersects(cellRange: CellRangePoints) {
+  intersects(cellRange: CellRange) {
     for (let i = 0; i < this._.length; i += 1) {
       const it = this._[i];
       if (it.intersects(cellRange)) {
@@ -40,7 +40,7 @@ export class Merges {
     return false;
   }
 
-  union(cellRange: CellRangePoints) {
+  union(cellRange: CellRange) {
     let cr = cellRange;
     this._.forEach((it) => {
       if (it.intersects(cr)) {
@@ -50,7 +50,7 @@ export class Merges {
     return cr;
   }
 
-  add(cr: CellRangePoints) {
+  add(cr: CellRange) {
     this.deleteWithin(cr);
     this._.push(cr);
   }
@@ -85,7 +85,7 @@ export class Merges {
     });
   }
 
-  move(cellRange: CellRangePoints, rn: number, cn: number) {
+  move(cellRange: CellRange, rn: number, cn: number) {
     this._.forEach((it1) => {
       const it = it1;
       if (it.within(cellRange)) {

@@ -25,7 +25,7 @@ export default class FormSelect {
     key: SelectType,
     items: string[],
     width: string,
-    getTitle: (it: unknown) => string = (it) => it,
+    getTitle: (it: unknown) => string = (it: unknown) => it as string,
     change: (...arg: unknown[]) => void = () => {}
   ) {
     this.key = key;

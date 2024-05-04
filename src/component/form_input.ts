@@ -9,7 +9,7 @@ export default class FormInput {
   constructor(width: string, hint: string) {
     this.vchange = () => {};
     this.el = h("div", `${cssPrefix}-form-input`);
-    this.input = h("input", "")
+    this.input = h<HTMLInputElement>("input", "")
       .css("width", width)
       .on("input", (evt: Event) => {
         this.vchange(evt);

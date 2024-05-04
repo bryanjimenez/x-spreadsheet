@@ -49,16 +49,15 @@ describe("fonts()", () => {
     assert.equal(f[fontItem.key], fontItem);
   });
 
-  /** @type {BaseFont} */
   const appendItem = [
     {
       key: "test",
       title: "test title",
     },
   ];
-  const appendItems = [appendItem];
-  it(`should include { ${appendItems[0].key}: ${JSON.stringify(appendItems[0])} } when the value is ${JSON.stringify(appendItems)}`, () => {
-    const f = fonts(appendItems);
-    assert.equal(f[appendItem.key], appendItem);
+  it(`should include { ${appendItem[0].key}: ${JSON.stringify(appendItem[0])} } when the value is ${JSON.stringify(appendItem)}`, () => {
+    const f = fonts(appendItem);
+    assert.equal(Object.keys(f).length, baseFonts.length + 1)
+    assert.equal(f[appendItem[0].key], appendItem[0]);
   });
 });

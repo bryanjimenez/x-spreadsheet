@@ -6,7 +6,7 @@ import { formatm } from "../core/format";
 
 import { Draw, DrawBox, thinLineWidth, npx } from "../canvas/draw";
 import type DataProxy from "../core/data_proxy";
-import { type CellRange } from "../core/cell_range";
+import { CellRangePoints, type CellRange } from "../core/cell_range";
 
 // gobal var
 const cellPaddingWidth = 5;
@@ -198,18 +198,15 @@ class Table {
     const rset = new Set();
     draw.save();
     draw.translate(0, -exceptRowTotalHeight);
-    data.eachMergesInView(
-      viewRange,
-      ({ sri, sci, eri }: { sri: number; sci: number; eri: number }) => {
-        if (!exceptRowSet.has(sri)) {
-          renderCell(draw, data, sri, sci);
-        } else if (!rset.has(sri)) {
-          rset.add(sri);
-          const height = data.rows.sumHeight(sri, eri + 1);
-          draw.translate(0, -height);
-        }
+    data.eachMergesInView(viewRange, ({ sri, sci, eri }: CellRangePoints) => {
+      if (!exceptRowSet.has(sri)) {
+        renderCell(draw, data, sri, sci);
+      } else if (!rset.has(sri)) {
+        rset.add(sri);
+        const height = data.rows.sumHeight(sri, eri + 1);
+        draw.translate(0, -height);
       }
-    );
+    });
     draw.restore();
 
     // 3 render autofilter

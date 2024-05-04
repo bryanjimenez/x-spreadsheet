@@ -70,7 +70,7 @@ export function equals<T extends object>(obj1: T, obj2: T) {
   objOrAry: obejct or Array
   cb: (value, index | key) => { return value }
 */
-function sum(
+export function sum(
   objOrAry: Record<string, number> | number[],
   cb = (value: number, index?: string) => value
 ) {

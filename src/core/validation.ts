@@ -170,7 +170,7 @@ export class Validations {
   setData(
     d: {
       refs: string[];
-      mode: string;
+      mode: SelectType;
       type: ValidatorType;
       required: boolean;
       value: string;

@@ -1312,7 +1312,7 @@ export default class DataProxy {
 
   eachMergesInView(
     viewRange: CellRangePoints,
-    cb: (...arg: unknown[]) => void
+    cb: (cr: CellRange, ...arg: unknown[]) => void
   ) {
     this.merges.filterIntersects(viewRange).forEach((it) => {
       cb(it);

@@ -1,5 +1,6 @@
 import DropdownItem from "./dropdown_item";
 import DropdownFontsize from "../dropdown_fontsize";
+import { isNumber } from "../../core/helper";
 
 export default class Format extends DropdownItem<DropdownFontsize> {
   constructor() {
@@ -10,7 +11,11 @@ export default class Format extends DropdownItem<DropdownFontsize> {
     if (!it || typeof it !== "object" || !("pt" in it)) {
       throw new Error("Expected font pt");
     }
-    return it.pt;
+    const size = it.pt;
+    if (!isNumber(size)) {
+      throw new Error("Expected size to be a number");
+    }
+    return size;
   }
 
   dropdown() {

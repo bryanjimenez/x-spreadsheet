@@ -117,20 +117,20 @@ describe("cell", () => {
         cell.render(
           "=SUM(A1,B2, C1, C5) + 50 + B20",
           formulam,
-          (x, y) => x + y
+          (x:number, y:number) => x + y
         ),
         0 + 2 + 2 + 6 + 50 + 20
       );
     });
     it("should return 50 + 20 when the value is =50 + B20", () => {
       assert.equal(
-        cell.render("=50 + B20", formulam, (x, y) => x + y),
+        cell.render("=50 + B20", formulam, (x:number, y:number) => x + y),
         50 + 20
       );
     });
     it("should return 2 when the value is =IF(2>1, 2, 1)", () => {
       assert.equal(
-        cell.render("=IF(2>1, 2, 1)", formulam, (x, y) => x + y),
+        cell.render("=IF(2>1, 2, 1)", formulam, (x:number, y:number) => x + y),
         2
       );
     });
@@ -139,7 +139,7 @@ describe("cell", () => {
         cell.render(
           "=AVERAGE(A1:A3) + 50 * 10 - B20",
           formulam,
-          (x, y) =>
+          (x:number, y:number) =>
             // console.log('x:', x, ', y:', y);
             x + y
         ),
@@ -149,7 +149,7 @@ describe("cell", () => {
     it('should return 78e731027d8fd50ed642340b7c9a63b3 when =MD5("message")', () => {
       const expected = "78e731027d8fd50ed642340b7c9a63b3";
       assert.equal(
-        cell.render('=MD5("message")', formulam, (x, y) => {}),
+        cell.render('=MD5("message")', formulam, (x:number, y:number) => {}),
         expected
       );
     });

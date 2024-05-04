@@ -213,8 +213,6 @@ export default class ModalValidation extends Modal {
   }
 
   setValue(v: { mode?: SelectType; ref: CellRef; validator?: Validator }) {
-    console.log("setValue");
-    console.log(v);
     if (v) {
       const { mf, rf, cf, of, svf, vf, minvf, maxvf } = this;
       const { mode, ref, validator } = v;
