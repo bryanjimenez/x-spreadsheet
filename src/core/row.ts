@@ -402,7 +402,7 @@ class Rows {
   getExportData() {
     const { len } = this;
 
-    const data = { len, ...this._ };
+    const data:RowList = { len, ...this._ };
 
     // Find all formulas and set 'text' to formula rendered val
     Object.keys(this._).forEach((ri) => {

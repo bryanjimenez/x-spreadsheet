@@ -12,7 +12,7 @@ const formatNumberRender = (v: string) => {
   return v;
 };
 
-interface BaseFormats {
+export interface BaseFormats {
   key: string;
   title: () => string;
   label?: string;
