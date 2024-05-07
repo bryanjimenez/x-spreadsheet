@@ -6,6 +6,7 @@ import {
   merge,
   numberCalc,
   sum,
+  rangeReduceIf,
 } from "../../src/core/helper";
 
 describe("[helper.ts](./src/core/helper.ts)", () => {
@@ -116,6 +117,48 @@ describe("[helper.ts](./src/core/helper.ts)", () => {
 
     it("'a' : false", function () {
       assert.equal(isNumber("a"), false);
+    });
+  });
+  describe(".rangeReduceIf()", function () {
+    describe("uniform row height", function () {
+      const uniformRowHeight = 35;
+
+      const rows = { len: 1000, getHeight: (_i: number) => uniformRowHeight };
+
+      it("no freeze", function () {
+        const freeze = 0;
+        const yScroll = 350;
+
+        const [ri, top, height] = rangeReduceIf(
+          freeze,
+          rows.len,
+          0,
+          0,
+          yScroll,
+          (i) => rows.getHeight(i)
+        );
+
+        assert.equal(ri, 10);
+        assert.equal(top, yScroll - uniformRowHeight);
+        assert.equal(height, uniformRowHeight);
+      });
+      it("with freeze", function () {
+        const freeze = 1;
+        const yScroll = 350;
+
+        const [ri, top, height] = rangeReduceIf(
+          freeze,
+          rows.len,
+          0,
+          0,
+          yScroll,
+          (i) => rows.getHeight(i)
+        );
+
+        assert.equal(ri, 11);
+        assert.equal(top, yScroll - uniformRowHeight);
+        assert.equal(height, uniformRowHeight);
+      });
     });
   });
 });

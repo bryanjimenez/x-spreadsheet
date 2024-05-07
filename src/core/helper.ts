@@ -104,7 +104,7 @@ export function rangeReduceIf(
   let v = initv;
   let i = min;
   for (; i < max; i += 1) {
-    if (s > ifv) break;
+    if (s >= ifv) break;
     v = getv(i);
     s += v;
   }

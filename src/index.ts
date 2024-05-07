@@ -123,8 +123,12 @@ export class Spreadsheet {
             this.sheet.resetData(d);
           },
           (index: number) => {
+            // bottom-bar on sheet change handler
             const d = this.datas[index];
             this.sheet.resetData(d);
+
+            this.sheet.verticalScrollbar.move({ top: d.scroll.y });
+            this.sheet.horizontalScrollbar.move({ left: d.scroll.x });
           },
           () => {
             this.deleteSheet();

@@ -5,7 +5,8 @@ export default class Scrollbar {
   el: Element<HTMLDivElement>;
   contentEl: Element<HTMLDivElement>;
   vertical: boolean;
-  moveFn: ((arg: number, ...arg1: unknown[]) => void) | null;
+  /** Callback after move */
+  moveFn: ((distance: number, ...arg1: unknown[]) => void) | null;
 
   constructor(vertical: boolean) {
     this.vertical = vertical;
@@ -30,11 +31,17 @@ export default class Scrollbar {
       });
   }
 
+  /**
+   * Move scroll position
+   */
   move<T extends { left?: number; top?: number }>(v: T) {
     this.el.scroll(v);
     return this;
   }
 
+  /**
+   * Get scroll position
+   */
   scroll() {
     return this.el.scroll();
   }
