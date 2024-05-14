@@ -1,9 +1,8 @@
-// const = require('../../src/data/);
 import assert from "assert";
 import { describe, it } from "mocha";
 import { indexAt, stringAt, expr2xy, expr2expr } from "../../src/core/alphabet";
 
-describe("alphabet", () => {
+describe("[alphabet.ts](./src/core/alphabet.ts)", function () {
   describe(".indexAt()", () => {
     it("should return 0 when the value is A", () => {
       assert.equal(indexAt("A"), 0);

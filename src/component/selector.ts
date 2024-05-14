@@ -285,9 +285,9 @@ export default class Selector {
     const ftwidth = data.freezeTotalWidth();
     const ftheight = data.freezeTotalHeight();
     let left0 = left - ftwidth;
-    if (ftwidth > l) left0 -= scroll.x;
+    if (l && ftwidth > l) left0 -= scroll.x;
     let top0 = top - ftheight;
-    if (ftheight > t) top0 -= scroll.y;
+    if (t && ftheight > t) top0 -= scroll.y;
     return {
       left: left0,
       top: top0,
@@ -312,7 +312,7 @@ export default class Selector {
     }
     const ftwidth = data.freezeTotalWidth();
     let left0 = left - ftwidth;
-    if (ftwidth > l) left0 -= scroll.x;
+    if (l && ftwidth > l) left0 -= scroll.x;
     return {
       left: left0,
       top: t,

@@ -4,15 +4,15 @@ const formatStringRender = (v: string) => v;
 
 const formatNumberRender = (v: string) => {
   // match "-12.1" or "12" or "12.1"
-  if (/^(?:-?\d*.?\d*)$/u.test(v)) {
+  if (/^(?:-?\d*\.?\d*)$/u.test(v)) {
     const v1 = Number(v).toFixed(2).toString();
-    const [first, ...parts] = v1.split("\\.");
-    return [first.replace(/(\d)(?=(\d{3})+(?!\d))/gu, "$1,"), ...parts];
+    const [whole, decimal] = v1.split("\\.");
+    return `${whole.replace(/(\d)(?=(\d{3})+(?!\d))/gu, "$1,")}${decimal ?? ""}`;
   }
   return v;
 };
 
-interface BaseFormats {
+export interface BaseFormats {
   key: string;
   title: () => string;
   label?: string;

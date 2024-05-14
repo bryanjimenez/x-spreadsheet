@@ -74,7 +74,7 @@ export default class Toolbar {
   btns: Element<HTMLDivElement>;
   btns2: [Element<HTMLDivElement>, number][];
   data: DataProxy;
-  change: (...arg: unknown[]) => void;
+  change: (arg: ToolBarChangeType, ...arg1: unknown[]) => void;
   widthFn: () => number;
   isHide: boolean;
 

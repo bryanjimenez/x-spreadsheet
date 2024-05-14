@@ -26,7 +26,7 @@ export function infixExprToSuffixExpr(src: string) {
         subStrs.push(c);
       } else if (c === '"') {
         i += 1;
-        while (src.charAt(i) !== '"') {
+        while (src.charAt(i) !== '"' && src.length > i) {
           subStrs.push(src.charAt(i));
           i += 1;
         }
@@ -36,6 +36,15 @@ export function infixExprToSuffixExpr(src: string) {
         subStrs.push(c);
       } else {
         // console.log('subStrs:', subStrs.join(''), stack);
+        if (
+          oldc === '"' &&
+          c === "," &&
+          operatorStack[operatorStack.length - 1] === "&"
+        ) {
+          // using &OP within a functions param
+          stack.push(operatorStack.pop());
+        }
+
         if (c !== "(" && subStrs.length > 0) {
           stack.push(subStrs.join(""));
         }
@@ -72,11 +81,7 @@ export function infixExprToSuffixExpr(src: string) {
           } else if (c1 && formulam[c1]?.operator === "unary") {
             // md5 is unary operator
             // console.log('c1:', c1, fnArgType, stack, operatorStack);
-            while (c1 !== "(") {
-              stack.push([c1, 1]);
-              if (operatorStack.length <= 0) break;
-              c1 = operatorStack.pop();
-            }
+            stack.push([c1, 1]);
           } else {
             // binary operators (+, -, ..)
             // console.log('c1:', c1, fnArgType, stack, operatorStack);
@@ -106,6 +111,24 @@ export function infixExprToSuffixExpr(src: string) {
         } else if (c === "(" && subStrs.length > 0) {
           // function
           operatorStack.push(subStrs.join(""));
+        } else if (
+          (oldc === '"' && c === "&") ||
+          (oldc === ")" && c === "&") ||
+          oldc === "&"
+        ) {
+          const top = operatorStack[operatorStack.length - 1];
+
+          if (oldc === '"' && c === "&" && top === "&") {
+            stack.push(operatorStack.pop());
+            operatorStack.push(c);
+          } else if (c !== "(" && c !== "&") {
+            // pushing an operator(symbol) as a parameter
+            stack.push(`"${c}`);
+          }
+          // else if(c!=="(" ){
+          else {
+            operatorStack.push(c);
+          }
         } else {
           // priority: */ > +-
           // console.log('xxxx:', operatorStack, c, stack);
@@ -216,6 +239,11 @@ const evalSuffixExpr = (
         ret = left <= top;
       }
       stack.push(ret);
+    } else if (expr === "&") {
+      const tail = stack.pop();
+      const head = stack.pop();
+
+      stack.push(String(head) + String(tail));
     } else if (Array.isArray(expr)) {
       const [formula, len] = expr as [keyof Formula, number];
       const params = [];

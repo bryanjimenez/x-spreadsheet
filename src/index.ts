@@ -94,7 +94,7 @@ interface CellOnEventCallbackMap {
   ) => void;
 }
 
-export default class Spreadsheet {
+export class Spreadsheet {
   options: Partial<DefaultSettings>;
   sheetIndex: number;
   datas: DataProxy[];
@@ -123,8 +123,12 @@ export default class Spreadsheet {
             this.sheet.resetData(d);
           },
           (index: number) => {
+            // bottom-bar on sheet change handler
             const d = this.datas[index];
             this.sheet.resetData(d);
+
+            this.sheet.verticalScrollbar.move({ top: d.scroll.y });
+            this.sheet.horizontalScrollbar.move({ left: d.scroll.x });
           },
           () => {
             this.deleteSheet();

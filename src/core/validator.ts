@@ -37,7 +37,7 @@ export type OperatorType =
   | "be"
   | "nbe";
 
-export default class Validator {
+export class Validator {
   required: boolean;
   value: string;
   type: ValidatorType;

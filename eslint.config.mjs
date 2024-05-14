@@ -30,6 +30,7 @@ const tooStrict = {
   "line-comment-position": "off",
   "no-negated-condition": "off",
   "no-undefined":"off",
+  "func-names": "off",
 }
 
 /** Warn these, don't show as error */
@@ -157,7 +158,7 @@ export default tseslint.config(
   ...tseslint.configs.strictTypeChecked,
 
   {
-    ignores: [".*", "node_modules/", "dist/", "test/"],
+    ignores: [".*", "node_modules/", "dist/"],
   },
   {
     languageOptions: {

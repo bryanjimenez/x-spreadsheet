@@ -1,4 +1,4 @@
-import Validator, { type OperatorType, type ValidatorType } from "./validator";
+import { Validator, type OperatorType, type ValidatorType } from "./validator";
 import { CellRange } from "./cell_range";
 import { SelectType } from "../component/form_select";
 
@@ -170,7 +170,7 @@ export class Validations {
   setData(
     d: {
       refs: string[];
-      mode: string;
+      mode: SelectType;
       type: ValidatorType;
       required: boolean;
       value: string;

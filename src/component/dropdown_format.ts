@@ -1,16 +1,16 @@
 import Dropdown from "./dropdown";
 import { h } from "./element";
-import { baseFormats } from "../core/format";
+import { type BaseFormats, baseFormats } from "../core/format";
 import { cssPrefix } from "../config";
 
 export default class DropdownFormat extends Dropdown {
   constructor() {
-    let nformats = baseFormats.slice(0);
+    const nformats: (BaseFormats | { key: string })[] = baseFormats.slice(0);
     nformats.splice(2, 0, { key: "divider" });
     nformats.splice(8, 0, { key: "divider" });
-    nformats = nformats.map((it) => {
+    const nformatsEl = nformats.map((it) => {
       const item = h("div", `${cssPrefix}-item`);
-      if (it.key === "divider") {
+      if (!("render" in it)) {
         item.addClass("divider");
       } else {
         item.child(it.title()).on("click", () => {
@@ -21,10 +21,10 @@ export default class DropdownFormat extends Dropdown {
       }
       return item;
     });
-    super("Normal", "220px", true, "bottom-left", ...nformats);
+    super("Normal", "220px", true, "bottom-left", ...nformatsEl);
   }
 
-  setTitle(key: keyof (typeof baseFormats)[0]) {
+  setTitle(key: string) {
     for (let i = 0; i < baseFormats.length; i += 1) {
       if (baseFormats[i].key === key) {
         this.title.html(baseFormats[i].title());

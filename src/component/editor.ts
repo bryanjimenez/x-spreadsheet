@@ -5,7 +5,7 @@ import Datepicker from "./datepicker";
 import { cssPrefix } from "../config";
 import { type Formula } from "../core/formula";
 import { type CellData } from "..";
-import type Validator from "../core/validator";
+import { type Validator } from "../core/validator";
 
 function dateFormat(d: Date) {
   const month = d.getMonth() + 1;
@@ -228,13 +228,13 @@ export default class Editor {
 
   private suggestItemClick(it: Formula) {
     const { inputText, validator } = this;
-    let position = 0;
+    // let position = 0;
     if (validator && validator.type === "list") {
       if (typeof it !== "string") {
         throw new Error("Expected it to contain list data validation");
       }
       this.inputText = it;
-      position = this.inputText.length;
+      // position = this.inputText.length;
     } else {
       if (typeof it === "string") {
         throw new Error("Expected it to contain function info");
@@ -281,16 +281,10 @@ export default class Editor {
     this.datepicker.hide();
   }
 
-  setOffset<
-    O extends {
-      left: number;
-      top: number;
-      width: number;
-      height: number;
-      l: number;
-      t: number;
-    },
-  >(offset: O, suggestPosition = "top") {
+  setOffset(
+    offset: typeof this.areaOffset,
+    suggestPosition: keyof NonNullable<typeof this.areaOffset> = "top"
+  ) {
     const { textEl, areaEl, suggest, freeze, el } = this;
     if (offset) {
       this.areaOffset = offset;
@@ -314,20 +308,20 @@ export default class Editor {
         top: top - elOffset.top - 0.8,
       });
       textEl.offset({ width: width - 9 + 0.8, height: height - 3 + 0.8 });
-      const sOffset = { left: 0 };
+      const sOffset: Partial<typeof this.areaOffset> = { left: 0 };
       sOffset[suggestPosition] = height;
       suggest.setOffset(sOffset);
       suggest.hide();
     }
   }
 
-  setCell(cell: CellData, validator: Validator) {
+  setCell(cell?: CellData, validator?: Validator) {
     if (cell && cell.editable === false) return;
 
     // console.log('::', validator);
     const { el, datepicker, suggest } = this;
     el.show();
-    this.cell = cell;
+    this.cell = cell ?? null;
     const text = (cell && cell.text) || "";
     this.setText(text);
 

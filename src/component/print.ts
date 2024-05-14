@@ -200,12 +200,9 @@ export default class Print {
       draw.translate(left, top);
       if (scale < 1) draw.scale(scale, scale);
       const yof = yoffset;
-      data.eachMergesInView(
-        mViewRange,
-        ({ sri, sci }: { sri: number; sci: number }) => {
-          renderCell(draw, data, sri, sci, yof);
-        }
-      );
+      data.eachMergesInView(mViewRange, ({ sri, sci }: CellRangePoints) => {
+        renderCell(draw, data, sri, sci, yof);
+      });
       draw.restore();
 
       mViewRange.sri = mViewRange.eri;

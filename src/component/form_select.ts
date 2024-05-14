@@ -6,7 +6,7 @@ import { Formula } from "../core/formula";
 export type SelectType = "cell" | "list" | "be";
 
 export default class FormSelect {
-  key: SelectType;
+  key: string;
   getTitle: (it: unknown) => string;
   vchange: Function;
   itemEl: Element<HTMLDivElement>;
@@ -25,7 +25,7 @@ export default class FormSelect {
     key: SelectType,
     items: string[],
     width: string,
-    getTitle: (it: unknown) => string = (it) => it,
+    getTitle: (it: unknown) => string = (it: unknown) => it as string,
     change: (...arg: unknown[]) => void = () => {}
   ) {
     this.key = key;
@@ -60,7 +60,7 @@ export default class FormSelect {
     this.suggest.search("");
   }
 
-  itemClick(it: SelectType) {
+  itemClick(it: string) {
     this.key = it;
     this.itemEl.html(this.getTitle(it));
   }
