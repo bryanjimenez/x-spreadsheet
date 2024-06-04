@@ -582,8 +582,17 @@ class Sheet {
   private selectorMove(multiple: boolean, direction: Direction) {
     const { selector, data } = this;
     const { rows, cols } = data;
-    let [ri, ci] = selector.indexes ?? [];
-    const { eri, eci } = selector.range ?? {};
+
+    if (selector.indexes === null) {
+      throw new Error("Expected selector indexes");
+    }
+    let [ri, ci] = selector.indexes;
+
+    if (selector.range === null) {
+      throw new Error("Expected selector indexes");
+    }
+    const { eri, eci } = selector.range;
+
     if (multiple) {
       if (selector.moveIndexes === undefined) {
         throw new Error("Expected moveIndexes row and column");
@@ -595,12 +604,12 @@ class Sheet {
       if (ci && ci > 0) ci -= 1;
     } else if (direction === "right") {
       if (eci !== ci) ci = eci;
-      if (ci && ci < cols.len - 1) ci += 1;
+      if (ci !== undefined && ci < cols.len - 1) ci += 1;
     } else if (direction === "up") {
-      if (ri && ri > 0) ri -= 1;
+      if (ri !== undefined && ri > 0) ri -= 1;
     } else if (direction === "down") {
       if (eri !== ri) ri = eri;
-      if (ri && ri < rows.len - 1) ri += 1;
+      if (ri !== undefined && ri < rows.len - 1) ri += 1;
     } else if (direction === "row-first") {
       ci = 0;
     } else if (direction === "row-last") {
@@ -610,7 +619,7 @@ class Sheet {
     } else if (direction === "col-last") {
       ri = rows.len - 1;
     }
-    if (multiple && ri && ci) {
+    if (multiple && ri !== undefined && ci !== undefined) {
       selector.moveIndexes = [ri, ci];
     }
     this.selectorSet(multiple, ri, ci);

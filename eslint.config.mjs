@@ -38,6 +38,9 @@ const commonWarnings = {
   "@typescript-eslint/no-unsafe-argument":"warn",  // typescript unknown
   "@typescript-eslint/no-floating-promises": "warn",
 
+  // prevent nullish/zero/NaN cases in if()
+  "@typescript-eslint/strict-boolean-expressions": "warn",
+
   "no-warning-comments":"warn",
   "camelcase":"warn",
   "max-depth":"warn",
