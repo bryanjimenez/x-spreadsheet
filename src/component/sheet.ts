@@ -252,6 +252,7 @@ class Sheet {
         const y = this.data.rows.len;
         const rowHeight = this.data.rows.height;
         const distance = rowHeight * (y - 4);
+        this.verticalScrollbar.move({ top: distance });
         this.verticalScrollbarMove(distance);
       } else {
         this.insertDeleteRowColumn(type);
