@@ -1,6 +1,6 @@
 {
   "name": "@nmemonica/x-spreadsheet",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Typescript xpreadsheet",
   "type": "module",
   "types": "dist/types/index.d.ts",
