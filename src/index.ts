@@ -92,6 +92,8 @@ interface CellOnEventCallbackMap {
     rowIndex: number,
     colIndex: number
   ) => void;
+  ["pasted-clipboard"]: (rows: RowList) => void;
+  ["change"]: (sheet: SheetData) => void;
 }
 
 export class Spreadsheet {
