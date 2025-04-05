@@ -220,7 +220,7 @@ class Sheet {
       this.horizontalScrollbarMove(distance);
     };
     // editor
-    editor.change = (state: string, itext: string) => {
+    editor.change = (state: "input" | "finished", itext: string) => {
       this.dataSetCellText(itext, state);
     };
     // modal validation
@@ -1057,7 +1057,10 @@ class Sheet {
     this.editorSetOffset();
   }
 
-  private dataSetCellText(text: string, state = "finished") {
+  private dataSetCellText(
+    text: string,
+    state: "input" | "finished" = "finished"
+  ) {
     const { data, table } = this;
     // const [ri, ci] = selector.indexes;
     if (data.settings.mode === "read") return;

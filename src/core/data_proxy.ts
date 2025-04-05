@@ -766,8 +766,7 @@ export default class DataProxy {
     });
   }
 
-  // state: input | finished
-  setSelectedCellText(text: string, state = "input") {
+  setSelectedCellText(text: string, state: "input" | "finished" = "input") {
     const { autoFilter, selector, rows } = this;
     const { ri, ci } = selector;
     let nri = ri;
