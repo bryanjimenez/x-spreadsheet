@@ -114,33 +114,34 @@ export class Spreadsheet {
     }
 
     this.options = { showBottomBar: true, ...options };
-    this.sheetIndex = 1;
+    this.sheetIndex = 0;
     this.datas = [];
 
-    this.bottombar = this.options.showBottomBar
-      ? new Bottombar(
-          () => {
-            if (this.options.mode === "read") return;
-            const d = this.addSheet();
-            this.sheet.resetData(d);
-          },
-          (index: number) => {
-            // bottom-bar on sheet change handler
-            const d = this.datas[index];
-            this.sheet.resetData(d);
+    this.bottombar =
+      this.options.showBottomBar === true
+        ? new Bottombar(
+            () => {
+              if (this.options.mode === "read") return;
+              const d = this.addSheet();
+              this.sheet.resetData(d);
+            },
+            (index: number) => {
+              // bottom-bar on sheet change handler
+              const d = this.datas[index];
+              this.sheet.resetData(d);
 
-            this.sheet.verticalScrollbar.move({ top: d.scroll.y });
-            this.sheet.horizontalScrollbar.move({ left: d.scroll.x });
-          },
-          () => {
-            this.deleteSheet();
-          },
-          (index, value) => {
-            this.datas[index].name = value;
-            this.sheet.trigger("change");
-          }
-        )
-      : null;
+              this.sheet.verticalScrollbar.move({ top: d.scroll.y });
+              this.sheet.horizontalScrollbar.move({ left: d.scroll.x });
+            },
+            () => {
+              this.deleteSheet();
+            },
+            (index, value) => {
+              this.datas[index].name = value;
+              this.sheet.trigger("change");
+            }
+          )
+        : null;
     this.data = this.addSheet();
     const rootEl = h("div", cssPrefix).on("contextmenu", (evt) => {
       evt.preventDefault();
@@ -154,7 +155,7 @@ export class Spreadsheet {
   }
 
   addSheet(name?: string, active = true) {
-    const n = name || `sheet${String(this.sheetIndex)}`;
+    const n = name ?? `sheet${String(this.sheetIndex)}`;
     const d = new DataProxy(n, this.options);
     d.change = (...args: unknown[]) => {
       this.sheet.trigger("change", ...args);
@@ -179,13 +180,59 @@ export class Spreadsheet {
     }
   }
 
+  focusOnSheet(name: string) {
+    const index = this.datas.findIndex((d) => d.name === name);
+
+    if (index === -1) {
+      return;
+    }
+
+    const sheetEl = this.bottombar?.items[index];
+    if (sheetEl !== undefined) {
+      this.bottombar?.clickSwap2(sheetEl);
+    }
+  }
+
+  focusOnCell(ri: number, ci: number) {
+    const height = this.options.row?.height;
+    const width = this.options.col?.width;
+    if (height !== undefined) {
+      const xOffset = height * ri;
+      this.sheet.verticalScrollbar.move({ top: xOffset });
+    }
+
+    if (width !== undefined) {
+      const yOffset = width * ci;
+      this.sheet.horizontalScrollbar.move({ left: yOffset });
+    }
+  }
+
+  focusOn(sheetName: string, ri?: number, ci?: number) {
+    this.focusOnSheet(sheetName);
+
+    const height = this.options.row?.height;
+    const width = this.options.col?.width;
+    if (height !== undefined && ri !== undefined) {
+      const xOffset = height * ri;
+      this.sheet.verticalScrollbar.move({ top: xOffset });
+    }
+
+    if (width !== undefined && ci !== undefined) {
+      const yOffset = width * ci;
+      this.sheet.horizontalScrollbar.move({ left: yOffset });
+    }
+  }
+
   loadData(data: SheetData | SheetData[]) {
     const ds = Array.isArray(data) ? data : [data];
     if (this.bottombar !== null) {
       this.bottombar.clear();
     }
-    this.datas = [];
+
     if (ds.length > 0) {
+      this.datas = [];
+      this.sheetIndex = 0;
+
       for (let i = 0; i < ds.length; i += 1) {
         const it = ds[i];
         const nd = this.addSheet(it.name, i === 0);
@@ -270,11 +317,14 @@ export class Spreadsheet {
 export const spreadsheet = (el: Element, options = {}) =>
   new Spreadsheet(el, options);
 
-if (window) {
+if (window !== undefined) {
+  /* eslint-disable camelcase */
   //@ts-expect-error camel case
   window.x_spreadsheet = spreadsheet;
+
   //@ts-expect-error camel case
   window.x_spreadsheet.locale = (lang, message) => {
     locale(lang, message);
   };
+  /* eslint-enable */
 }
