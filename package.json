@@ -1,6 +1,6 @@
 {
   "name": "@nmemonica/x-spreadsheet",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A Typescript xpreadsheet",
   "type": "module",
   "types": "dist/types/index.d.ts",
@@ -28,9 +28,9 @@
   },
   "scripts": {
     "dev": "rspack serve -c ./build/rspack.dev.js",
-    "pre-build": "rm -rf ./dist",
+    "prebuild": "rm -rf ./dist",
     "build": "rspack build -c ./build/rspack.prod.js",
-    "post-build": "npm run build-dts; npm run build-locale",
+    "postbuild": "npm run build-dts; npm run build-locale",
     "build-locale": "rspack -c build/rspack.locale.js",
     "build-dts": "tsc -p ./tsconfig.types.json | cat",
     "test": "mocha -r ./test/require.mjs --recursive --extension ts ./test",
