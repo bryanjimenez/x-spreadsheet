@@ -280,7 +280,9 @@ class Element<T extends HTMLElement> {
   css(name: string, value?: string) {
     if (value === undefined && typeof name !== "string") {
       (Object.keys(name) as (keyof CSSStyleDeclaration)[]).forEach((k) => {
-        this.el.style[k] = name[k];
+        if (k !== "length" && k !== "parentRule") {
+          this.el.style[k] = name[k];
+        }
       });
       return this;
     }

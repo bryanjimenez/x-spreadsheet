@@ -14,7 +14,7 @@ import Table from "./table";
 import Toolbar from "./toolbar/index";
 import { cssPrefix } from "../config";
 import { baseFormulas } from "../core/formula";
-import DataProxy from "../core/data_proxy";
+import DataProxy, { type BorderEdit } from "../core/data_proxy";
 import { type ToolBarChangeType } from "./toolbar";
 import { type Operator } from "../core/auto_filter";
 import { type SheetData } from "..";
@@ -178,14 +178,17 @@ class Sheet {
     });
 
     // toolbar change
-    toolbar.change = (type: ToolBarChangeType, value: unknown) => {
+    toolbar.change = (
+      type: ToolBarChangeType,
+      value: string | boolean | BorderEdit
+    ) => {
       this.toolbarChange(type, value);
     };
 
     // sort filter ok
     sortFilter.ok = (
-      ci: number | null,
-      order: "asc" | "desc" | null,
+      ci: number,
+      order: "asc" | "desc",
       o: "in",
       v: string[]
     ) => {
@@ -220,7 +223,7 @@ class Sheet {
       this.horizontalScrollbarMove(distance);
     };
     // editor
-    editor.change = (state: string, itext: string) => {
+    editor.change = (state: "input" | "finished", itext: string) => {
       this.dataSetCellText(itext, state);
     };
     // modal validation
@@ -691,7 +694,10 @@ class Sheet {
     this.sheetReset();
   }
 
-  private toolbarChange(type: ToolBarChangeType | InsertType, value: unknown) {
+  private toolbarChange(
+    type: ToolBarChangeType | InsertType,
+    value: boolean | string | BorderEdit
+  ) {
     const { data } = this;
     if (type === "undo") {
       this.undo();
@@ -977,7 +983,7 @@ class Sheet {
     const { editor, data } = this;
     const sOffset = data.getSelectedRect();
     const tOffset = this.getTableOffset();
-    let sPosition = "top";
+    let sPosition: keyof NonNullable<(typeof editor)["areaOffset"]> = "top";
     // console.log('sOffset:', sOffset, ':', tOffset);
     if (sOffset.top > tOffset.height / 2) {
       sPosition = "bottom";
@@ -1057,7 +1063,10 @@ class Sheet {
     this.editorSetOffset();
   }
 
-  private dataSetCellText(text: string, state = "finished") {
+  private dataSetCellText(
+    text: string,
+    state: "input" | "finished" = "finished"
+  ) {
     const { data, table } = this;
     // const [ri, ci] = selector.indexes;
     if (data.settings.mode === "read") return;

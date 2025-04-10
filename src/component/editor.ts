@@ -31,6 +31,7 @@ export default class Editor {
   areaOffset: {
     left: number;
     top: number;
+    bottom?: number;
     width: number;
     height: number;
     l: number;
@@ -39,7 +40,7 @@ export default class Editor {
   freeze: { w: number; h: number };
   cell: CellData | null;
   inputText: string;
-  change: (state: string, itext: string) => void;
+  change: (state: "input" | "finished", itext: string) => void;
   validator?: Validator;
 
   constructor(

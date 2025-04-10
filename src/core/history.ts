@@ -1,3 +1,5 @@
+import { type SheetData } from "..";
+
 export default class History {
   undoItems: string[];
   redoItems: string[];
@@ -20,7 +22,7 @@ export default class History {
     return this.redoItems.length > 0;
   }
 
-  undo(currentd: unknown, cb: (arg: unknown) => void) {
+  undo(currentd: unknown, cb: (d: SheetData) => void) {
     const { undoItems, redoItems } = this;
     if (this.canUndo()) {
       redoItems.push(JSON.stringify(currentd));
@@ -30,7 +32,7 @@ export default class History {
     }
   }
 
-  redo(currentd: unknown, cb: (arg: unknown) => void) {
+  redo(currentd: unknown, cb: (d: SheetData) => void) {
     const { undoItems, redoItems } = this;
     if (this.canRedo()) {
       undoItems.push(JSON.stringify(currentd));

@@ -1,7 +1,7 @@
 import Modal from "./modal";
 import FormInput from "./form_input";
 import FormSelect, { type SelectType } from "./form_select";
-import FormField, { type Rule } from "./form_field";
+import FormField from "./form_field";
 import Button from "./button";
 import { t } from "../locale/locale";
 import { h } from "./element";
@@ -20,7 +20,17 @@ export default class ModalValidation extends Modal {
   maxvf: FormField;
   vf: FormField;
   svf: FormField;
-  change: (arg: string, mode?: SelectType, ref?: CellRef, rule?: Rule) => void;
+  change: (
+    arg: string,
+    mode?: SelectType,
+    ref?: CellRef,
+    rule?: {
+      type: ValidatorType;
+      required: boolean;
+      value: string | string[];
+      operator: OperatorType;
+    }
+  ) => void;
 
   constructor() {
     const mf = new FormField(
@@ -45,7 +55,8 @@ export default class ModalValidation extends Modal {
         "100%",
         (it) => t(`dataValidation.type.${it}`),
         (it) => {
-          this.criteriaSelected(it);
+          // TODO: validate isValidatorType
+          this.criteriaSelected(it as ValidatorType);
         }
       ),
       { required: true },
@@ -61,7 +72,8 @@ export default class ModalValidation extends Modal {
         "160px",
         (it) => t(`dataValidation.operator.${it}`),
         (it) => {
-          this.criteriaOperatorSelected(it);
+          // TODO: validate isOperatorType
+          this.criteriaOperatorSelected(it as OperatorType);
         }
       ),
       { required: true }
@@ -181,7 +193,16 @@ export default class ModalValidation extends Modal {
       this.hide();
     } else if (action === "save") {
       // validate
-      const attrs = ["mf", "rf", "cf", "of", "svf", "vf", "minvf", "maxvf"];
+      const attrs = [
+        "mf",
+        "rf",
+        "cf",
+        "of",
+        "svf",
+        "vf",
+        "minvf",
+        "maxvf",
+      ] as const;
       for (let i = 0; i < attrs.length; i += 1) {
         const field = this[attrs[i]];
         // console.log('field:', field);
@@ -191,11 +212,12 @@ export default class ModalValidation extends Modal {
         }
       }
 
-      const mode = this.mf.val();
+      // TODO: validate these ...
+      const mode: SelectType = this.mf.val();
       const ref = this.rf.val();
       const type: ValidatorType = this.cf.val();
-      const operator = this.of.val();
-      let value = this.svf.val();
+      const operator: OperatorType = this.of.val();
+      let value: string | string[] = this.svf.val();
       if (type === "number" || type === "date") {
         if (operator === "be" || operator === "nbe") {
           value = [this.minvf.val(), this.maxvf.val()];
@@ -222,7 +244,7 @@ export default class ModalValidation extends Modal {
       mf.val(mode || "cell");
       rf.val(ref);
       cf.val(type);
-      of.val(operator);
+      of.val(operator as string);
       if (Array.isArray(value)) {
         minvf.val(value[0]);
         maxvf.val(value[1]);
