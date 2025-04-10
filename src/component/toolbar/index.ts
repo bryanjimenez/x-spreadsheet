@@ -29,6 +29,7 @@ import { type Element, h } from "../element";
 import { cssPrefix } from "../../config";
 import { bind } from "../event";
 import type DataProxy from "../../core/data_proxy";
+import { type BorderEdit } from "../../core/data_proxy";
 
 export interface ExtendToolbarOption {
   tip?: string;
@@ -74,7 +75,10 @@ export default class Toolbar {
   btns: Element<HTMLDivElement>;
   btns2: [Element<HTMLDivElement>, number][];
   data: DataProxy;
-  change: (arg: ToolBarChangeType, ...arg1: unknown[]) => void;
+  change: (
+    type: ToolBarChangeType,
+    value: string | boolean | BorderEdit
+  ) => void;
   widthFn: () => number;
   isHide: boolean;
 

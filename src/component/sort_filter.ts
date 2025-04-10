@@ -16,12 +16,12 @@ export default class SortFilter {
   filterhEl: Element<HTMLDivElement>;
   sortAscEl: Element<HTMLDivElement>;
   sortDescEl: Element<HTMLDivElement>;
-  ci: number | null;
+  ci: number | undefined;
   values: string[];
   filterValues: string[];
   ok?: (
-    ci: number | null,
-    sort: "asc" | "desc" | null,
+    ci: number,
+    sort: "asc" | "desc",
     type: "in",
     filterValues: string[]
   ) => void;
@@ -55,7 +55,7 @@ export default class SortFilter {
       )
       .hide();
     // this.setFilters(['test1', 'test2', 'text3']);
-    this.ci = null;
+    this.ci = undefined;
     this.values = [];
     this.filterValues = [];
   }
@@ -97,7 +97,11 @@ export default class SortFilter {
   btnClick(it: "ok" | "cancel") {
     if (it === "ok") {
       const { ci, sort, filterValues } = this;
-      if (typeof this.ok === "function") {
+      if (
+        typeof this.ok === "function" &&
+        ci !== undefined &&
+        sort !== undefined
+      ) {
         this.ok(ci, sort, "in", filterValues);
       }
     }
@@ -111,7 +115,7 @@ export default class SortFilter {
     sortDescEl.checked(it === "desc");
   }
 
-  filterClick(index: number, it: unknown) {
+  filterClick(index: number, it: string) {
     // console.log('index:', index, it);
     const { filterbEl, filterValues, values } = this;
     const children = filterbEl.children();

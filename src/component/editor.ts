@@ -31,6 +31,7 @@ export default class Editor {
   areaOffset: {
     left: number;
     top: number;
+    bottom?: number;
     width: number;
     height: number;
     l: number;
