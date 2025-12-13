@@ -23,6 +23,10 @@ export default function rspackConfig(
       path: path.resolve(__dirname, "dist"),
     },
 
+    experiments: {
+      css: true,
+    },
+
     resolve: {
       extensions: ["...", ".ts"],
     },

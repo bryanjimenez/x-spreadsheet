@@ -27,6 +27,7 @@ export default function rspackConfig(
     },
 
     experiments: {
+      css: true,
       outputModule: true,
     },
 
