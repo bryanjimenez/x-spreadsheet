@@ -1,4 +1,3 @@
-//* global window */
 import { h, Element } from "./element";
 import Suggest from "./suggest";
 import Datepicker from "./datepicker";
