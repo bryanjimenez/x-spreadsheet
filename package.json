@@ -78,7 +78,6 @@
     "typescript-eslint": "^8.54.0"
   },
   "dependencies": {
-    "md5": "^2.3.0",
     "typescript": "^5.8.3"
   }
 }

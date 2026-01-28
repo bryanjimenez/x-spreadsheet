@@ -113,12 +113,6 @@ describe("[formula.ts](./src/core/formula.ts)", function () {
       it("CONCAT: should return 1200USD when the value is ['1200', 'USD']", () => {
         assert.equal(formulam.CONCAT.render(["1200", "USD"]), "1200USD");
       });
-      it("MD5: should return 78e731027d8fd50ed642340b7c9a63b3 when the value is message", () => {
-        assert.equal(
-          formulam.MD5.render(["message"]),
-          "78e731027d8fd50ed642340b7c9a63b3"
-        );
-      });
     });
   });
 });

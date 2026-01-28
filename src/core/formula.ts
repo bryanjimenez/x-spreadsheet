@@ -1,4 +1,3 @@
-import md5 from "md5";
 import { tf } from "../locale/locale";
 import {
   isBoolean,
@@ -125,12 +124,6 @@ export const baseFormulas: Formula[] = [
     key: "CONCAT",
     title: tf("formula.concat"),
     render: (ary: string[]) => ary.join(""),
-  },
-  {
-    key: "MD5",
-    operator: "unary",
-    title: tf("formula.md5"),
-    render: ([s]: [string]) => md5(s),
   },
   /* support:  1 + A1 + B2 * 3
   {

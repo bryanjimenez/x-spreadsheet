@@ -79,7 +79,7 @@ export function infixExprToSuffixExpr(src: string) {
             stack.push([c1, fnArgsLen]);
             fnArgsLen = 1;
           } else if (c1 && formulam[c1]?.operator === "unary") {
-            // md5 is unary operator
+            // unary operator
             // console.log('c1:', c1, fnArgType, stack, operatorStack);
             stack.push([c1, 1]);
           } else {
@@ -275,7 +275,7 @@ const evalSuffixExpr = (
  * @param {string} src Cell text
  * @param {*} formulaMap Formula Map
  * @param {*} getCellText
- * @param {*} cellList Sheet cell's list in formula ex: `=MD5(A1)` -> ['A1']
+ * @param {*} cellList Sheet cell's list in formula ex: `=SUM(A1)` -> ['A1']
  */
 function cellRender(
   src: string,

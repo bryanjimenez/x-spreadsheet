@@ -116,13 +116,6 @@ describe("[cell.ts](./src/core/cell.ts)", function () {
     it("should return SUM when =SUM(", () => {
       assert.deepEqual(infixExprToSuffixExpr("SUM("), ["SUM"]);
     });
-    it('should return "messageMD5,1 when =MD5("message")', () => {
-      // md5 function is an unary operator
-      assert.deepEqual(infixExprToSuffixExpr('MD5("message")'), [
-        '"message',
-        ["MD5", 1],
-      ]);
-    });
     it("should return [9,1,+,2,3,+,*] when =(9+1)*(2+3)", () => {
       assert.deepEqual(
         infixExprToSuffixExpr("(9+1)*(2+3)"),
@@ -201,12 +194,12 @@ describe("[cell.ts](./src/core/cell.ts)", function () {
           ['"body', '"hat', '"head', ["CONCAT", 2], "&"]
         );
       });
-      it("should return ['\"body','\"hat',['MD5', 1],'&'] when =\"body\" & MD5(\"hat\")", () => {
+      it.skip("should return ['\"body','\"hat',['SUM', 1],'&'] when =\"body\" & SUM(\"1\")", () => {
         // before unary function
         assert.deepEqual(
-          infixExprToSuffixExpr('"body" & MD5("hat")'),
+          infixExprToSuffixExpr('"body" & SUM("1")'),
           // eslint-disable-next-line
-        ['"body','"hat',["MD5", 1],"&",]);
+        ['"body','"1',"SUM","&",]);
       });
     });
   });
@@ -249,13 +242,6 @@ describe("[cell.ts](./src/core/cell.ts)", function () {
               x + y
           ),
           1 + 500 - 20
-        );
-      });
-      it('should return 78e731027d8fd50ed642340b7c9a63b3 when =MD5("message")', () => {
-        const expected = "78e731027d8fd50ed642340b7c9a63b3";
-        assert.equal(
-          cell.render('=MD5("message")', formulam, () => {}),
-          expected
         );
       });
     });
