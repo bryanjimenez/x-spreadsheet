@@ -1,10 +1,25 @@
 {
   "name": "@nmemonica/x-spreadsheet",
-  "version": "0.1.7",
+  "version": "0.1.7-alpha.1",
   "description": "A Typescript xpreadsheet",
   "type": "module",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./helper": {
+      "default": "./dist/helper.js",
+      "types": "./dist/types/helper.d.ts"
+    },
+    "./types/*": "./dist/types/*.d.ts",
+    "./locale/*": {
+      "default": "./dist/locale/*.js",
+      "types": "./dist/types/locale/*.d.ts"
+    },
+    "./index.css": "./dist/index.css"
+  },
   "types": "dist/types/index.d.ts",
-  "module": "dist/index.js",
   "files": [
     "assets",
     "dist",
