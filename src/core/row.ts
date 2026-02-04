@@ -402,23 +402,24 @@ class Rows {
   getExportData() {
     const { len } = this;
 
-    const data:RowList = { len, ...this._ };
+    const data: RowList = { len, ...this._ };
 
     // Find all formulas and set 'text' to formula rendered val
     Object.keys(this._).forEach((ri) => {
       const nri = parseInt(ri, 10);
       if (this._[nri] && this._[nri].cells) {
         Object.entries(this._[nri].cells).forEach(([ci, cell]) => {
-          if (cell.text?.startsWith("=")) {
-            // console.log("FORMULA: "+cell.text)
+          const text = cell.text?.toString();
+          if (text !== undefined && text.startsWith("=")) {
+            // console.log("FORMULA: "+text)
             const renderedText = _cell.render(
-              cell.text || "",
+              text,
               formulam,
               (y: number, x: number) => this.getCell(x, y)?.text
             );
 
-            data[nri].cells[ci].text = renderedText;
-            data[nri].cells[ci].formula = cell.text;
+            data[nri].cells[ci].formula = text;
+            data[nri].cells[ci].text = renderedText.toString();
           }
         });
       }
