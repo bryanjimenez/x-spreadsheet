@@ -156,6 +156,75 @@ export function isNumber(x: unknown): x is number {
   );
 }
 
+/**
+ * Unless `x` is specifically falsy treat it as true
+ * @param x
+ */
+export function isBooleanLoose(x: unknown): x is boolean {
+  if (
+    // x===undefined ||
+    // x===null ||
+    x === 0 ||
+    x === false
+  ) {
+    return false;
+  }
+
+  if (
+    typeof x === "string" &&
+    (x.trim().toLowerCase() === "false" || x.trim().toLowerCase() === "0")
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Unless `x` is specifically truthy treat it as false
+ * @param x
+ */
+export function isBooleanStrict(x: unknown): x is boolean {
+  if (x === 1 || x === true) {
+    return true;
+  }
+
+  if (
+    typeof x === "string" &&
+    (x.trim().toLowerCase() === "true" || x.trim().toLowerCase() === "1")
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+export function isBoolean(x: unknown): x is boolean {
+  if (x === 0 || x === false) {
+    return true;
+  }
+
+  if (x === 1 || x === true) {
+    return true;
+  }
+
+  if (
+    typeof x === "string" &&
+    (x.trim().toLowerCase() === "false" || x.trim().toLowerCase() === "0")
+  ) {
+    return true;
+  }
+
+  if (
+    typeof x === "string" &&
+    (x.trim().toLowerCase() === "true" || x.trim().toLowerCase() === "1")
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 function numberOp(type: "-" | "+" | "*" | "/", num1: number, num2: number) {
   let ret = 0;
   switch (type) {
