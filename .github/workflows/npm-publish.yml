@@ -32,4 +32,4 @@ jobs:
           name: dist
           path: dist
       - run: npm install -g npm@latest
-      - run: npm publish --access public
+      - run: npm publish --tag alpha --access public
