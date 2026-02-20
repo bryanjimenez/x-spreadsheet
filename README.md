@@ -1,5 +1,8 @@
 # x-spreadsheet
 
+![license](https://img.shields.io/github/license/bryanjimenez/x-spreadsheet)
+![version](https://img.shields.io/npm/v/@nmemonica/x-spreadsheet)
+
 > A Typescript spreadsheet
 
 A fork from https://github.com/myliang/x-spreadsheet  
