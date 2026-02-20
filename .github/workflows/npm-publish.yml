@@ -1,31 +1,19 @@
 name: Publish to npmjs
 on:
   push:
-    # branches:
-      # - main
     tags:
       - "v*"
-  # release:
-  #   types: [published]
+
 jobs:
   build:
-    environment: ci
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 20
-      - run: npm install
-      - run: npm run build
-      - uses: actions/upload-artifact@v6
-        with: 
-          name: dist
-          path: dist/
+    uses: ./.github/workflows/job-build.yml
+
+  test:
+    uses: ./.github/workflows/job-test.yml
 
   publish-npm:
     environment: ci
-    needs: build
+    needs: [build, test]
     runs-on: ubuntu-latest
     permissions:
       contents: read
