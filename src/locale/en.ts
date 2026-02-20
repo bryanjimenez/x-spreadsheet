@@ -72,7 +72,6 @@ export default {
     and: "AND",
     or: "OR",
     concat: "Concat",
-    md5: "md5",
   },
   validation: {
     required: "it must be required",

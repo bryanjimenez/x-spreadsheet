@@ -1,10 +1,25 @@
 {
   "name": "@nmemonica/x-spreadsheet",
-  "version": "0.1.7",
+  "version": "0.1.7-alpha.1",
   "description": "A Typescript xpreadsheet",
   "type": "module",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./helper": {
+      "default": "./dist/helper.js",
+      "types": "./dist/types/helper.d.ts"
+    },
+    "./types/*": "./dist/types/*.d.ts",
+    "./locale/*": {
+      "default": "./dist/locale/*.js",
+      "types": "./dist/types/locale/*.d.ts"
+    },
+    "./index.css": "./dist/index.css"
+  },
   "types": "dist/types/index.d.ts",
-  "module": "dist/index.js",
   "files": [
     "assets",
     "dist",
@@ -47,14 +62,14 @@
   ],
   "devDependencies": {
     "@eslint/js": "^9.39.0",
-    "@rspack/cli": "^1.7.5",
-    "@rspack/core": "^1.7.5",
+    "@rspack/cli": "^1.7.6",
+    "@rspack/core": "^1.7.6",
     "@types/md5": "^2.3.5",
     "@types/mocha": "^10.0.6",
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
     "eslint-plugin-prettier": "^5.5.5",
-    "less-loader": "^12.3.0",
+    "less-loader": "^12.3.1",
     "license-checker-webpack-plugin": "^0.2.1",
     "mocha": "^11.6.0",
     "nyc": "^17.1.0",
@@ -63,7 +78,6 @@
     "typescript-eslint": "^8.54.0"
   },
   "dependencies": {
-    "md5": "^2.3.0",
     "typescript": "^5.8.3"
   }
 }

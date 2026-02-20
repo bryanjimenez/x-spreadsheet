@@ -1,0 +1,10 @@
+name: Pull Request test
+on: pull_request
+
+jobs:
+  build:
+    uses: ./.github/workflows/job-build.yml
+
+  test-pkg:
+    needs: build
+    uses: ./.github/workflows/job-test.yml
