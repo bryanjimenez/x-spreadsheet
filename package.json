@@ -62,8 +62,8 @@
   ],
   "devDependencies": {
     "@eslint/js": "^9.39.0",
-    "@rspack/cli": "^1.7.5",
-    "@rspack/core": "^1.7.5",
+    "@rspack/cli": "^1.7.6",
+    "@rspack/core": "^1.7.6",
     "@types/md5": "^2.3.5",
     "@types/mocha": "^10.0.6",
     "@typescript-eslint/parser": "^8.54.0",
