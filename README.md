@@ -1,7 +1,7 @@
 # x-spreadsheet
 
-![license](https://img.shields.io/github/license/bryanjimenez/x-spreadsheet)
-![version](https://img.shields.io/npm/v/@nmemonica/x-spreadsheet)
+[![version](https://img.shields.io/npm/v/@nmemonica/x-spreadsheet?&style=flat-square)](https://www.npmjs.com/package/@nmemonica/x-spreadsheet)
+![license](https://img.shields.io/github/license/bryanjimenez/x-spreadsheet?&style=flat-square)
 
 > A Typescript spreadsheet
 
