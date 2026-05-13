@@ -1,6 +1,6 @@
 {
   "name": "@nmemonica/x-spreadsheet",
-  "version": "0.1.7-alpha.2",
+  "version": "0.1.7-alpha.3",
   "description": "A Typescript xpreadsheet",
   "type": "module",
   "exports": {
