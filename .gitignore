@@ -2,6 +2,10 @@ node_modules
 dist
 .*
 !.github
+!.nycrc
 
 *.txt
 *.tgz
+
+# nyc config
+!.nycrc
