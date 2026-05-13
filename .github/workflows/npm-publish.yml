@@ -11,6 +11,10 @@ jobs:
   test:
     uses: ./.github/workflows/job-test.yml
 
+  coverage:
+    needs: test
+    uses: ./.github/workflows/job-coverage.yml
+
   publish-npm:
     environment: ci
     needs: [build, test]

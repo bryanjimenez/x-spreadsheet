@@ -1,0 +1,18 @@
+name: Test Pkg
+on: workflow_call
+
+jobs:
+  coverage:
+    environment: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npx nyc npm run test 2> >(xargs -L 1 echo "::warning::")
+        continue-on-error: true
