@@ -55,6 +55,7 @@ export interface DefaultSettings {
   row: {
     len: number;
     height: number;
+    indexHeight: number;
   };
   col: {
     len: number;
@@ -120,6 +121,7 @@ const defaultSettings = {
   row: {
     len: 100,
     height: 25,
+    indexHeight: 25,
   },
   col: {
     len: 26,
@@ -395,8 +397,8 @@ export default class DataProxy {
     const { rows } = this;
     const fsh = this.freezeTotalHeight();
     // console.log('y:', y, ', fsh:', fsh);
-    let inits = rows.height;
-    if (fsh + rows.height < y) inits -= scrollOffsety;
+    let inits = rows.indexHeight;
+    if (fsh + rows.indexHeight < y) inits -= scrollOffsety;
 
     // handle ri in autofilter
     const frset = this.exceptRowSet;

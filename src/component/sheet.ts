@@ -791,7 +791,7 @@ class Sheet {
       rowResizer.hide();
     }
     if (cRect.ri === -1 && cRect.ci >= 0) {
-      cRect.height = rows.height;
+      cRect.height = rows.indexHeight;
       colResizer.show(cRect, {
         height: tRect.height,
       });
@@ -1142,9 +1142,9 @@ class Sheet {
     const { width, height } = this.getRect();
     return {
       width: width - cols.indexWidth,
-      height: height - rows.height,
+      height: height - rows.indexHeight,
       left: cols.indexWidth,
-      top: rows.height,
+      top: rows.indexHeight,
     };
   }
 }
