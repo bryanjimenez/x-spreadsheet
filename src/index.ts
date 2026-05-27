@@ -14,6 +14,7 @@ import { type SelectType } from "./component/form_select";
 import { type OperatorType, type ValidatorType } from "./core/validator";
 
 export type CellMerge = [number, number];
+export { type DefaultSettings } from "./core/data_proxy";
 
 /**
  * Data for representing a cell
