@@ -43,7 +43,15 @@ export type BorderEdit = {
 export type CopyType = "text" | "all" | "format";
 
 export interface DefaultSettings {
+  /**
+   * Sheet mode: edit or read-only  
+   * Default `edit`
+   */
   mode: "edit" | "read";
+  /**
+   * Forces focus on cell (at startup and on clicks)
+   */
+  autoFocus: boolean,
   view: {
     height: () => number;
     width: () => number;
@@ -113,6 +121,8 @@ export interface DefaultSettings {
 }
 const defaultSettings = {
   mode: "edit", // edit | read
+  autoFocus: false,
+
   view: {
     height: () => document.documentElement.clientHeight,
     width: () => document.documentElement.clientWidth,
