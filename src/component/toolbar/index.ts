@@ -257,7 +257,7 @@ export default class Toolbar {
   private moreResize() {
     const { el, btns, moreEl, btns2 } = this;
     const { moreBtns, contentEl } = moreEl.dd;
-    el.css("width", `${String(this.widthFn())}px`);
+    el.css("height", `${String(this.data.settings.toolbarHeight-1)}px`);
     const elBox = el.box();
 
     let sumWidth = 160;

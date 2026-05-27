@@ -13,6 +13,7 @@ import { cssPrefix } from "../config";
 // import { xtoast } from './message';
 import { tf } from "../locale/locale";
 import { type Offset } from "./selector";
+import { type DefaultSettings } from "../core/data_proxy";
 
 class DropdownMore extends Dropdown {
   contentClick: (index: number) => void;
@@ -124,13 +125,12 @@ class Bottombar {
       ))
     );
   }
-  addItem<T extends { mode?: string }>(
-    name: string,
-    active: boolean,
-    options: T
-  ) {
+  addItem(name: string, active: boolean, options: DefaultSettings) {
     this.dataNames.push(name);
     const item = h("li", active ? "active" : "").child(name);
+    item.css("height", `${String(options.bottombarHeight-1)}px`);
+    item.css("line-height", `${String(options.bottombarHeight-1)}px`);
+
     item
       .on("click", () => {
         this.clickSwap2(item);

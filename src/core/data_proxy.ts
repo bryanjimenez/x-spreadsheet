@@ -48,6 +48,9 @@ export interface DefaultSettings {
     height: () => number;
     width: () => number;
   };
+  toolbarHeight: number;
+  bottombarHeight: number;
+
   showGrid: boolean;
   showToolbar: boolean;
   showContextmenu: boolean;
@@ -114,6 +117,10 @@ const defaultSettings = {
     height: () => document.documentElement.clientHeight,
     width: () => document.documentElement.clientWidth,
   },
+
+  toolbarHeight: 40,
+  bottombarHeight: 40,
+
   showGrid: true,
   showToolbar: true,
   showContextmenu: true,
@@ -148,9 +155,6 @@ const defaultSettings = {
   },
 };
 
-const toolbarHeight = 41;
-const bottombarHeight = 41;
-
 export default class DataProxy {
   name: string;
   freeze: number[];
@@ -175,7 +179,7 @@ export default class DataProxy {
   unsortedRowMap: Map<number, number>;
 
   constructor(name: string, settings: Partial<DefaultSettings>) {
-    this.settings = merge<DefaultSettings>(defaultSettings, settings || {});
+    this.settings = merge<DefaultSettings>(defaultSettings, settings);
     // save data begin
     this.name = name || "sheet";
     this.freeze = [0, 0];
@@ -1244,10 +1248,10 @@ export default class DataProxy {
     const { view, showToolbar, showBottomBar } = this.settings;
     let h = view.height();
     if (showBottomBar) {
-      h -= bottombarHeight;
+      h -= this.settings.bottombarHeight;
     }
     if (showToolbar) {
-      h -= toolbarHeight;
+      h -= this.settings.toolbarHeight;
     }
     return h;
   }
