@@ -5,7 +5,10 @@ import tseslint from "typescript-eslint";
 import tsParser from "@typescript-eslint/parser";
 import prettierPlugin from "eslint-plugin-prettier";
 
-/** Temporarily ignore these */
+/**
+ * Temporarily ignore these
+ * @type {import("typescript-eslint").FlatConfig.Rules}
+ */
 const temporaryRules = {
   // turn back on later
   "sort-imports": "off",
@@ -15,7 +18,10 @@ const temporaryRules = {
   "multiline-comment-style": "off",
 }
 
-/** Ignore these, they're too strict */
+/**
+ * Ignore these, they're too strict
+ * @type {import("typescript-eslint").FlatConfig.Rules}
+ */
 const tooStrict = {
   "sort-keys": "off",
   "func-style": "off",
@@ -33,7 +39,10 @@ const tooStrict = {
   "func-names": "off",
 }
 
-/** Warn these, don't show as error */
+/**
+ * Warn these, don't show as error
+ * @type {import("typescript-eslint").FlatConfig.Rules}
+ */
 const commonWarnings = {
   "@typescript-eslint/no-unsafe-argument":"warn",  // typescript unknown
   "@typescript-eslint/no-floating-promises": "warn",
@@ -48,6 +57,9 @@ const commonWarnings = {
   "max-classes-per-file":"warn",
 }
 
+/**
+ * @type {import("typescript-eslint").FlatConfig.Rules}
+ */
 const extraRules = {
   // Warn against template literal placeholder syntax in regular strings
   "no-template-curly-in-string": "warn",
@@ -144,6 +156,9 @@ const extraRules = {
   // "promise/no-nesting": "warn",
 };
 
+/**
+ * @type {import("typescript-eslint").FlatConfig.Rules}
+ */
 const unUsedVarsIgnore = {
   "@typescript-eslint/no-unused-vars": [
     "warn",
@@ -199,7 +214,7 @@ export default tseslint.config(
       prettier: prettierPlugin,
     },
     rules: {
-      ...prettierPlugin.configs.recommended.rules,
+      ...prettierPlugin.configs?.recommended.rules,
       "prettier/prettier": ["warn", { trailingComma: "es5" }],
     },
   }
