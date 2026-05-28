@@ -3,7 +3,7 @@ import Bottombar from "./component/bottombar";
 import { h } from "./component/element";
 import Sheet from "./component/sheet";
 import { cssPrefix } from "./config";
-import DataProxy, { DefaultSettings } from "./core/data_proxy";
+import DataProxy, { type DefaultSettings } from "./core/data_proxy";
 import { locale } from "./locale/locale";
 import "./index.less";
 import { type ColProperties } from "./core/col";
@@ -14,6 +14,7 @@ import { type SelectType } from "./component/form_select";
 import { type OperatorType, type ValidatorType } from "./core/validator";
 
 export type CellMerge = [number, number];
+export { type DefaultSettings } from "./core/data_proxy";
 
 /**
  * Data for representing a cell
@@ -163,7 +164,7 @@ export class Spreadsheet {
     this.datas.push(d);
     // console.log('d:', n, d, this.datas);
     if (this.bottombar !== null) {
-      this.bottombar.addItem(n, active, this.options);
+      this.bottombar.addItem(n, active, d.settings);
     }
     this.sheetIndex += 1;
     return d;

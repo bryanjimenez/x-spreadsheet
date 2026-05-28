@@ -43,11 +43,22 @@ export type BorderEdit = {
 export type CopyType = "text" | "all" | "format";
 
 export interface DefaultSettings {
+  /**
+   * Sheet mode: edit or read-only  
+   * Default `edit`
+   */
   mode: "edit" | "read";
+  /**
+   * Forces focus on cell (at startup and on clicks)
+   */
+  autoFocus: boolean,
   view: {
     height: () => number;
     width: () => number;
   };
+  toolbarHeight: number;
+  bottombarHeight: number;
+
   showGrid: boolean;
   showToolbar: boolean;
   showContextmenu: boolean;
@@ -55,6 +66,7 @@ export interface DefaultSettings {
   row: {
     len: number;
     height: number;
+    indexHeight: number;
   };
   col: {
     len: number;
@@ -109,10 +121,16 @@ export interface DefaultSettings {
 }
 const defaultSettings = {
   mode: "edit", // edit | read
+  autoFocus: false,
+
   view: {
     height: () => document.documentElement.clientHeight,
     width: () => document.documentElement.clientWidth,
   },
+
+  toolbarHeight: 40,
+  bottombarHeight: 40,
+
   showGrid: true,
   showToolbar: true,
   showContextmenu: true,
@@ -120,6 +138,7 @@ const defaultSettings = {
   row: {
     len: 100,
     height: 25,
+    indexHeight: 25,
   },
   col: {
     len: 26,
@@ -146,9 +165,6 @@ const defaultSettings = {
   },
 };
 
-const toolbarHeight = 41;
-const bottombarHeight = 41;
-
 export default class DataProxy {
   name: string;
   freeze: number[];
@@ -173,7 +189,7 @@ export default class DataProxy {
   unsortedRowMap: Map<number, number>;
 
   constructor(name: string, settings: Partial<DefaultSettings>) {
-    this.settings = merge<DefaultSettings>(defaultSettings, settings || {});
+    this.settings = merge<DefaultSettings>(defaultSettings, settings);
     // save data begin
     this.name = name || "sheet";
     this.freeze = [0, 0];
@@ -395,8 +411,8 @@ export default class DataProxy {
     const { rows } = this;
     const fsh = this.freezeTotalHeight();
     // console.log('y:', y, ', fsh:', fsh);
-    let inits = rows.height;
-    if (fsh + rows.height < y) inits -= scrollOffsety;
+    let inits = rows.indexHeight;
+    if (fsh + rows.indexHeight < y) inits -= scrollOffsety;
 
     // handle ri in autofilter
     const frset = this.exceptRowSet;
@@ -1242,10 +1258,10 @@ export default class DataProxy {
     const { view, showToolbar, showBottomBar } = this.settings;
     let h = view.height();
     if (showBottomBar) {
-      h -= bottombarHeight;
+      h -= this.settings.bottombarHeight;
     }
     if (showToolbar) {
-      h -= toolbarHeight;
+      h -= this.settings.toolbarHeight;
     }
     return h;
   }

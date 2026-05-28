@@ -375,7 +375,7 @@ class Table {
     // fixed width of header
     const fw = cols.indexWidth;
     // fixed height of header
-    const fh = rows.height;
+    const fh = rows.indexHeight;
 
     this.draw.resize(data.viewWidth(), data.viewHeight());
     this.clear();

@@ -19,7 +19,7 @@ let startZIndex = 10;
 
 class SelectorElement {
   useHideInput: unknown;
-  autoFocus: unknown;
+  autoFocus: boolean;
   inputChange: (arg: string) => void;
   cornerEl: Element<HTMLDivElement>;
   areaEl: Element<HTMLDivElement>;
@@ -29,7 +29,7 @@ class SelectorElement {
   hideInput?: Element<HTMLInputElement>;
   hideInputDiv?: Element<HTMLDivElement>;
 
-  constructor(useHideInput = false, autoFocus = true) {
+  constructor(useHideInput = false, autoFocus: boolean) {
     this.useHideInput = useHideInput;
     this.autoFocus = autoFocus;
     this.inputChange = () => {};

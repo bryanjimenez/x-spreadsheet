@@ -22,14 +22,24 @@ class Rows {
   _: RowList;
   len: number;
   height: number;
+  indexHeight: number;
   hide?: boolean;
   cells?: Record<string, CellData>;
 
-  constructor({ len, height }: { len: number; height: number }) {
+  constructor({
+    len,
+    height,
+    indexHeight,
+  }: {
+    len: number;
+    height: number;
+    indexHeight: number;
+  }) {
     this._ = {};
     this.len = len;
     // default row height
     this.height = height;
+    this.indexHeight = indexHeight;
   }
 
   getHeight(ri: number) {
