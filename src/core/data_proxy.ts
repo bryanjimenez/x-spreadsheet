@@ -49,20 +49,35 @@ export interface DefaultSettings {
    */
   mode: "edit" | "read";
   /**
-   * Forces focus on cell (at startup and on clicks)
+   * Forces focus on cell (at startup and on clicks)  
+   * Default `false`
    */
   autoFocus: boolean,
+  /**
+   * Area available for workbook component
+   */
   view: {
     height: () => number;
     width: () => number;
   };
-  toolbarHeight: number;
-  bottombarHeight: number;
 
   showGrid: boolean;
   showToolbar: boolean;
+  /**
+   * Workbook's primary toolbar height
+   * Default `40px`
+   */
+  toolbarHeight: number;
+
   showContextmenu: boolean;
+
   showBottomBar: boolean;
+  /**
+   * Workbook's sheet add/delete/view toolbar height
+   * Default `40px`
+   */
+  bottombarHeight: number;
+
   row: {
     len: number;
     height: number;
