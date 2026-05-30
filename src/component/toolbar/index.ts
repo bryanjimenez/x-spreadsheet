@@ -28,8 +28,7 @@ import Item from "./item";
 import { type Element, h } from "../element";
 import { cssPrefix } from "../../config";
 import { bind } from "../event";
-import type DataProxy from "../../core/data_proxy";
-import { type BorderEdit } from "../../core/data_proxy";
+import type { default as DataProxy, BorderEdit } from "../../core/data_proxy";
 
 export interface ExtendToolbarOption {
   tip?: string;
@@ -210,11 +209,11 @@ export default class Toolbar {
     btn.el.on("click", () => {
       if (it.onClick) it.onClick(this.data.getData(), this.data);
     });
-    btn.tip = it.tip || "";
+    btn.tip = it.tip ?? "";
 
     let { el } = it;
 
-    if (it.icon) {
+    if (it.icon !== undefined) {
       el = h("img").attr("src", it.icon);
     }
 
@@ -257,7 +256,7 @@ export default class Toolbar {
   private moreResize() {
     const { el, btns, moreEl, btns2 } = this;
     const { moreBtns, contentEl } = moreEl.dd;
-    el.css("height", `${String(this.data.settings.toolbar.height-1)}px`);
+    el.css("height", `${String(this.data.settings.toolbar.height - 1)}px`);
     const elBox = el.box();
 
     let sumWidth = 160;

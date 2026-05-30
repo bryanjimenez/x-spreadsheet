@@ -98,9 +98,8 @@ interface CellOnEventCallbackMap {
 }
 
 export type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends object
-  ? DeepPartial<T[K]>: T[K];
-}
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
 
 export class Spreadsheet {
   options: DeepPartial<DefaultSettings>;
@@ -110,7 +109,10 @@ export class Spreadsheet {
   sheet: Sheet;
   bottombar: Bottombar | null;
 
-  constructor(selectors: string | Element, options:DeepPartial<DefaultSettings> = {}) {
+  constructor(
+    selectors: string | Element,
+    options: DeepPartial<DefaultSettings> = {}
+  ) {
     const targetEl =
       typeof selectors === "string"
         ? document.querySelector(selectors)
@@ -119,7 +121,13 @@ export class Spreadsheet {
       throw new Error(`Selector ${JSON.stringify(selectors)} was not found`);
     }
 
-    this.options = { ...options, bottombar: { ...options.bottombar, show: options.bottombar?.show!==false } };
+    this.options = {
+      ...options,
+      bottombar: {
+        ...options.bottombar,
+        show: options.bottombar?.show !== false,
+      },
+    };
     this.sheetIndex = 0;
     this.datas = [];
 
@@ -329,7 +337,10 @@ if (window !== undefined) {
   window.x_spreadsheet = spreadsheet;
 
   //@ts-expect-error camel case
-  window.x_spreadsheet.locale = (lang, message) => {
+  window.x_spreadsheet.locale = (
+    lang: string,
+    message: Record<string, unknown>
+  ) => {
     locale(lang, message);
   };
   /* eslint-enable */

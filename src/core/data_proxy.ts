@@ -44,15 +44,15 @@ export type CopyType = "text" | "all" | "format";
 
 export interface DefaultSettings {
   /**
-   * Sheet mode: edit or read-only  
+   * Sheet mode: edit or read-only
    * Default `edit`
    */
   mode: "edit" | "read";
   /**
-   * Forces focus on cell (at startup and on clicks)  
+   * Forces focus on cell (at startup and on clicks)
    * Default `false`
    */
-  autoFocus: boolean,
+  autoFocus: boolean;
   /**
    * Area available for workbook component
    */
@@ -148,12 +148,12 @@ const defaultSettings = {
     width: () => document.documentElement.clientWidth,
   },
 
-  toolbar:{
+  toolbar: {
     show: true,
     height: 40,
   },
 
-  bottombar:{
+  bottombar: {
     show: true,
     height: 40,
   },
@@ -555,7 +555,7 @@ export default class DataProxy {
       const row = [];
       for (let ci = sci; ci <= eci; ci += 1) {
         const cell = this.getCell(ri, ci);
-        row.push((cell && cell.text) || "");
+        row.push(cell?.text ?? "");
       }
       copyText.push(row);
     }
@@ -836,7 +836,7 @@ export default class DataProxy {
     let nri = ri;
     if (this.unsortedRowMap.has(ri)) {
       const value = this.unsortedRowMap.get(ri);
-      if (value) {
+      if (value !== undefined) {
         nri = value;
       }
     }
@@ -1209,7 +1209,7 @@ export default class DataProxy {
 
   getCellTextOrDefault(ri: number, ci: number) {
     const cell = this.getCell(ri, ci);
-    return cell && cell.text ? cell.text : "";
+    return cell?.text ? cell.text : "";
   }
 
   getCellStyle(ri: number, ci: number) {
@@ -1465,7 +1465,7 @@ export default class DataProxy {
         }
       } else if (property === "freeze") {
         const f = d.freeze;
-        if (f) {
+        if (f !== undefined) {
           const [x, y] = expr2xy(f);
           this.freeze = [y, x];
         }
