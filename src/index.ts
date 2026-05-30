@@ -97,15 +97,20 @@ interface CellOnEventCallbackMap {
   ["change"]: (sheet: SheetData) => void;
 }
 
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object
+  ? DeepPartial<T[K]>: T[K];
+}
+
 export class Spreadsheet {
-  options: Partial<DefaultSettings>;
+  options: DeepPartial<DefaultSettings>;
   sheetIndex: number;
   datas: DataProxy[];
   data: DataProxy;
   sheet: Sheet;
   bottombar: Bottombar | null;
 
-  constructor(selectors: string | Element, options = {}) {
+  constructor(selectors: string | Element, options:DeepPartial<DefaultSettings> = {}) {
     const targetEl =
       typeof selectors === "string"
         ? document.querySelector(selectors)
@@ -114,12 +119,12 @@ export class Spreadsheet {
       throw new Error(`Selector ${JSON.stringify(selectors)} was not found`);
     }
 
-    this.options = { showBottomBar: true, ...options };
+    this.options = { ...options, bottombar: { ...options.bottombar, show: options.bottombar?.show!==false } };
     this.sheetIndex = 0;
     this.datas = [];
 
     this.bottombar =
-      this.options.showBottomBar === true
+      this.options.bottombar?.show === true
         ? new Bottombar(
             () => {
               if (this.options.mode === "read") return;

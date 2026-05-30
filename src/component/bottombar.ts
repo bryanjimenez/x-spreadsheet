@@ -128,8 +128,8 @@ class Bottombar {
   addItem(name: string, active: boolean, options: DefaultSettings) {
     this.dataNames.push(name);
     const item = h("li", active ? "active" : "").child(name);
-    item.css("height", `${String(options.bottombarHeight-1)}px`);
-    item.css("line-height", `${String(options.bottombarHeight-1)}px`);
+    item.css("height", `${String(options.bottombar.height-1)}px`);
+    item.css("line-height", `${String(options.bottombar.height-1)}px`);
 
     item
       .on("click", () => {

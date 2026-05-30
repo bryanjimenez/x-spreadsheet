@@ -64,9 +64,9 @@ class Sheet {
 
   constructor(targetEl: Element<HTMLDivElement>, data: DataProxy) {
     this.eventMap = createEventEmitter();
-    const { view, showToolbar, showContextmenu } = data.settings;
+    const { view, toolbar, showContextmenu } = data.settings;
     this.el = h("div", `${cssPrefix}-sheet`);
-    this.toolbar = new Toolbar(data, view.width, !showToolbar);
+    this.toolbar = new Toolbar(data, view.width, !toolbar.show);
     this.print = new Print(data);
     targetEl.children(this.toolbar.el, this.el, this.print.el);
     this.data = data;

@@ -13,7 +13,7 @@ import { Validations } from "./validation";
 import { CellRange, CellRangePoints, CellRef } from "./cell_range";
 import { expr2xy, xy2expr } from "./alphabet";
 import { t } from "../locale/locale";
-import { RowList, type CellData, type SheetData } from "..";
+import { type DeepPartial, RowList, type CellData, type SheetData } from "..";
 import {
   type ExtendToolbarOption,
   type ToolBarChangeType,
@@ -62,21 +62,26 @@ export interface DefaultSettings {
   };
 
   showGrid: boolean;
-  showToolbar: boolean;
-  /**
-   * Workbook's primary toolbar height
-   * Default `40px`
-   */
-  toolbarHeight: number;
+
+  toolbar: {
+    show: boolean;
+    /**
+     * Workbook's primary toolbar height
+     * Default `40px`
+     */
+    height: number;
+  };
+
+  bottombar: {
+    show: boolean;
+    /**
+     * Workbook's sheet add/delete/view toolbar height
+     * Default `40px`
+     */
+    height: number;
+  };
 
   showContextmenu: boolean;
-
-  showBottomBar: boolean;
-  /**
-   * Workbook's sheet add/delete/view toolbar height
-   * Default `40px`
-   */
-  bottombarHeight: number;
 
   row: {
     len: number;
@@ -143,13 +148,18 @@ const defaultSettings = {
     width: () => document.documentElement.clientWidth,
   },
 
-  toolbarHeight: 40,
-  bottombarHeight: 40,
+  toolbar:{
+    show: true,
+    height: 40,
+  },
+
+  bottombar:{
+    show: true,
+    height: 40,
+  },
 
   showGrid: true,
-  showToolbar: true,
   showContextmenu: true,
-  showBottomBar: true,
   row: {
     len: 100,
     height: 25,
@@ -203,7 +213,7 @@ export default class DataProxy {
   sortedRowMap: Map<number, number>;
   unsortedRowMap: Map<number, number>;
 
-  constructor(name: string, settings: Partial<DefaultSettings>) {
+  constructor(name: string, settings: DeepPartial<DefaultSettings>) {
     this.settings = merge<DefaultSettings>(defaultSettings, settings);
     // save data begin
     this.name = name || "sheet";
@@ -1270,13 +1280,13 @@ export default class DataProxy {
   }
 
   viewHeight() {
-    const { view, showToolbar, showBottomBar } = this.settings;
+    const { view, toolbar, bottombar } = this.settings;
     let h = view.height();
-    if (showBottomBar) {
-      h -= this.settings.bottombarHeight;
+    if (bottombar.show) {
+      h -= bottombar.height;
     }
-    if (showToolbar) {
-      h -= this.settings.toolbarHeight;
+    if (toolbar.show) {
+      h -= toolbar.height;
     }
     return h;
   }
