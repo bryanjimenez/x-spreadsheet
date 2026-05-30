@@ -102,7 +102,7 @@ export type DeepPartial<T> = {
 };
 
 export class Spreadsheet {
-  options: DeepPartial<DefaultSettings>;
+  options: DefaultSettings;
   sheetIndex: number;
   datas: DataProxy[];
   data: DataProxy;
@@ -121,15 +121,11 @@ export class Spreadsheet {
       throw new Error(`Selector ${JSON.stringify(selectors)} was not found`);
     }
 
-    this.options = {
-      ...options,
-      bottombar: {
-        ...options.bottombar,
-        show: options.bottombar?.show !== false,
-      },
-    };
     this.sheetIndex = 0;
     this.datas = [];
+
+    const {settings} = new DataProxy('sheet-options', options);
+    this.options = settings;
 
     this.bottombar =
       this.options.bottombar?.show === true
@@ -156,6 +152,10 @@ export class Spreadsheet {
             }
           )
         : null;
+
+    this.bottombar?.moreEl.css("height", `${String(this.options.bottombar?.height-1)}px`);
+    this.bottombar?.moreEl.css("line-height", `${String(this.options.bottombar?.height-1)}px`);
+
     this.data = this.addSheet();
     const rootEl = h("div", cssPrefix).on("contextmenu", (evt) => {
       evt.preventDefault();
