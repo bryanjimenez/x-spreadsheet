@@ -52,8 +52,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@rspack/cli": "^1.7.6",
-    "@rspack/core": "^1.7.6",
+    "@rspack/cli": "^2.0.5",
+    "@rspack/core": "^2.0.5",
+    "@rspack/dev-server": "^2.0.3",
     "@types/md5": "^2.3.5",
     "@types/mocha": "^10.0.6",
     "@typescript-eslint/parser": "^8.54.0",
