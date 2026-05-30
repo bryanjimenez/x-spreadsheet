@@ -14,7 +14,7 @@
     },
     "./types/*": "./dist/types/*.d.ts",
     "./locale/*": {
-      "default": "./dist/locale/*.js",
+      "default": "./dist/locale/*.json",
       "types": "./dist/types/locale/*.d.ts"
     },
     "./index.css": "./dist/index.css"
@@ -35,8 +35,7 @@
     "dev": "rspack serve -c ./build/rspack.dev.js",
     "prebuild": "rm -rf ./dist",
     "build": "rspack build -c ./build/rspack.prod.js",
-    "postbuild": "npm run build-dts; npm run build-locale",
-    "build-locale": "rspack -c build/rspack.locale.js",
+    "postbuild": "npm run build-dts",
     "build-dts": "tsc -p ./tsconfig.types.json | cat",
     "test": "mocha -r ./test/require.mjs --recursive --extension ts ./test",
     "coverage": "nyc npm run test > '/dev/null'; nyc report",
