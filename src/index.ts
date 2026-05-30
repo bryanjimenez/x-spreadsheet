@@ -14,7 +14,7 @@ import { type SelectType } from "./component/form_select";
 import { type OperatorType, type ValidatorType } from "./core/validator";
 
 export type CellMerge = [number, number];
-export { type DefaultSettings } from "./core/data_proxy";
+export type InitConfig = DeepPartial<DefaultSettings>;
 
 /**
  * Data for representing a cell
@@ -109,10 +109,7 @@ export class Spreadsheet {
   sheet: Sheet;
   bottombar: Bottombar | null;
 
-  constructor(
-    selectors: string | Element,
-    options: DeepPartial<DefaultSettings> = {}
-  ) {
+  constructor(selectors: string | Element, options: InitConfig = {}) {
     const targetEl =
       typeof selectors === "string"
         ? document.querySelector(selectors)
@@ -124,37 +121,42 @@ export class Spreadsheet {
     this.sheetIndex = 0;
     this.datas = [];
 
-    const {settings} = new DataProxy('sheet-options', options);
+    const { settings } = new DataProxy("sheet-options", options);
     this.options = settings;
 
-    this.bottombar =
-      this.options.bottombar?.show === true
-        ? new Bottombar(
-            () => {
-              if (this.options.mode === "read") return;
-              const d = this.addSheet();
-              this.sheet.resetData(d);
-            },
-            (index: number) => {
-              // bottom-bar on sheet change handler
-              const d = this.datas[index];
-              this.sheet.resetData(d);
+    this.bottombar = this.options.bottombar?.show
+      ? new Bottombar(
+          () => {
+            if (this.options.mode === "read") return;
+            const d = this.addSheet();
+            this.sheet.resetData(d);
+          },
+          (index: number) => {
+            // bottom-bar on sheet change handler
+            const d = this.datas[index];
+            this.sheet.resetData(d);
 
-              this.sheet.verticalScrollbar.move({ top: d.scroll.y });
-              this.sheet.horizontalScrollbar.move({ left: d.scroll.x });
-            },
-            () => {
-              this.deleteSheet();
-            },
-            (index, value) => {
-              this.datas[index].name = value;
-              this.sheet.trigger("change");
-            }
-          )
-        : null;
+            this.sheet.verticalScrollbar.move({ top: d.scroll.y });
+            this.sheet.horizontalScrollbar.move({ left: d.scroll.x });
+          },
+          () => {
+            this.deleteSheet();
+          },
+          (index, value) => {
+            this.datas[index].name = value;
+            this.sheet.trigger("change");
+          }
+        )
+      : null;
 
-    this.bottombar?.moreEl.css("height", `${String(this.options.bottombar?.height-1)}px`);
-    this.bottombar?.moreEl.css("line-height", `${String(this.options.bottombar?.height-1)}px`);
+    this.bottombar?.moreEl.css(
+      "height",
+      `${String(this.options.bottombar?.height - 1)}px`
+    );
+    this.bottombar?.moreEl.css(
+      "line-height",
+      `${String(this.options.bottombar?.height - 1)}px`
+    );
 
     this.data = this.addSheet();
     const rootEl = h("div", cssPrefix).on("contextmenu", (evt) => {
