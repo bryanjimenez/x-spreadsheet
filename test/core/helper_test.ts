@@ -61,28 +61,27 @@ describe("[helper.ts](./src/core/helper.ts)", () => {
     it("The modification of the returned value does not affect the original value", () => {
       const obj = { k: { k1: "v" } };
       const obj1 = cloneDeep(obj);
-      // @ts-expect-error @typescript-eslint/no-unsafe-member-access
       obj1.k.k1 = "v1";
       assert.equal(obj.k.k1, "v");
     });
   });
   describe(".merge()", () => {
     it("should return { a: 'a' } where the value is { a: 'a' }", () => {
-      const m = merge({ a: "a" });
-      // @ts-expect-error @typescript-eslint/no-unsafe-member-access
+      const obj = { a: "a" };
+      const m = merge<typeof obj>(obj);
       assert.equal(m.a, "a");
     });
     it("should return {a: 'a', b: 'b'} where the value is {a: 'a'}, {b: 'b'}", () => {
-      const m = merge({ a: "a" }, { b: "b" });
-      // @ts-expect-error @typescript-eslint/no-unsafe-member-access
+      const objA = { a: "a" };
+      const objB = { b: "b" };
+      const m = merge<typeof objA & typeof objB>(objA, objB);
       const { a, b } = m;
       assert.equal(a, "a");
       assert.equal(b, "b");
     });
     it("should return { a: { a1: 'a2' }, b: 'b' } where the value is {a: {a1: 'a1'}, b: 'b'}, {a: {a1: 'b'}}", () => {
       const obj = { a: { a1: "a1" }, b: "b" };
-      const m = merge(obj, { a: { a1: "a2" } });
-      // @ts-expect-error @typescript-eslint/no-unsafe-member-access
+      const m = merge<typeof obj>(obj, { a: { a1: "a2" } });
       const { a, b } = m;
       assert.equal(obj.a.a1, "a1");
       assert.equal(a.a1, "a2");
@@ -110,11 +109,16 @@ describe("[helper.ts](./src/core/helper.ts)", () => {
     it(" 0  : true", function () {
       assert.equal(isNumber(0), true);
     });
+    it("'0.0' : true", function () {
+      assert.equal(isNumber("0.0"), true);
+    });
 
+    it("'0a' : false", function () {
+      assert.equal(isNumber("0a"), false);
+    });
     it("'-' : false", function () {
       assert.equal(isNumber("-"), false);
     });
-
     it("'a' : false", function () {
       assert.equal(isNumber("a"), false);
     });

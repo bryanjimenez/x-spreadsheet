@@ -139,7 +139,7 @@ export interface DefaultSettings {
     right?: ExtendToolbarOption[];
   };
 }
-const defaultSettings = {
+const defaultSettings: DefaultSettings = {
   mode: "edit", // edit | read
   autoFocus: false,
 
@@ -179,6 +179,12 @@ const defaultSettings = {
     strike: false,
     underline: false,
     color: "#0a0a0a",
+    border: {
+      bottom: null,
+      left: null,
+      right: null,
+      top: null,
+    },
     //"border":{"top":["thin","#0366d6"],"bottom":["thin","#0366d6"],"right":["thin","#0366d6"],"left":["thin","#0366d6"]}
     font: {
       name: "Arial",
@@ -188,12 +194,14 @@ const defaultSettings = {
     },
     format: "normal",
   },
+  evalPaused: undefined,
+  extendToolbar: undefined,
 };
 
 export default class DataProxy {
   name: string;
   freeze: number[];
-  styles: DefaultSettings["style"][];
+  styles: Partial<DefaultSettings["style"]>[];
 
   merges: Merges;
   rows: Rows;
@@ -307,7 +315,7 @@ export default class DataProxy {
     if (cell.style !== undefined) {
       cstyle = cloneDeep(styles[cell.style]);
     }
-    cstyle = merge<DefaultSettings["style"]>(cstyle, { border: bss });
+    cstyle = merge(cstyle, { border: bss });
     cell.style = this.addStyle(cstyle);
   }
 
@@ -1430,11 +1438,11 @@ export default class DataProxy {
     }
   }
 
-  defaultStyle() {
+  defaultStyle(): DefaultSettings["style"] {
     return this.settings.style;
   }
 
-  addStyle(nstyle: DefaultSettings["style"]) {
+  addStyle(nstyle: Partial<DefaultSettings["style"]>) {
     const { styles } = this;
     // console.log('old.styles:', styles, nstyle);
     for (let i = 0; i < styles.length; i += 1) {

@@ -15,7 +15,7 @@ export default class Format extends DropdownItem<DropdownFontsize> {
     if (!isNumber(size)) {
       throw new Error("Expected size to be a number");
     }
-    return size;
+    return Number(size);
   }
 
   dropdown() {

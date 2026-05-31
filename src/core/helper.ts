@@ -1,10 +1,10 @@
-export function cloneDeep<T>(obj: unknown): T {
-  return JSON.parse(JSON.stringify(obj));
+export function cloneDeep<T extends object>(obj: T) {
+  return JSON.parse(JSON.stringify(obj)) as T;
 }
 
-export function mergeDeep<T>(
-  object: Record<string, unknown> = {},
-  ...sources: Record<string, unknown>[]
+export function mergeDeep<T extends object>(
+  object: T = {} as T,
+  ...sources: T[]
 ): T {
   sources.forEach((source) => {
     Object.keys(source).forEach((key) => {
@@ -32,8 +32,8 @@ export function mergeDeep<T>(
   return object;
 }
 
-export function merge<T>(...sources: Record<string, unknown>[]) {
-  return mergeDeep<T>({}, ...sources);
+export function merge<T>(...sources: unknown[]) {
+  return mergeDeep({}, ...sources) as T;
 }
 
 export function equals<T extends object>(obj1: T, obj2: T) {
@@ -83,14 +83,14 @@ export function sum(
   return [total, size];
 }
 
-function deleteProperty<T extends Record<string, unknown>>(
-  obj: T,
-  property: keyof T
-) {
-  const oldv = obj[String(property)];
-  delete obj[String(property)];
-  return oldv;
-}
+// function deleteProperty<T extends Record<string, unknown>>(
+//   obj: T,
+//   property: keyof T
+// ) {
+//   const oldv = obj[String(property)];
+//   delete obj[String(property)];
+//   return oldv;
+// }
 
 export function rangeReduceIf(
   min: number,
@@ -123,11 +123,11 @@ export function rangeSum(
   return s;
 }
 
-function rangeEach(min: number, max: number, cb: (i: number) => void) {
-  for (let i = min; i < max; i += 1) {
-    cb(i);
-  }
-}
+// function rangeEach(min: number, max: number, cb: (i: number) => void) {
+//   for (let i = min; i < max; i += 1) {
+//     cb(i);
+//   }
+// }
 
 export function arrayEquals(a1: unknown[], a2: unknown[]) {
   if (a1.length === a2.length) {
@@ -149,7 +149,7 @@ function digits(a: unknown) {
   return ret;
 }
 
-export function isNumber(x: unknown): x is number {
+export function isNumber(x: unknown): x is number | string {
   return (
     (typeof x === "number" || (typeof x === "string" && x.trim() !== "")) &&
     !isNaN(x as number)
@@ -267,7 +267,7 @@ export function numberCalc(
   }
 
   if (!isNumber(a1) || !isNumber(a2)) {
-    return a1 + type + a2;
+    return String(a1) + type + String(a2);
   }
 
   const al1 = digits(a1);
