@@ -17,7 +17,7 @@ function deepFreeze<T>(obj: T): Immutable<T> {
   const propNames = Object.getOwnPropertyNames(obj);
   for (const name of propNames) {
     const value = (obj as any)[name];
-    if (value && typeof value === "object") {
+    if (value !== undefined && typeof value === "object") {
       deepFreeze(value);
     }
   }
@@ -26,7 +26,7 @@ function deepFreeze<T>(obj: T): Immutable<T> {
 }
 
 describe("./src/spreasheet", function () {
-  const data = {
+  const dataA = {
     name: "SheetA",
     autofilter: {
       ref: null,
@@ -52,67 +52,154 @@ describe("./src/spreasheet", function () {
     },
   };
 
+  const dataB = {
+    name: "SheetB",
+    autofilter: {
+      ref: null,
+      filters: [],
+      sort: null,
+    },
+    rows: {
+      "0": {
+        cells: {
+          "0": { text: "header 100" },
+          "1": { text: "header 101" },
+          "2": { text: "header 102" },
+        },
+      },
+      "1": {
+        cells: {
+          "0": { text: "X" },
+          "1": { text: "Y" },
+          "2": { text: "Z" },
+        },
+      },
+      len: 2,
+    },
+  };
+
   describe("Spreadsheet", function () {
-    it.skip("loadData doesn't mutate", function () {
-      // NOTE: the dataCopy.row.len property is being modified by loadData
+    describe("data", function () {
+      it.skip("loadData doesn't mutate", function () {
+        // NOTE: the dataCopy.row.len property is being modified by loadData
 
-      const dataCopy = deepFreeze(data);
+        const dataCopy = deepFreeze(dataA);
 
-      const myDiv = window.document.createElement("div");
-      let sheet;
-      try {
-        // @ts-expect-error dataCopy is not unwrapped
-        sheet = new Spreadsheet(myDiv, {}).loadData([dataCopy]);
-      } catch (err) {
-        assert.fail(err);
-      }
-      const [actual] = sheet.exportValues();
+        const myDiv = window.document.createElement("div");
+        let sheet;
+        try {
+          // @ts-expect-error dataCopy is not unwrapped
+          sheet = new Spreadsheet(myDiv, {}).loadData([dataCopy]);
+        } catch (err) {
+          assert.fail(err);
+        }
+        const [actual] = sheet.exportValues();
 
-      assert.equal(actual.name, data.name);
-      // assert.equal(actual.rows.len, data.rows.len)
-      assert.equal(actual.rows.len, Object.keys(data.rows).length);
+        assert.equal(actual.name, dataA.name);
+        // assert.equal(actual.rows.len, data.rows.len)
+        assert.equal(actual.rows.len, Object.keys(dataA.rows).length);
+      });
+
+      it("exportValues: no change", function () {
+        const dataCopy = deepCopy(dataA);
+
+        const myDiv = window.document.createElement("div");
+        const sheet = new Spreadsheet(myDiv).loadData([dataCopy]);
+        const [actual] = sheet.exportValues();
+
+        assert.equal(actual.name, dataA.name);
+        assert.equal(actual.rows.len, dataA.rows.len);
+        // assert.equal(actual.rows.len, Object.keys(data.rows).length)
+      });
+
+      it("exportValues: w/ change", function () {
+        const dataCopy = deepCopy(dataA);
+
+        const myDiv = window.document.createElement("div");
+        const sheet = new Spreadsheet(myDiv).loadData([dataCopy]);
+        sheet.cellText(1, 0, "Z");
+        sheet.cellText(1, 1, "Z");
+        sheet.cellText(1, 2, "Z");
+        const [actual] = sheet.exportValues();
+
+        assert.equal(actual.name, dataA.name);
+        assert.equal(actual.rows.len, dataA.rows.len);
+        assert.equal(
+          JSON.stringify(actual.rows[1].cells),
+          JSON.stringify({
+            "0": {
+              text: "Z",
+            },
+            "1": {
+              text: "Z",
+            },
+            "2": {
+              text: "Z",
+            },
+          })
+        );
+      });
+
+      it("focusOnSheet", function () {
+        const dataCopy = deepCopy([dataA, dataB]);
+
+        const myDiv = window.document.createElement("div");
+        const sheet = new Spreadsheet(myDiv).loadData(dataCopy);
+        sheet.focusOnSheet("SheetB");
+        sheet.cellText(1, 0, "Z");
+        sheet.cellText(1, 1, "Z");
+        sheet.cellText(1, 2, "Z");
+        const [_sheetA, actual] = sheet.exportValues();
+
+        assert.equal(actual.name, dataB.name);
+        assert.equal(actual.rows.len, dataB.rows.len);
+        assert.equal(
+          JSON.stringify(actual.rows[1].cells),
+          JSON.stringify({
+            "0": {
+              text: "X",
+            },
+            "1": {
+              text: "Y",
+            },
+            "2": {
+              text: "Z",
+            },
+          })
+        );
+      });
     });
 
-    it("exportValues", function () {
-      const dataCopy = deepCopy(data);
+    describe("html", function () {
+      it("hide toolbar", function () {
+        const expected = false;
+        const myDiv = window.document.createElement("div");
+        const sheet = new Spreadsheet(myDiv, {
+          toolbar: { show: expected },
+        }).loadData([]);
+        // const [actual] = sheet.exportValues();
 
-      const myDiv = window.document.createElement("div");
-      const sheet = new Spreadsheet(myDiv).loadData([dataCopy]);
-      const [actual] = sheet.exportValues();
+        assert.equal(myDiv.getElementsByClassName("x-spreadsheet").length, 1);
 
-      assert.equal(actual.name, data.name);
-      assert.equal(actual.rows.len, data.rows.len);
-      // assert.equal(actual.rows.len, Object.keys(data.rows).length)
-    });
+        assert.equal(
+          sheet.data.settings.toolbar.show,
+          expected,
+          "toolbar-settings"
+        );
+        assert.equal(!sheet.sheet.toolbar.isHide, expected, "toolbar-object");
+        assert.equal(
+          myDiv
+            .getElementsByClassName("x-spreadsheet-toolbar")[0]
+            .getAttribute("style"),
+          "display: none;",
+          "toolbar-html"
+        );
 
-    it.skip("hide toolbar", function () {
-      const expected = false;
-      const myDiv = window.document.createElement("div");
-      const sheet = new Spreadsheet(myDiv, {
-        toolbar: { show: expected },
-      }).loadData([]);
-      // const [actual] = sheet.exportValues();
-
-      assert.equal(myDiv.getElementsByClassName("x-spreadsheet").length, 1);
-
-      assert.equal(
-        sheet.data.settings.toolbar.show,
-        expected,
-        "toolbar-settings"
-      );
-      assert.equal(!sheet.sheet.toolbar.isHide, expected, "toolbar-object");
-      assert.equal(
-        myDiv
-          .getElementsByClassName("x-spreadsheet-toolbar")[0]
-          .getAttribute("style"),
-        "display: none;",
-        "toolbar-html"
-      );
-
-      assert.equal(
-        myDiv.getElementsByClassName("x-spreadsheet-bottombar").length,
-        1
-      );
+        assert.equal(
+          myDiv.getElementsByClassName("x-spreadsheet-bottombar").length,
+          1
+        );
+      });
     });
   });
 
