@@ -83,6 +83,11 @@ export default function rspackConfig(
     },
 
     plugins: [
+      new rspack.CopyRspackPlugin({
+        patterns: [
+          { context: "./src/locale", from: "*.json", to: "locale" },
+        ],
+      }),
       new rspack.HtmlRspackPlugin({
         template: "./index.html",
         title: "x-spreadsheet",

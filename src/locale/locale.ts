@@ -1,5 +1,5 @@
 /* global window */
-import en from "./en";
+import en from "./en.json";
 
 // Defines the fallback language as English
 let $languages = ["en"];
@@ -14,7 +14,7 @@ const $messages: Record<string, unknown> = {
  */
 function translate(
   key: string,
-  messages: Record<string, unknown>
+  messages: Record<string, unknown>,
 ): string | undefined {
   if (messages) {
     // Return the translation from the first language in the languages array
@@ -84,7 +84,7 @@ function tf(key: string) {
 function locale(
   lang: string,
   message: Record<string, unknown>,
-  clearLangList = false
+  clearLangList = false,
 ) {
   if (clearLangList) {
     $languages = [lang];
