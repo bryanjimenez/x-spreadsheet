@@ -1,9 +1,15 @@
 // @ts-check
 
-import eslint from "@eslint/js";
+import fs from "node:fs";
+import path from "node:path";
+import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 import tsParser from "@typescript-eslint/parser";
 import prettierPlugin from "eslint-plugin-prettier";
+import prettier from "prettier";
+
+const ENABLE_PRETTIER = true;
 
 /**
  * Temporarily ignore these
@@ -13,10 +19,10 @@ const temporaryRules = {
   // turn back on later
   "sort-imports": "off",
   "no-magic-numbers": "off",
-  "curly": "off",
+  curly: "off",
   "one-var": "off",
   "multiline-comment-style": "off",
-}
+};
 
 /**
  * Ignore these, they're too strict
@@ -27,35 +33,35 @@ const tooStrict = {
   "func-style": "off",
   "id-length": "off",
   "capitalized-comments": "off",
-  "no-inline-comments":"off",
+  "no-inline-comments": "off",
   "max-statements": "off",
-  "max-params":"off",
-  "max-lines":"off",
-  "max-lines-per-function":"off",
+  "max-params": "off",
+  "max-lines": "off",
+  "max-lines-per-function": "off",
   "no-ternary": "off",
   "line-comment-position": "off",
   "no-negated-condition": "off",
-  "no-undefined":"off",
+  "no-undefined": "off",
   "func-names": "off",
-}
+};
 
 /**
  * Warn these, don't show as error
  * @type {import("typescript-eslint").FlatConfig.Rules}
  */
 const commonWarnings = {
-  "@typescript-eslint/no-unsafe-argument":"warn",  // typescript unknown
+  "@typescript-eslint/no-unsafe-argument": "warn", // typescript unknown
   "@typescript-eslint/no-floating-promises": "warn",
 
   // prevent nullish/zero/NaN cases in if()
   "@typescript-eslint/strict-boolean-expressions": "warn",
 
-  "no-warning-comments":"warn",
-  "camelcase":"warn",
-  "max-depth":"warn",
+  "no-warning-comments": "warn",
+  camelcase: "warn",
+  "max-depth": "warn",
   "no-console": "warn",
-  "max-classes-per-file":"warn",
-}
+  "max-classes-per-file": "warn",
+};
 
 /**
  * @type {import("typescript-eslint").FlatConfig.Rules}
@@ -170,28 +176,25 @@ const unUsedVarsIgnore = {
   ],
 };
 
-export default tseslint.config(
-  eslint.configs.all,
+export default defineConfig(
+  {
+    ignores: [".*", "node_modules/", "dist/"],
+  },
+
+  js.configs.all,
   ...tseslint.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
 
   {
-    ignores: [".*", "node_modules/", "dist/"],
-  },
-  {
     languageOptions: {
       parser: tsParser,
-
       parserOptions: {
-        project: "./tsconfig.json",
-        // sourceType: "module",
-        // ecmaVersion: "latest",
+        projectService: true,
       },
-      sourceType: "module",
-      // globals: { ...globals.browser },
     },
-    plugins: {},
-    settings: {},
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
     rules: {
       ...extraRules,
       ...unUsedVarsIgnore,
@@ -209,13 +212,63 @@ export default tseslint.config(
     },
   },
   {
-    // everything gets prettier
-    plugins: {
-      prettier: prettierPlugin,
-    },
-    rules: {
-      ...prettierPlugin.configs?.recommended.rules,
-      "prettier/prettier": ["warn", { trailingComma: "es5" }],
-    },
-  }
+    files: ["**/*.js"],
+    extends: [tseslint.configs.disableTypeChecked],
+  },
+  ...(ENABLE_PRETTIER
+    ? [
+        {
+          // everything gets prettier
+          plugins: {
+            prettier: prettierPlugin,
+          },
+          rules: {
+            ...prettierPlugin.configs?.recommended.rules,
+            "prettier/prettier": ["warn", { trailingComma: "es5" }],
+          },
+        },
+        {
+          // json gets prettier
+          files: ["**/*.{json,css}"],
+          extends: [tseslint.configs.disableTypeChecked],
+
+          languageOptions: {
+            parser: {
+              parse: (
+                /** @type {string} */ text,
+                /** @type {{filePath:string}} */ info,
+              ) => {
+                // When file is Json send it to prettier for formatting
+
+                // console.log(JSON.stringify(info))
+
+                prettier
+                  .format(text, { filepath: info.filePath })
+                  .then((pretty) =>
+                    fs.createWriteStream(info.filePath).end(pretty),
+                  );
+
+                const name = path.basename(info.filePath);
+                console.log(
+                  info.filePath,
+                  "\n   \x1b[1m\x1b[32mprettier:\x1b[0m",
+                  name,
+                );
+                // throw new Error("Sent to Prettier -> *." + fileExt);
+                // node_modules/eslint/lib/source-code/source-code.jsL326
+                return {
+                  type: "Program",
+                  body: [],
+                  tokens: [],
+                  comments: [],
+                  loc: [],
+                  range: {},
+                  scopes: [],
+                };
+              },
+            },
+          },
+        },
+      ]
+    : []),
 );

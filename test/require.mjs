@@ -10,6 +10,7 @@ tsNode.register({
   transpileOnly: true,
 
   compilerOptions: {
+    ignoreDeprecations: "6.0",
     moduleResolution: "node",
   },
 
