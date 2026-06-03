@@ -1,10 +1,10 @@
-export function cloneDeep<T>(obj: unknown): T {
-  return JSON.parse(JSON.stringify(obj));
+export function cloneDeep<T extends object>(obj: T) {
+  return JSON.parse(JSON.stringify(obj)) as T;
 }
 
-export function mergeDeep<T>(
-  object: Record<string, unknown> = {},
-  ...sources: Record<string, unknown>[]
+export function mergeDeep<T extends object>(
+  object: T = {} as T,
+  ...sources: T[]
 ): T {
   sources.forEach((source) => {
     Object.keys(source).forEach((key) => {
@@ -32,12 +32,12 @@ export function mergeDeep<T>(
   return object;
 }
 
-export function merge<T>(...sources: Record<string, unknown>[]) {
-  return mergeDeep<T>({}, ...sources);
+export function merge<T>(...sources: unknown[]) {
+  return mergeDeep({}, ...sources) as T;
 }
 
-export function equals<T extends object>(obj1: T, obj2: T) {
-  const keys = Object.keys(obj1) as (keyof T)[];
+export function equals<T extends object>(obj1: T, obj2: unknown) {
+  const keys = Object.keys(obj1) as (keyof typeof obj1)[];
   if (keys.length !== Object.keys(obj2).length) return false;
   for (let i = 0; i < keys.length; i += 1) {
     const k = keys[i];
@@ -60,36 +60,10 @@ export function equals<T extends object>(obj1: T, obj2: T) {
       !Array.isArray(v1) &&
       v1 instanceof Object
     ) {
-      if (!equals(v1, v2)) return false;
+      if (!equals(v1 as object, v2)) return false;
     }
   }
   return true;
-}
-
-/*
-  objOrAry: obejct or Array
-  cb: (value, index | key) => { return value }
-*/
-export function sum(
-  objOrAry: Record<string, number> | number[],
-  cb = (value: number, index?: string) => value
-) {
-  let total = 0;
-  let size = 0;
-  Object.keys(objOrAry).forEach((key) => {
-    total += cb(objOrAry[key], key);
-    size += 1;
-  });
-  return [total, size];
-}
-
-function deleteProperty<T extends Record<string, unknown>>(
-  obj: T,
-  property: keyof T
-) {
-  const oldv = obj[String(property)];
-  delete obj[String(property)];
-  return oldv;
 }
 
 export function rangeReduceIf(
@@ -123,12 +97,6 @@ export function rangeSum(
   return s;
 }
 
-function rangeEach(min: number, max: number, cb: (i: number) => void) {
-  for (let i = min; i < max; i += 1) {
-    cb(i);
-  }
-}
-
 export function arrayEquals(a1: unknown[], a2: unknown[]) {
   if (a1.length === a2.length) {
     for (let i = 0; i < a1.length; i += 1) {
@@ -149,7 +117,7 @@ function digits(a: unknown) {
   return ret;
 }
 
-export function isNumber(x: unknown): x is number {
+export function isNumber(x: unknown): x is number | string {
   return (
     (typeof x === "number" || (typeof x === "string" && x.trim() !== "")) &&
     !isNaN(x as number)
@@ -199,7 +167,7 @@ export function isBooleanStrict(x: unknown): x is boolean {
   return false;
 }
 
-export function isBoolean(x: unknown): x is boolean {
+export function isBoolean(x: unknown): x is boolean | string {
   if (x === 0 || x === false) {
     return true;
   }
@@ -267,7 +235,7 @@ export function numberCalc(
   }
 
   if (!isNumber(a1) || !isNumber(a2)) {
-    return a1 + type + a2;
+    return String(a1) + type + String(a2);
   }
 
   const al1 = digits(a1);

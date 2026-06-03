@@ -14,7 +14,7 @@ import { type SelectType } from "./component/form_select";
 import { type OperatorType, type ValidatorType } from "./core/validator";
 
 export type CellMerge = [number, number];
-export { type DefaultSettings } from "./core/data_proxy";
+export type InitConfig = DeepPartial<DefaultSettings>;
 
 /**
  * Data for representing a cell
@@ -97,15 +97,19 @@ interface CellOnEventCallbackMap {
   ["change"]: (sheet: SheetData) => void;
 }
 
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
+
 export class Spreadsheet {
-  options: Partial<DefaultSettings>;
+  options: DefaultSettings;
   sheetIndex: number;
   datas: DataProxy[];
   data: DataProxy;
   sheet: Sheet;
   bottombar: Bottombar | null;
 
-  constructor(selectors: string | Element, options = {}) {
+  constructor(selectors: string | Element, options: InitConfig = {}) {
     const targetEl =
       typeof selectors === "string"
         ? document.querySelector(selectors)
@@ -114,35 +118,46 @@ export class Spreadsheet {
       throw new Error(`Selector ${JSON.stringify(selectors)} was not found`);
     }
 
-    this.options = { showBottomBar: true, ...options };
     this.sheetIndex = 0;
     this.datas = [];
 
-    this.bottombar =
-      this.options.showBottomBar === true
-        ? new Bottombar(
-            () => {
-              if (this.options.mode === "read") return;
-              const d = this.addSheet();
-              this.sheet.resetData(d);
-            },
-            (index: number) => {
-              // bottom-bar on sheet change handler
-              const d = this.datas[index];
-              this.sheet.resetData(d);
+    const { settings } = new DataProxy("sheet-options", options);
+    this.options = settings;
 
-              this.sheet.verticalScrollbar.move({ top: d.scroll.y });
-              this.sheet.horizontalScrollbar.move({ left: d.scroll.x });
-            },
-            () => {
-              this.deleteSheet();
-            },
-            (index, value) => {
-              this.datas[index].name = value;
-              this.sheet.trigger("change");
-            }
-          )
-        : null;
+    this.bottombar = this.options.bottombar?.show
+      ? new Bottombar(
+          () => {
+            if (this.options.mode === "read") return;
+            const d = this.addSheet();
+            this.sheet.resetData(d);
+          },
+          (index: number) => {
+            // bottom-bar on sheet change handler
+            const d = this.datas[index];
+            this.sheet.resetData(d);
+
+            this.sheet.verticalScrollbar.move({ top: d.scroll.y });
+            this.sheet.horizontalScrollbar.move({ left: d.scroll.x });
+          },
+          () => {
+            this.deleteSheet();
+          },
+          (index, value) => {
+            this.datas[index].name = value;
+            this.sheet.trigger("change");
+          }
+        )
+      : null;
+
+    this.bottombar?.moreEl.css(
+      "height",
+      `${String(this.options.bottombar?.height - 1)}px`
+    );
+    this.bottombar?.moreEl.css(
+      "line-height",
+      `${String(this.options.bottombar?.height - 1)}px`
+    );
+
     this.data = this.addSheet();
     const rootEl = h("div", cssPrefix).on("contextmenu", (evt) => {
       evt.preventDefault();
@@ -324,7 +339,10 @@ if (window !== undefined) {
   window.x_spreadsheet = spreadsheet;
 
   //@ts-expect-error camel case
-  window.x_spreadsheet.locale = (lang, message) => {
+  window.x_spreadsheet.locale = (
+    lang: string,
+    message: Record<string, unknown>
+  ) => {
     locale(lang, message);
   };
   /* eslint-enable */

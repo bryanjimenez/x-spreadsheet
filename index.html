@@ -51,9 +51,13 @@
       previewEl.height = 16
 
       var xs = x_spreadsheet('#x-spreadsheet-demo', {
-        showToolbar: true,
+        toolbar: {
+          show: true
+        },
+        bottombar:{
+          show: true
+        },
         showGrid: true,
-        showBottomBar: true,
         extendToolbar: {
           left: [
             {

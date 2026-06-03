@@ -206,6 +206,16 @@ describe("[cell.ts](./src/core/cell.ts)", function () {
 
   describe("cell", () => {
     describe(".render()", () => {
+      it('should return #VALUE! when =SUM(10,10,"a")', () => {
+        assert.equal(
+          cell.render(
+            '=SUM(10,10,"a")',
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          "#VALUE!"
+        );
+      });
       it("should return 0 + 2 + 2 + 6 + 49 + 20 when =SUM(A1,B2, C1, C5) + 50 + B20", () => {
         assert.equal(
           cell.render(
@@ -220,6 +230,22 @@ describe("[cell.ts](./src/core/cell.ts)", function () {
         assert.equal(
           cell.render("=50 + B20", formulam, (x: number, y: number) => x + y),
           50 + 20
+        );
+      });
+      it("should return #VALUE! when =IF(,2, 1)", () => {
+        assert.equal(
+          cell.render("=IF(, 2, 1)", formulam, (x: number, y: number) => x + y),
+          "#VALUE!"
+        );
+      });
+      it('should return #VALUE! when =IF("a", 2, 1)', () => {
+        assert.equal(
+          cell.render(
+            '=IF("a", 2, 1)',
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          "#VALUE!"
         );
       });
       it("should return 2 when =IF(2>1, 2, 1)", () => {
@@ -242,6 +268,94 @@ describe("[cell.ts](./src/core/cell.ts)", function () {
               x + y
           ),
           1 + 500 - 20
+        );
+      });
+      it('should return #VALUE! when =AVERAGE(10,10,10,"a")', () => {
+        assert.equal(
+          cell.render(
+            '=AVERAGE(10,10,10,"a")',
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          "#VALUE!"
+        );
+      });
+      it("should return 10 when =MIN(100,10)", function () {
+        assert.equal(
+          cell.render(
+            "=MIN(100,10)",
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          10
+        );
+      });
+      it("should return 100 when =MAX(100,10)", function () {
+        assert.equal(
+          cell.render(
+            "=MAX(100,10)",
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          100
+        );
+      });
+      it("should return true when =AND(true,true)", function () {
+        assert.equal(
+          cell.render(
+            "=AND(true,true)",
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          true
+        );
+      });
+      it("should return true when =AND(1,1)", function () {
+        assert.equal(
+          cell.render("=AND(1,1)", formulam, (x: number, y: number) => x + y),
+          true
+        );
+      });
+      it("should return true when =OR(true,false)", function () {
+        assert.equal(
+          cell.render(
+            "=OR(true,false)",
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          true
+        );
+      });
+      it("should return true when =OR(false,false,false,true)", function () {
+        assert.equal(
+          cell.render(
+            "=OR(false,false,false,true)",
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          true
+        );
+      });
+      it("should return true when =OR(1,0)", function () {
+        assert.equal(
+          cell.render("=OR(1,0)", formulam, (x: number, y: number) => x + y),
+          true
+        );
+      });
+      it("should return false when =OR(0,0)", function () {
+        assert.equal(
+          cell.render("=OR(0,0)", formulam, (x: number, y: number) => x + y),
+          false
+        );
+      });
+      it("should return false when =OR(false,false)", function () {
+        assert.equal(
+          cell.render(
+            '=OR("false","false")',
+            formulam,
+            (x: number, y: number) => x + y
+          ),
+          false
         );
       });
     });

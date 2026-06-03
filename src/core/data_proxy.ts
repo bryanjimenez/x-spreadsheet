@@ -13,7 +13,7 @@ import { Validations } from "./validation";
 import { CellRange, CellRangePoints, CellRef } from "./cell_range";
 import { expr2xy, xy2expr } from "./alphabet";
 import { t } from "../locale/locale";
-import { RowList, type CellData, type SheetData } from "..";
+import { type DeepPartial, RowList, type CellData, type SheetData } from "..";
 import {
   type ExtendToolbarOption,
   type ToolBarChangeType,
@@ -49,20 +49,40 @@ export interface DefaultSettings {
    */
   mode: "edit" | "read";
   /**
-   * Forces focus on cell (at startup and on clicks)
+   * Forces focus on cell (at startup and on clicks)  
+   * Default `false`
    */
-  autoFocus: boolean,
+  autoFocus: boolean;
+  /**
+   * Area available for workbook component
+   */
   view: {
     height: () => number;
     width: () => number;
   };
-  toolbarHeight: number;
-  bottombarHeight: number;
 
   showGrid: boolean;
-  showToolbar: boolean;
+
+  toolbar: {
+    show: boolean;
+    /**
+     * Workbook's primary toolbar height  
+     * Default `40px`
+     */
+    height: number;
+  };
+
+  bottombar: {
+    show: boolean;
+    /**
+     * Workbook's sheet add/delete/view toolbar height  
+     * Default `40px`
+     */
+    height: number;
+  };
+
   showContextmenu: boolean;
-  showBottomBar: boolean;
+
   row: {
     len: number;
     height: number;
@@ -119,7 +139,7 @@ export interface DefaultSettings {
     right?: ExtendToolbarOption[];
   };
 }
-const defaultSettings = {
+const defaultSettings: DefaultSettings = {
   mode: "edit", // edit | read
   autoFocus: false,
 
@@ -128,13 +148,18 @@ const defaultSettings = {
     width: () => document.documentElement.clientWidth,
   },
 
-  toolbarHeight: 40,
-  bottombarHeight: 40,
+  toolbar: {
+    show: true,
+    height: 40,
+  },
+
+  bottombar: {
+    show: true,
+    height: 40,
+  },
 
   showGrid: true,
-  showToolbar: true,
   showContextmenu: true,
-  showBottomBar: true,
   row: {
     len: 100,
     height: 25,
@@ -154,6 +179,12 @@ const defaultSettings = {
     strike: false,
     underline: false,
     color: "#0a0a0a",
+    border: {
+      bottom: null,
+      left: null,
+      right: null,
+      top: null,
+    },
     //"border":{"top":["thin","#0366d6"],"bottom":["thin","#0366d6"],"right":["thin","#0366d6"],"left":["thin","#0366d6"]}
     font: {
       name: "Arial",
@@ -163,12 +194,14 @@ const defaultSettings = {
     },
     format: "normal",
   },
+  evalPaused: undefined,
+  extendToolbar: undefined,
 };
 
 export default class DataProxy {
   name: string;
   freeze: number[];
-  styles: DefaultSettings["style"][];
+  styles: Partial<DefaultSettings["style"]>[];
 
   merges: Merges;
   rows: Rows;
@@ -188,7 +221,7 @@ export default class DataProxy {
   sortedRowMap: Map<number, number>;
   unsortedRowMap: Map<number, number>;
 
-  constructor(name: string, settings: Partial<DefaultSettings>) {
+  constructor(name: string, settings: DeepPartial<DefaultSettings>) {
     this.settings = merge<DefaultSettings>(defaultSettings, settings);
     // save data begin
     this.name = name || "sheet";
@@ -282,7 +315,7 @@ export default class DataProxy {
     if (cell.style !== undefined) {
       cstyle = cloneDeep(styles[cell.style]);
     }
-    cstyle = merge<DefaultSettings["style"]>(cstyle, { border: bss });
+    cstyle = merge(cstyle, { border: bss });
     cell.style = this.addStyle(cstyle);
   }
 
@@ -530,7 +563,7 @@ export default class DataProxy {
       const row = [];
       for (let ci = sci; ci <= eci; ci += 1) {
         const cell = this.getCell(ri, ci);
-        row.push((cell && cell.text) || "");
+        row.push(cell?.text ?? "");
       }
       copyText.push(row);
     }
@@ -811,7 +844,7 @@ export default class DataProxy {
     let nri = ri;
     if (this.unsortedRowMap.has(ri)) {
       const value = this.unsortedRowMap.get(ri);
-      if (value) {
+      if (value !== undefined) {
         nri = value;
       }
     }
@@ -1184,7 +1217,7 @@ export default class DataProxy {
 
   getCellTextOrDefault(ri: number, ci: number) {
     const cell = this.getCell(ri, ci);
-    return cell && cell.text ? cell.text : "";
+    return cell?.text ? cell.text : "";
   }
 
   getCellStyle(ri: number, ci: number) {
@@ -1255,13 +1288,13 @@ export default class DataProxy {
   }
 
   viewHeight() {
-    const { view, showToolbar, showBottomBar } = this.settings;
+    const { view, toolbar, bottombar } = this.settings;
     let h = view.height();
-    if (showBottomBar) {
-      h -= this.settings.bottombarHeight;
+    if (bottombar.show) {
+      h -= bottombar.height;
     }
-    if (showToolbar) {
-      h -= this.settings.toolbarHeight;
+    if (toolbar.show) {
+      h -= toolbar.height;
     }
     return h;
   }
@@ -1405,11 +1438,11 @@ export default class DataProxy {
     }
   }
 
-  defaultStyle() {
+  defaultStyle(): DefaultSettings["style"] {
     return this.settings.style;
   }
 
-  addStyle(nstyle: DefaultSettings["style"]) {
+  addStyle(nstyle: Partial<DefaultSettings["style"]>) {
     const { styles } = this;
     // console.log('old.styles:', styles, nstyle);
     for (let i = 0; i < styles.length; i += 1) {
@@ -1440,7 +1473,7 @@ export default class DataProxy {
         }
       } else if (property === "freeze") {
         const f = d.freeze;
-        if (f) {
+        if (f !== undefined) {
           const [x, y] = expr2xy(f);
           this.freeze = [y, x];
         }

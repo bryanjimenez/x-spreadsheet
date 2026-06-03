@@ -20,7 +20,7 @@ function tableFixedHeaderStyle() {
   return {
     textAlign: "center",
     textBaseline: "middle",
-    font: `500 ${String(npx(12))}px Source Sans Pro`,
+    font: `500 ${String(npx(12))}px 'Lato', 'Source Sans Pro', Roboto, Helvetica, Arial, sans-serif`,
     fillStyle: "#585757",
     lineWidth: thinLineWidth(),
     strokeStyle: "#e6e6e6",

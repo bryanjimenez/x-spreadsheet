@@ -24,7 +24,9 @@
     "checkJs": true,
 
     "removeComments": true,
-    "declaration": true
+    "declaration": true,
+
+    "noImplicitReturns": true,
   },
   "exclude": ["./node_modules", "./dist"],
   "include": ["./src", "./test"]

@@ -13,7 +13,7 @@ export default class Item {
   // tooltip
   // tag: the subclass type
   // shortcut: shortcut key
-  constructor(tag: string, shortcut?: string, value?: string) {
+  constructor(tag?: string, shortcut?: string, value?: string) {
     this.tip = "";
     if (tag)
       this.tip = t(

@@ -164,7 +164,7 @@ export function infixExprToSuffixExpr(src: string) {
 
 function evalSubExpr(
   subExpr: string,
-  cellRender: (x: number, y: number) => string
+  fnCellRender: (x: number, y: number) => string
 ) {
   const [fl] = subExpr;
   let expr = subExpr;
@@ -180,10 +180,10 @@ function evalSubExpr(
     return ret * Number(expr);
   }
   const [x, y] = expr2xy(expr);
-  const r = cellRender(x, y);
+  const r = fnCellRender(x, y);
 
   if (isNumber(r)) {
-    return ret * r;
+    return ret * Number(r);
   }
 
   return r;
@@ -222,8 +222,10 @@ const evalSuffixExpr = (
       stack.push(numberCalc("/", stack.pop(), top));
     } else if (fc === "=" || fc === ">" || fc === "<") {
       let top = stack.pop() as number;
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
       if (!Number.isNaN(top)) top = Number(top);
       let left = stack.pop() as number;
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
       if (!Number.isNaN(left)) left = Number(left);
 
       let ret = false;
