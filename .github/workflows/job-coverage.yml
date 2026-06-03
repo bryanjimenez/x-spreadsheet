@@ -1,8 +1,16 @@
 name: Coverage
-on: workflow_call
+on:
+  workflow_call:
+  pull_request:
+    branches:
+      - main
 
 jobs:
+  test:
+    uses: ./.github/workflows/job-test.yml
+
   coverage:
+    needs: test
     environment: ci
     runs-on: ubuntu-latest
     permissions:
@@ -12,7 +20,11 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
       - run: npm ci
-      - run: npx nyc npm run test 2> >(xargs -L 1 echo "::warning::")
+      - uses: actions/download-artifact@v8
+        with:
+          name: nyc_coverage
+          path: nyc_coverage
+      - run: npx nyc report -t nyc_coverage --reporter text 2> >(xargs -L 1 echo "::warning::")
         continue-on-error: true
