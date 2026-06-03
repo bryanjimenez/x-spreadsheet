@@ -31,16 +31,6 @@
     "type": "git",
     "url": "git+https://github.com/bryanjimenez/x-spreadsheet.git"
   },
-  "nyc": {
-    "all": true,
-    "include": [
-      "src/core/*.ts",
-      "src/locale/locale.ts"
-    ],
-    "exclude": [
-      "**/*.spec.*"
-    ]
-  },
   "scripts": {
     "dev": "rspack serve -c ./build/rspack.dev.js",
     "prebuild": "rm -rf ./dist",
