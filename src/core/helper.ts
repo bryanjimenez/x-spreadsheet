@@ -97,12 +97,6 @@ export function rangeSum(
   return s;
 }
 
-// function rangeEach(min: number, max: number, cb: (i: number) => void) {
-//   for (let i = min; i < max; i += 1) {
-//     cb(i);
-//   }
-// }
-
 export function arrayEquals(a1: unknown[], a2: unknown[]) {
   if (a1.length === a2.length) {
     for (let i = 0; i < a1.length; i += 1) {

@@ -44,12 +44,12 @@ export type CopyType = "text" | "all" | "format";
 
 export interface DefaultSettings {
   /**
-   * Sheet mode: edit or read-only
+   * Sheet mode: edit or read-only  
    * Default `edit`
    */
   mode: "edit" | "read";
   /**
-   * Forces focus on cell (at startup and on clicks)
+   * Forces focus on cell (at startup and on clicks)  
    * Default `false`
    */
   autoFocus: boolean;
@@ -66,7 +66,7 @@ export interface DefaultSettings {
   toolbar: {
     show: boolean;
     /**
-     * Workbook's primary toolbar height
+     * Workbook's primary toolbar height  
      * Default `40px`
      */
     height: number;
@@ -75,7 +75,7 @@ export interface DefaultSettings {
   bottombar: {
     show: boolean;
     /**
-     * Workbook's sheet add/delete/view toolbar height
+     * Workbook's sheet add/delete/view toolbar height  
      * Default `40px`
      */
     height: number;
