@@ -13,4 +13,8 @@ jobs:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm run test
+      - run: npx nyc --reporter json --report-dir nyc_coverage --check-coverage false npm run test
+      - uses: actions/upload-artifact@v7
+        with:
+          name: nyc_coverage
+          path: nyc_coverage/
