@@ -5,10 +5,15 @@ on:
       - "v*"
 
 jobs:
+  simple-tag-check:
+    uses: ./.github/workflows/job-tag-ver.yml
+
   build:
+    needs: [simple-tag-check]
     uses: ./.github/workflows/job-build.yml
 
   coverage:
+    needs: [simple-tag-check]
     uses: ./.github/workflows/job-coverage.yml
 
   publish-npm:

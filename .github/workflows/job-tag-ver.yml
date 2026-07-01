@@ -1,0 +1,17 @@
+on: workflow_call
+
+jobs:
+  check-tag:
+    environment: ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+      - run: |
+            echo "tag_ref: $GITHUB_REF_NAME"
+            pkg_ver=`grep version ./package.json | sed -r -e's/(version)|[",: ]//g' -e 's/^/v/g'`
+            echo "pkg_ver: $pkg_ver"
+            [[ "pkg_ver" != "$GITHUB_REF_NAME" ]] && (echo "::warning:: $GITHUB_REF_NAME" != $pkg_ver && exit 1)
