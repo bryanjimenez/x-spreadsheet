@@ -1,4 +1,6 @@
 name: Coverage
+permissions: {}
+
 on:
   workflow_call:
   pull_request:
@@ -13,18 +15,20 @@ jobs:
     needs: test
     environment: ci
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #actions/checkout@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 #actions/setup-node@v7
         with:
           node-version: 24
           registry-url: "https://registry.npmjs.org"
+
       - run: npm ci
-      - uses: actions/download-artifact@v8
+
+      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 #actions/download-artifact@v8
         with:
           name: nyc_coverage
           path: nyc_coverage
-      - run: npx nyc report -t nyc_coverage --reporter text 2> >(xargs -L 1 echo "::warning::")
+
+      - name: Check coverage
+        run: npx nyc report -t nyc_coverage --reporter text 2> >(xargs -L 1 echo "::warning::")
         continue-on-error: true

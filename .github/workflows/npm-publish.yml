@@ -1,4 +1,10 @@
 name: Publish to npmjs
+permissions:
+  contents: read
+  packages: write
+  id-token: write     # Required for OIDC
+  attestations: write # Optional for security provenance
+
 on:
   push:
     tags:
@@ -23,18 +29,21 @@ jobs:
     permissions:
       contents: read
       packages: write
-      id-token: write # Required for OIDC
-      attestations: write # Optional for security provenance
+      id-token: write
+      attestations: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #actions/checkout@v7
       # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 #actions/setup-node@v7
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
-      - uses: actions/download-artifact@v8
+
+      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 #actions/download-artifact@v8
         with:
           name: dist
           path: dist
+
       - run: npm install -g npm@latest
+
       - run: npm publish --tag alpha --access public

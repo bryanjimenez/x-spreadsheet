@@ -1,20 +1,23 @@
 on: workflow_call
+permissions: {}
 
 jobs:
   test:
     environment: ci
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #actions/checkout@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 #actions/setup-node@v7
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
+
       - run: npm ci
-      - run: npx nyc --reporter json --report-dir nyc_coverage --check-coverage false npm run test
-      - uses: actions/upload-artifact@v7
+
+      - name: Test and build coverage
+        run: npx nyc --reporter json --report-dir nyc_coverage --check-coverage false npm run test
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #actions/upload-artifact@v7
         with:
           name: nyc_coverage
           path: nyc_coverage/
