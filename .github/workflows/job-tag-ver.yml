@@ -1,16 +1,15 @@
 on: workflow_call
+permissions: {}
 
 jobs:
   check-tag:
     environment: ci
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-      - run: |
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #actions/checkout@v7
+
+      - name: Verify tag name
+        run: |
             echo "tag_ref: $GITHUB_REF_NAME"
             pkg_ver=`grep version ./package.json | sed -r -e's/(version)|[",: ]//g' -e 's/^/v/g'`
             echo "pkg_ver: $pkg_ver"
