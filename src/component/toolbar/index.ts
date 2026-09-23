@@ -272,8 +272,8 @@ export default class Toolbar {
         list2.push(it);
       }
     });
-    btns.html("").children(...list1);
-    moreBtns.html("").children(...list2);
+    btns.children(...list1);
+    moreBtns.children(...list2);
     contentEl.css("width", `${String(sumWidth2)}px`);
     if (list2.length > 0) {
       moreEl.show();

@@ -102,7 +102,7 @@ export default class Calendar {
 
   buildHeaderLeft() {
     const { value } = this;
-    this.headerLeftEl.html(
+    this.headerLeftEl.setHTML(
       `${ct("calendar.months")[value.getMonth()]} ${value.getFullYear()}`
     );
   }
@@ -125,6 +125,6 @@ export default class Calendar {
       });
       return h("tr", "").children(...tds);
     });
-    bodyEl.html("").children(...trs);
+    bodyEl.children(...trs);
   }
 }

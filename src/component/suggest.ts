@@ -62,7 +62,7 @@ export default class Suggest {
     }
 
     const { el } = this;
-    el.html("")
+    el
       .children(...filteredItems)
       .show();
     bindClickoutside(el.parent(), () => {

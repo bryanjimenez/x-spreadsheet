@@ -146,7 +146,7 @@ class Bottombar {
       })
       .on("dblclick", () => {
         if (options.mode === "read") return;
-        const v = item.html();
+        const v = item.getHTML();
         const input = new FormInput("auto", "");
         input.val(v);
         input.input.on("blur", ({ target }: HTMLInputEvent) => {
@@ -156,11 +156,11 @@ class Bottombar {
           /*
         this.dataNames.splice(nindex, 1, value);
         this.moreEl.reset(this.dataNames);
-        item.html('').child(value);
+        item.child(value);
         this.updateFunc(nindex, value);
         */
         });
-        item.html("").child(input.el);
+        item.child(input.el);
         input.focus();
       });
     if (active) {
@@ -174,7 +174,7 @@ class Bottombar {
   renameItem(index: number, value: string) {
     this.dataNames.splice(index, 1, value);
     this.moreEl.reset(this.dataNames);
-    this.items[index].html("").child(value);
+    this.items[index].child(value);
     this.updateFunc(index, value);
   }
 

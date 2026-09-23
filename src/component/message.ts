@@ -18,7 +18,7 @@ export function xtoast(title: string, content: string) {
       }),
       title
     ),
-    h("div", `${cssPrefix}-toast-content`).html(content)
+    h("div", `${cssPrefix}-toast-content`).setHTML(content)
   );
   document.body.appendChild(el.el);
   document.body.appendChild(dimmer.el);

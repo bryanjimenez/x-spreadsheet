@@ -159,7 +159,7 @@ export default class Print {
     }
     let ri = 0;
     let yoffset = 0;
-    this.contentEl.html("");
+    this.contentEl.removeHTML();
     this.canvases = [];
     const mViewRange: CellRangePoints = {
       sri: 0,

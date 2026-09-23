@@ -48,7 +48,7 @@ export default class FormSelect {
     );
     this.el
       .children(
-        (this.itemEl = h("div", "input-text").html(this.getTitle(key))),
+        (this.itemEl = h("div", "input-text").setHTML(this.getTitle(key))),
         this.suggest.el
       )
       .on("click", () => {
@@ -62,7 +62,7 @@ export default class FormSelect {
 
   itemClick(it: string) {
     this.key = it;
-    this.itemEl.html(this.getTitle(it));
+    this.itemEl.setHTML(this.getTitle(it));
   }
 
   /** getVal */
@@ -72,7 +72,7 @@ export default class FormSelect {
   val(v?: SelectType) {
     if (v !== undefined) {
       this.key = v;
-      this.itemEl.html(this.getTitle(v));
+      this.itemEl.setHTML(this.getTitle(v));
       return this;
     }
     return this.key;
