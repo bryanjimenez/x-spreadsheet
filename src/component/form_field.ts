@@ -39,7 +39,7 @@ export default class FormField {
     if (label) {
       this.label = h("label", "label")
         .css("width", `${String(labelWidth)}px`)
-        .html(label);
+        .setHTML(label);
     }
     this.tip = h("div", "tip").child("tip").hide();
     this.input = input;
@@ -87,7 +87,7 @@ export default class FormField {
     const v = input.val();
     if (rule.required) {
       if (/^\s*$/.test(v)) {
-        tip.html(t("validation.required"));
+        tip.setHTML(t("validation.required"));
         el.addClass("error");
         return false;
       }
@@ -98,7 +98,7 @@ export default class FormField {
     const pattern = primary ?? secondary;
 
     if (pattern !== undefined && !pattern.test(v)) {
-      tip.html(t("validation.notMatch"));
+      tip.setHTML(t("validation.notMatch"));
       el.addClass("error");
       return false;
     }

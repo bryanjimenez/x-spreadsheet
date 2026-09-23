@@ -40,7 +40,7 @@ export default class DropdownLineType extends Dropdown {
           this.hide();
           this.change(it);
         })
-        .child(h("div", `${cssPrefix}-line-type`).html(it[1]))
+        .child(h("div", `${cssPrefix}-line-type`).setHTML(it[1]))
     );
 
     super(icon, "auto", false, "bottom-left", ...lineTypeEls);

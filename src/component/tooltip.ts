@@ -14,7 +14,7 @@ export default function tooltip(html: string, target: EventTarget) {
     return;
   }
   const { left, top, width, height } = targetEl.getBoundingClientRect();
-  const el = h("div", `${cssPrefix}-tooltip`).html(html).show();
+  const el = h("div", `${cssPrefix}-tooltip`).setHTML(html).show();
   document.body.appendChild(el.el);
   const elBox = el.box();
   // console.log('elBox:', elBox);

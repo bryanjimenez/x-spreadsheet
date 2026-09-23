@@ -155,18 +155,17 @@ class Element<T extends HTMLElement> {
   }
   */
 
-  child(arg: unknown) {
-    let ele = arg;
+  child(arg: Element<HTMLDivElement> | Node | string) {
     if (typeof arg === "string") {
-      ele = document.createTextNode(arg);
+      const textNode =  document.createTextNode(arg);
+      this.el.appendChild(textNode);
     } else if (arg instanceof Element) {
-      ele = arg.el;
+      this.el.appendChild(arg.el);
+    } else if (arg instanceof Node) {
+      this.el.appendChild(arg);
+    } else {
+      throw new Error(`Unexpected type arg ${typeof arg}`)
     }
-    // FIXME: CodeQL js/xss-through-dom
-    // Extracting text from a DOM node and interpreting it as HTML can lead to a cross-site scripting vulnerability.
-    // DOM text reinterpreted as HTML
-    // DOM text is reinterpreted as HTML without escaping meta-characters.
-    this.el.appendChild(ele as Node);
     return this;
   }
 
@@ -246,18 +245,29 @@ class Element<T extends HTMLElement> {
     return this;
   }
 
-  html(): string;
-  html(content: string): this;
-  html(content?: string) {
-    if (content !== undefined) {
-      // FIXME: CodeQL js/xss-through-dom
-      // Extracting text from a DOM node and interpreting it as HTML can lead to a cross-site scripting vulnerability.
-      // DOM text reinterpreted as HTML
-      // DOM text is reinterpreted as HTML without escaping meta-characters.
-      this.el.innerHTML = content;
-      return this;
+  removeHTML(){
+    while(this.el.firstChild!==null){
+      this.el.removeChild(this.el.firstChild)
     }
-    return this.el.innerHTML;
+    return this;
+  }
+  setHTML(content: Element<HTMLDivElement> | Node | string) {
+    this.removeHTML()
+
+    if (typeof content === "string") {
+      const textNode =  document.createTextNode(content);
+      this.el.appendChild(textNode);
+    } else if (content instanceof Element) {
+      this.el.appendChild(content.el);
+    } else if (content instanceof Node) {
+      this.el.appendChild(content);
+    } else {
+      throw new Error(`Unexpected type arg ${typeof content}`)
+    }
+    return this
+  }
+  getHTML(){
+    return this.el.innerHTML
   }
 
   val(): string;

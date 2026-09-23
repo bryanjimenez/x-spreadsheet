@@ -62,13 +62,13 @@ export default class SortFilter {
 
   private resetFilterHeader() {
     const { filterhEl, filterValues, values } = this;
-    filterhEl.html(`${String(filterValues.length)} / ${String(values.length)}`);
+    filterhEl.setHTML(`${String(filterValues.length)} / ${String(values.length)}`);
     filterhEl.checked(filterValues.length === values.length);
   }
 
   private buildFilterBody(items: Record<string, number>) {
     const { filterbEl, filterValues } = this;
-    filterbEl.html("");
+    filterbEl.removeHTML();
     const itemKeys = Object.keys(items);
     itemKeys.forEach((it, index) => {
       const cnt: number = items[it];
@@ -80,7 +80,7 @@ export default class SortFilter {
           })
           .children(
             it === "" ? t("filter.empty") : it,
-            h("div", "label").html(`(${String(cnt)})`)
+            h("div", "label").setHTML(`(${String(cnt)})`)
           )
       );
     });

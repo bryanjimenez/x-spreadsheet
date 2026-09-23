@@ -55,14 +55,14 @@ export default class Dropdown extends Element<HTMLDivElement> {
   }
 
   setContentChildren(...children: Element<HTMLDivElement>[]) {
-    this.contentEl.html("");
+    this.contentEl.removeHTML();
     if (children.length > 0) {
       this.contentEl.children(...children);
     }
   }
 
   setTitle(title: string) {
-    this.title.html(title);
+    this.title.setHTML(title);
     this.hide();
   }
 

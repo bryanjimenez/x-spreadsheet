@@ -128,7 +128,7 @@ export default class Editor {
     target.setSelectionRange(selectionEnd + 1, selectionEnd + 1);
 
     this.inputText = ntxt;
-    this.textlineEl.html(ntxt);
+    this.textlineEl.setHTML(ntxt);
     this.resetTextareaSize();
   }
 
@@ -176,7 +176,7 @@ export default class Editor {
             suggest.hide();
           }
         }
-        textlineEl.html(v);
+        textlineEl.setHTML(v);
         this.resetTextareaSize();
         this.change("input", v);
       } else {
@@ -198,7 +198,7 @@ export default class Editor {
           suggest.hide();
         }
       }
-      textlineEl.html(v);
+      textlineEl.setHTML(v);
       this.resetTextareaSize();
       this.change("input", v);
     }
@@ -213,7 +213,7 @@ export default class Editor {
     textEl.el.blur();
 
     textEl.val(text);
-    textlineEl.html(text);
+    textlineEl.setHTML(text);
     this.setTextareaRange(text.length);
     this.resetTextareaSize();
   }
@@ -276,7 +276,7 @@ export default class Editor {
     this.inputText = "";
     this.el.hide();
     this.textEl.val("");
-    this.textlineEl.html("");
+    this.textlineEl.removeHTML();
     this.resetSuggestItems();
     this.datepicker.hide();
   }
