@@ -15,6 +15,10 @@ export function mergeDeep<T extends object>(
         typeof v === "number" ||
         typeof v === "boolean"
       ) {
+        // FIXME: CodeQL js/prototype-pollution-utility
+        // Most JavaScript objects inherit the properties of the built-in Object.prototype object. Prototype pollution is a type of vulnerability in which an attacker is able to modify Object.prototype. Since most objects inherit from the compromised Object.prototype, the attacker can use this to tamper with the application logic, and often escalate to remote code execution or cross-site scripting.
+        // Prototype-polluting function
+        // Properties are copied from source to object without guarding against prototype pollution.
         object[key] = v;
       } else if (
         typeof v !== "function" &&
@@ -24,6 +28,10 @@ export function mergeDeep<T extends object>(
         object[key] ??= {};
         mergeDeep(object[key], v);
       } else {
+        // FIXME: CodeQL js/prototype-pollution-utility
+        // Most JavaScript objects inherit the properties of the built-in Object.prototype object. Prototype pollution is a type of vulnerability in which an attacker is able to modify Object.prototype. Since most objects inherit from the compromised Object.prototype, the attacker can use this to tamper with the application logic, and often escalate to remote code execution or cross-site scripting.
+        // Prototype-polluting function
+        // Properties are copied from source to object without guarding against prototype pollution.
         object[key] = v;
       }
     });

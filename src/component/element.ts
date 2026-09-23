@@ -162,6 +162,10 @@ class Element<T extends HTMLElement> {
     } else if (arg instanceof Element) {
       ele = arg.el;
     }
+    // FIXME: CodeQL js/xss-through-dom
+    // Extracting text from a DOM node and interpreting it as HTML can lead to a cross-site scripting vulnerability.
+    // DOM text reinterpreted as HTML
+    // DOM text is reinterpreted as HTML without escaping meta-characters.
     this.el.appendChild(ele as Node);
     return this;
   }
@@ -246,6 +250,10 @@ class Element<T extends HTMLElement> {
   html(content: string): this;
   html(content?: string) {
     if (content !== undefined) {
+      // FIXME: CodeQL js/xss-through-dom
+      // Extracting text from a DOM node and interpreting it as HTML can lead to a cross-site scripting vulnerability.
+      // DOM text reinterpreted as HTML
+      // DOM text is reinterpreted as HTML without escaping meta-characters.
       this.el.innerHTML = content;
       return this;
     }
