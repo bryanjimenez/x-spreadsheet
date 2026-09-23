@@ -8,9 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #actions/checkout@v7
 
-      - name: Verify tag name
+      - name: Verify tag version
         run: |
             echo "tag_ref: $GITHUB_REF_NAME"
-            pkg_ver=`grep version ./package.json | sed -r -e's/(version)|[",: ]//g' -e 's/^/v/g'`
+            pkg_ver=$(grep version ./package.json | sed -r -e's/(version)|[",: ]//g' -e 's/^/v/g')
             echo "pkg_ver: $pkg_ver"
-            [[ "pkg_ver" != "$GITHUB_REF_NAME" ]] && (echo "::warning:: $GITHUB_REF_NAME" != $pkg_ver && exit 1)
+            [[ "$pkg_ver" != "$GITHUB_REF_NAME" ]] && echo "::warning:: $GITHUB_REF_NAME != $pkg_ver"
+            [[ "$pkg_ver" == "$GITHUB_REF_NAME" ]]
