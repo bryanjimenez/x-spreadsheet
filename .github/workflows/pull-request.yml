@@ -1,0 +1,14 @@
+name: Publish to npmjs
+permissions: {}
+
+on: 
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    uses: ./.github/workflows/job-build.yml
+
+  coverage:
+    uses: ./.github/workflows/job-coverage.yml
