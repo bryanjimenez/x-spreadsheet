@@ -1,5 +1,5 @@
 /* global window document */
-import { type Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import { cssPrefix } from "../config.ts";
 import Button from "./button.ts";
 import { Draw } from "../canvas/draw.ts";

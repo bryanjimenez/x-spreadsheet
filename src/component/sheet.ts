@@ -1,7 +1,7 @@
 /* global window */
 import ContextMenu from "./contextmenu.ts";
 import Editor from "./editor.ts";
-import { Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import { bind, bindTouch, createEventEmitter, mouseMoveUp } from "./event.ts";
 import { xtoast } from "./message.ts";
 import ModalValidation from "./modal_validation.ts";

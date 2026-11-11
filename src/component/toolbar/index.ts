@@ -25,7 +25,7 @@ import Textwrap from "./textwrap.ts";
 import More from "./more.ts";
 import Item from "./item.ts";
 
-import { type Element, h } from "../element.ts";
+import Element, { h } from "../element.ts";
 import { cssPrefix } from "../../config.ts";
 import { bind } from "../event.ts";
 import type { default as DataProxy, BorderEdit } from "../../core/data_proxy.ts";

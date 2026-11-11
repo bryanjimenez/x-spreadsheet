@@ -2,7 +2,7 @@
 /* global window */
 import { type Offset } from "./selector.ts";
 
-class Element<T extends HTMLElement> {
+export default class Element<T extends HTMLElement> {
   el: T;
   value?: string;
   xclickoutside?: (evt: MouseEvent) => void;
@@ -331,4 +331,4 @@ const h = <T extends HTMLElement = HTMLDivElement>(
   className = ""
 ) => new Element<T>(tag, className);
 
-export { Element, h };
+export { h };

@@ -1,6 +1,6 @@
 /* global document */
 /* global window */
-import { type Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import Icon from "./icon.ts";
 import { cssPrefix } from "../config.ts";
 import { bind, unbind } from "./event.ts";

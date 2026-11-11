@@ -1,4 +1,4 @@
-import { type Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import { bindClickoutside, unbindClickoutside } from "./event.ts";
 import { cssPrefix } from "../config.ts";
 import { tf } from "../locale/locale.ts";

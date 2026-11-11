@@ -1,4 +1,4 @@
-import { type Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import { cssPrefix } from "../config.ts";
 import { t } from "../locale/locale.ts";
 import FormInput from "./form_input.ts";

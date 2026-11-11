@@ -1,4 +1,4 @@
-import { type Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import { cssPrefix } from "../config.ts";
 import { CellRange } from "../core/cell_range.ts";
 import type DataProxy from "../core/data_proxy.ts";

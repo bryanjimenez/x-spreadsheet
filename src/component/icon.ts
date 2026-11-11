@@ -1,4 +1,4 @@
-import { Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import { cssPrefix } from "../config.ts";
 
 export default class Icon extends Element<HTMLElement> {

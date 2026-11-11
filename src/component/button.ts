@@ -1,4 +1,4 @@
-import { Element } from "./element.ts";
+import Element from "./element.ts";
 import { cssPrefix } from "../config.ts";
 import { t } from "../locale/locale.ts";
 

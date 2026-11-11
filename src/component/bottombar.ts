@@ -1,5 +1,5 @@
 import Dropdown from "./dropdown.ts";
-import { type Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import {
   type HTMLEvent,
   type HTMLInputEvent,

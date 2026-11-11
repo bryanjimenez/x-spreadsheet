@@ -1,5 +1,5 @@
 /* global window */
-import { type Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import { mouseMoveUp } from "./event.ts";
 import { cssPrefix } from "../config.ts";
 import { type Offset } from "./selector.ts";

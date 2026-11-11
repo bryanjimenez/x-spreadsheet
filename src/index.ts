@@ -1,5 +1,5 @@
 /* global window, document */
-import { h } from "./component/element.ts";
+import Element, { h } from "./component/element.ts";
 import { type SelectType } from "./component/form_select.ts";
 import Bottombar from "./component/bottombar.ts";
 import Sheet from "./component/sheet.ts";

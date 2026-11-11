@@ -1,4 +1,4 @@
-import { type Element, h } from "./element.ts";
+import Element, { h } from "./element.ts";
 import Icon from "./icon.ts";
 import { ct, t } from "../locale/locale.ts";
 

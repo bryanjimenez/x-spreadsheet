@@ -1,6 +1,6 @@
 import { cssPrefix } from "../../config.ts";
 import { t } from "../../locale/locale.ts";
-import { Element, h } from "../element.ts";
+import Element, { h } from "../element.ts";
 import tooltip from "../tooltip.ts";
 
 export default class Item {

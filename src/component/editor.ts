@@ -1,4 +1,4 @@
-import { h, Element } from "./element.ts";
+import Element, { h } from "./element.ts";
 import Suggest from "./suggest.ts";
 import Datepicker from "./datepicker.ts";
 import { cssPrefix } from "../config.ts";
