@@ -18,7 +18,8 @@ export default function rspackConfig(
 
     entry: {
       index: "./src/index.ts",
-      helper: "./src/helper.ts"
+      less: "./src/index.less",
+      helper: "./src/helper.ts",
     },
     output: {
       filename: "[name].js",

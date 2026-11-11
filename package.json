@@ -17,11 +17,10 @@
       "default": "./dist/locale/*.json",
       "types": "./dist/types/locale/*.d.ts"
     },
-    "./index.css": "./dist/index.css"
+    "./less.css": "./dist/less.css"
   },
   "types": "dist/types/index.d.ts",
   "files": [
-    "assets",
     "dist",
     "THIRD_PARTY_LICENSE"
   ],

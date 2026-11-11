@@ -5,7 +5,6 @@ import Sheet from "./component/sheet";
 import { cssPrefix } from "./config";
 import DataProxy, { type DefaultSettings } from "./core/data_proxy";
 import { locale } from "./locale/locale";
-import "./index.less";
 import { type ColProperties } from "./core/col";
 import { type RowData } from "./core/row";
 import { type Filter, type Sort } from "./core/auto_filter";

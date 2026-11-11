@@ -17,6 +17,7 @@ export default function rspackConfig(
 
     entry: {
       index: "./src/index.ts",
+      less: "./src/index.less",
     },
     output: {
       filename: "[name].js",
