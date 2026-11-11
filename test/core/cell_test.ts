@@ -1,7 +1,7 @@
 import assert from "assert";
-import { describe, it } from "mocha";
-import cell, { infixExprToSuffixExpr } from "../../src/core/cell";
-import { formulam } from "../../src/core/formula";
+import { describe, it } from "node:test";
+import cell, { infixExprToSuffixExpr } from "../../src/core/cell.ts";
+import { formulam } from "../../src/core/formula.ts";
 
 describe("[cell.ts](./src/core/cell.ts)", function () {
   describe(".infixExprToSuffixExpr()", () => {

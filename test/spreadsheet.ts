@@ -1,8 +1,8 @@
-import "jsdom-global/register";
+import "jsdom-global/register.js";
 import assert from "assert";
-import { describe, it } from "mocha";
-import { Spreadsheet } from "../src/index";
-import zhCn from "../src/locale/zh-cn.json";
+import { describe, it } from "node:test";
+import { Spreadsheet } from "../src/index.ts";
+import zhCn from "../src/locale/zh-cn.json" with { type: "json" };
 
 /** Deep Immutable `T` */
 export type Immutable<T> = {

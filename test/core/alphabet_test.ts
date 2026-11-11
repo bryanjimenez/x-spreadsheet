@@ -1,6 +1,6 @@
 import assert from "assert";
-import { describe, it } from "mocha";
-import { indexAt, stringAt, expr2xy, expr2expr } from "../../src/core/alphabet";
+import { describe, it } from "node:test";
+import { indexAt, stringAt, expr2xy, expr2expr } from "../../src/core/alphabet.ts";
 
 describe("[alphabet.ts](./src/core/alphabet.ts)", function () {
   describe(".indexAt()", () => {
