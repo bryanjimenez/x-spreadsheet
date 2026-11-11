@@ -1,9 +1,9 @@
 /* global document */
 /* global window */
-import { type Element, h } from "./element";
-import Icon from "./icon";
-import { cssPrefix } from "../config";
-import { bind, unbind } from "./event";
+import { type Element, h } from "./element.ts";
+import Icon from "./icon.ts";
+import { cssPrefix } from "../config.ts";
+import { bind, unbind } from "./event.ts";
 
 export default class Modal {
   el: Element<HTMLDivElement>;

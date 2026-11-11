@@ -1,13 +1,13 @@
-import Modal from "./modal";
-import FormInput from "./form_input";
-import FormSelect, { type SelectType } from "./form_select";
-import FormField from "./form_field";
-import Button from "./button";
-import { t } from "../locale/locale";
-import { h } from "./element";
-import { cssPrefix } from "../config";
-import { Validator, type OperatorType, ValidatorType } from "../core/validator";
-import { type CellRef } from "../core/cell_range";
+import Modal from "./modal.ts";
+import FormInput from "./form_input.ts";
+import FormSelect, { type SelectType } from "./form_select.ts";
+import FormField from "./form_field.ts";
+import Button from "./button.ts";
+import { t } from "../locale/locale.ts";
+import { h } from "./element.ts";
+import { cssPrefix } from "../config.ts";
+import { Validator, type OperatorType, type ValidatorType } from "../core/validator.ts";
+import { type CellRef } from "../core/cell_range.ts";
 
 const fieldLabelWidth = 100;
 

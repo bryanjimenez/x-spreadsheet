@@ -1,4 +1,4 @@
-import { CellRange } from "./cell_range";
+import { CellRange } from "./cell_range.ts";
 
 export class Merges {
   _: CellRange[];

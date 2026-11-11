@@ -1,7 +1,7 @@
-import { type Element, h } from "./element";
-import { cssPrefix } from "../config";
-import { CellRange } from "../core/cell_range";
-import type DataProxy from "../core/data_proxy";
+import { type Element, h } from "./element.ts";
+import { cssPrefix } from "../config.ts";
+import { CellRange } from "../core/cell_range.ts";
+import type DataProxy from "../core/data_proxy.ts";
 
 export interface Offset {
   left?: number;

@@ -1,7 +1,7 @@
-import Dropdown from "./dropdown";
-import { h } from "./element";
-import Icon from "./icon";
-import { cssPrefix } from "../config";
+import Dropdown from "./dropdown.ts";
+import { h } from "./element.ts";
+import Icon from "./icon.ts";
+import { cssPrefix } from "../config.ts";
 
 const lineTypes = [
   [

@@ -1,4 +1,4 @@
-import { xy2expr, expr2xy } from "./alphabet";
+import { xy2expr, expr2xy } from "./alphabet.ts";
 
 export type CellRef = string;
 

@@ -1,4 +1,4 @@
-import ToggleItem from "./toggle_item";
+import ToggleItem from "./toggle_item.ts";
 
 export default class Paintformat extends ToggleItem {
   constructor() {

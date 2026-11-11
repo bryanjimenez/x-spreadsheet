@@ -1,6 +1,6 @@
 /* global window */
-import { type Element } from "./element";
-import { type Direction } from "./sheet";
+import { type Element } from "./element.ts";
+import { type Direction } from "./sheet.ts";
 
 export interface HTMLEvent extends Event {
   target: HTMLElement;

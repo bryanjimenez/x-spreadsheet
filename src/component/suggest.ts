@@ -1,7 +1,7 @@
-import { type Element, h } from "./element";
-import { bindClickoutside, unbindClickoutside } from "./event";
-import { cssPrefix } from "../config";
-import { type Formula } from "../core/formula";
+import { type Element, h } from "./element.ts";
+import { bindClickoutside, unbindClickoutside } from "./event.ts";
+import { cssPrefix } from "../config.ts";
+import { type Formula } from "../core/formula.ts";
 
 export default class Suggest {
   filterItems: Element<HTMLDivElement>[];

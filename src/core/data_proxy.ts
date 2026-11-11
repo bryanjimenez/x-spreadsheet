@@ -1,31 +1,31 @@
 /* global document */
 
-import Selector from "./selector";
-import Scroll from "./scroll";
-import History from "./history";
-import Clipboard from "./clipboard";
-import AutoFilter from "./auto_filter";
-import { Merges } from "./merge";
-import { cloneDeep, equals, merge, rangeReduceIf } from "./helper";
-import { Rows } from "./row";
-import { Cols } from "./col";
-import { Validations } from "./validation";
-import { CellRange, CellRangePoints, CellRef } from "./cell_range";
-import { expr2xy, xy2expr } from "./alphabet";
-import { t } from "../locale/locale";
-import { type DeepPartial, RowList, type CellData, type SheetData } from "..";
+import Selector from "./selector.ts";
+import Scroll from "./scroll.ts";
+import History from "./history.ts";
+import Clipboard from "./clipboard.ts";
+import AutoFilter from "./auto_filter.ts";
+import { Merges } from "./merge.ts";
+import { cloneDeep, equals, merge, rangeReduceIf } from "./helper.ts";
+import { Rows } from "./row.ts";
+import { Cols } from "./col.ts";
+import { Validations } from "./validation.ts";
+import { CellRange, type CellRangePoints, type CellRef } from "./cell_range.ts";
+import { expr2xy, xy2expr } from "./alphabet.ts";
+import { t } from "../locale/locale.ts";
+import { type DeepPartial, type RowList, type CellData, type SheetData } from "../index.ts";
 import {
   type ExtendToolbarOption,
   type ToolBarChangeType,
-} from "../component/toolbar/index";
-import { type HAlign, type VAlign, type LineType } from "../canvas/draw";
-import { type BorderType } from "../component/border_palette";
-import { SelectType } from "../component/form_select";
+} from "../component/toolbar/index.ts";
+import { type HAlign, type VAlign, type LineType } from "../canvas/draw.ts";
+import { type BorderType } from "../component/border_palette.ts";
+import { type SelectType } from "../component/form_select.ts";
 import {
   type Validator,
   type OperatorType,
   type ValidatorType,
-} from "./validator";
+} from "./validator.ts";
 
 interface BSS {
   top?: string[];

@@ -1,6 +1,6 @@
-import DropdownItem from "./dropdown_item";
-import DropdownFontsize from "../dropdown_fontsize";
-import { isNumber } from "../../core/helper";
+import DropdownItem from "./dropdown_item.ts";
+import DropdownFontsize from "../dropdown_fontsize.ts";
+import { isNumber } from "../../core/helper.ts";
 
 export default class Format extends DropdownItem<DropdownFontsize> {
   constructor() {

@@ -1,8 +1,8 @@
 /* global window */
-import { type Element, h } from "./element";
-import { mouseMoveUp } from "./event";
-import { cssPrefix } from "../config";
-import { type Offset } from "./selector";
+import { type Element, h } from "./element.ts";
+import { mouseMoveUp } from "./event.ts";
+import { cssPrefix } from "../config.ts";
+import { type Offset } from "./selector.ts";
 
 export default class Resizer {
   moving: boolean;

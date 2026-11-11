@@ -1,1 +1,1 @@
-export { stringAt, indexAt } from "./core/alphabet";
+export { stringAt, indexAt } from "./core/alphabet.ts";

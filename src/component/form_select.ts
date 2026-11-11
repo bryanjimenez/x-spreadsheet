@@ -1,7 +1,7 @@
-import { type Element, h } from "./element";
-import Suggest from "./suggest";
-import { cssPrefix } from "../config";
-import { Formula } from "../core/formula";
+import { type Element, h } from "./element.ts";
+import Suggest from "./suggest.ts";
+import { cssPrefix } from "../config.ts";
+import { type Formula } from "../core/formula.ts";
 
 export type SelectType = "cell" | "list" | "be";
 

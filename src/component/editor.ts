@@ -1,10 +1,10 @@
-import { h, Element } from "./element";
-import Suggest from "./suggest";
-import Datepicker from "./datepicker";
-import { cssPrefix } from "../config";
-import { type Formula } from "../core/formula";
-import { type CellData } from "..";
-import { type Validator } from "../core/validator";
+import { h, Element } from "./element.ts";
+import Suggest from "./suggest.ts";
+import Datepicker from "./datepicker.ts";
+import { cssPrefix } from "../config.ts";
+import { type Formula } from "../core/formula.ts";
+import { type CellData } from "../index.ts";
+import { type Validator } from "../core/validator.ts";
 
 function dateFormat(d: Date) {
   const month = d.getMonth() + 1;

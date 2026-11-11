@@ -1,5 +1,5 @@
-import type Dropdown from "../dropdown";
-import Item from "./item";
+import type Dropdown from "../dropdown.ts";
+import Item from "./item.ts";
 
 export default class DropdownItem<T extends Dropdown> extends Item {
   //DropdownFormat|DropdownFont|DropdownFontSize|DropdownColor|DropdownBorder|DropdownAlign|DropdownFormula|DropdownMore

@@ -1,6 +1,6 @@
 /* global document */
 /* global window */
-import { type Offset } from "./selector";
+import { type Offset } from "./selector.ts";
 
 class Element<T extends HTMLElement> {
   el: T;

@@ -1,5 +1,5 @@
-import { ColList } from "..";
-import { rangeSum } from "./helper";
+import { type ColList } from "../index.ts";
+import { rangeSum } from "./helper.ts";
 
 export interface ColProperties {
   width?: number;

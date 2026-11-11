@@ -1,6 +1,6 @@
-import { Element } from "./element";
-import { cssPrefix } from "../config";
-import { t } from "../locale/locale";
+import { Element } from "./element.ts";
+import { cssPrefix } from "../config.ts";
+import { t } from "../locale/locale.ts";
 
 export default class Button extends Element<HTMLDivElement> {
   // type: primary

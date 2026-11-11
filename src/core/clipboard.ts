@@ -1,4 +1,4 @@
-import { type CellRange } from "./cell_range";
+import { type CellRange } from "./cell_range.ts";
 
 interface ClipboardClear {
   range: null;

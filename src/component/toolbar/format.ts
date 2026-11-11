@@ -1,5 +1,5 @@
-import DropdownItem from "./dropdown_item";
-import DropdownFormat from "../dropdown_format";
+import DropdownItem from "./dropdown_item.ts";
+import DropdownFormat from "../dropdown_format.ts";
 
 export default class Format extends DropdownItem<DropdownFormat> {
   constructor() {

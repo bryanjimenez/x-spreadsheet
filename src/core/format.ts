@@ -1,4 +1,4 @@
-import { tf } from "../locale/locale";
+import { tf } from "../locale/locale.ts";
 
 const formatStringRender = (v: string) => v;
 

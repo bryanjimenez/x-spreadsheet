@@ -1,7 +1,7 @@
-import Dropdown from "./dropdown";
-import { h } from "./element";
-import { baseFonts } from "../core/font";
-import { cssPrefix } from "../config";
+import Dropdown from "./dropdown.ts";
+import { h } from "./element.ts";
+import { baseFonts } from "../core/font.ts";
+import { cssPrefix } from "../config.ts";
 
 export default class DropdownFont extends Dropdown {
   constructor() {

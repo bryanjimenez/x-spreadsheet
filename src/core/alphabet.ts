@@ -1,4 +1,4 @@
-import { type CellRef } from "./cell_range";
+import { type CellRef } from "./cell_range.ts";
 
 // eslint-disable-next-line
 const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];

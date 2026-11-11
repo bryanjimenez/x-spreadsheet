@@ -1,19 +1,19 @@
-import Dropdown from "./dropdown";
-import { type Element, h } from "./element";
+import Dropdown from "./dropdown.ts";
+import { type Element, h } from "./element.ts";
 import {
   type HTMLEvent,
   type HTMLInputEvent,
   bindClickoutside,
   unbindClickoutside,
-} from "./event";
-import FormInput from "./form_input";
-import Icon from "./icon";
-import { cssPrefix } from "../config";
+} from "./event.ts";
+import FormInput from "./form_input.ts";
+import Icon from "./icon.ts";
+import { cssPrefix } from "../config.ts";
 // Record: temp not used
 // import { xtoast } from './message';
-import { tf } from "../locale/locale";
-import { type Offset } from "./selector";
-import { type DefaultSettings } from "../core/data_proxy";
+import { tf } from "../locale/locale.ts";
+import { type Offset } from "./selector.ts";
+import { type DefaultSettings } from "../core/data_proxy.ts";
 
 class DropdownMore extends Dropdown {
   contentClick: (index: number) => void;

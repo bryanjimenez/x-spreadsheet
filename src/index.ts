@@ -1,16 +1,16 @@
 /* global window, document */
-import Bottombar from "./component/bottombar";
-import { h } from "./component/element";
-import Sheet from "./component/sheet";
-import { cssPrefix } from "./config";
-import DataProxy, { type DefaultSettings } from "./core/data_proxy";
-import { locale } from "./locale/locale";
-import { type ColProperties } from "./core/col";
-import { type RowData } from "./core/row";
-import { type Filter, type Sort } from "./core/auto_filter";
-import { type LineType } from "./canvas/draw";
-import { type SelectType } from "./component/form_select";
-import { type OperatorType, type ValidatorType } from "./core/validator";
+import { h } from "./component/element.ts";
+import { type SelectType } from "./component/form_select.ts";
+import Bottombar from "./component/bottombar.ts";
+import Sheet from "./component/sheet.ts";
+import { cssPrefix } from "./config.ts";
+import DataProxy, { type DefaultSettings } from "./core/data_proxy.ts";
+import { locale } from "./locale/locale.ts";
+import { type ColProperties } from "./core/col.ts";
+import { type RowData } from "./core/row.ts";
+import { type Filter, type Sort } from "./core/auto_filter.ts";
+import { type LineType } from "./canvas/draw.ts";
+import { type OperatorType, type ValidatorType } from "./core/validator.ts";
 
 export type CellMerge = [number, number];
 export type InitConfig = DeepPartial<DefaultSettings>;
@@ -332,7 +332,7 @@ export class Spreadsheet {
 export const spreadsheet = (el: Element, options = {}) =>
   new Spreadsheet(el, options);
 
-if (window !== undefined) {
+if (typeof window !== "undefined") {
   /* eslint-disable camelcase */
   //@ts-expect-error camel case
   window.x_spreadsheet = spreadsheet;

@@ -1,6 +1,6 @@
-import { Validator, type OperatorType, type ValidatorType } from "./validator";
-import { CellRange } from "./cell_range";
-import { SelectType } from "../component/form_select";
+import { Validator, type OperatorType, type ValidatorType } from "./validator.ts";
+import { CellRange } from "./cell_range.ts";
+import { type SelectType } from "../component/form_select.ts";
 
 class Validation {
   refs: string[];

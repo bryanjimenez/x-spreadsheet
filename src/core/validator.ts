@@ -1,5 +1,5 @@
-import { t } from "../locale/locale";
-import { arrayEquals } from "./helper";
+import { t } from "../locale/locale.ts";
+import { arrayEquals } from "./helper.ts";
 
 const rules = {
   phone: /^[1-9]\d{10}$/u,
