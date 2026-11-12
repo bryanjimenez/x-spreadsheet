@@ -104,3 +104,43 @@ export function swapify(
   delete sortedSheet.autofilter;
   return sortedSheet;
 }
+
+/**
+ * The **`HTMLCanvasElement.getContext()`** method returns a drawing context on the canvas, or null if the context identifier is not supported, or the canvas has already been set to a different context mode.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLCanvasElement/getContext)
+ */
+function getContextMock(
+    _contextId: string,
+    _options?: CanvasRenderingContext2DSettings,
+):CanvasRenderingContext2D {
+// getContext(contextId: "2d", options?: CanvasRenderingContext2DSettings): CanvasRenderingContext2D | null;
+// getContext(contextId: "bitmaprenderer", options?: ImageBitmapRenderingContextSettings): ImageBitmapRenderingContext | null;
+// getContext(contextId: "webgl", options?: WebGLContextAttributes): WebGLRenderingContext | null;
+// getContext(contextId: "webgl2", options?: WebGLContextAttributes): WebGL2RenderingContext | null;
+// getContext(contextId: string, options?: any): RenderingContext | null;
+
+  return {
+      scale: () => {},
+      clearRect: () => {},
+      save: () => {},
+      beginPath: () => {},
+      translate: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      stroke: () => {},
+      restore: () => {},
+      fillRect: () => {},
+      fillText: () => {},
+      rect: () => {},
+      clip: () => {},
+      fill: () => {},
+      measureText: () => ({ width: 0 }),
+    };
+}
+
+export function mockCanvasAPI() {
+
+  // @ts-expect-error mocking the getContext method
+  HTMLCanvasElement.prototype.getContext = getContextMock
+}
