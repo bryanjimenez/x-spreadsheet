@@ -3,6 +3,9 @@ import assert from "assert";
 import { describe, it } from "node:test";
 import { Spreadsheet } from "../src/index.ts";
 import zhCn from "../src/locale/zh-cn.json" with { type: "json" };
+import { mockCanvasAPI } from "./shared.ts";
+
+mockCanvasAPI();
 
 /** Deep Immutable `T` */
 export type Immutable<T> = {
