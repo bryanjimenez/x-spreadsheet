@@ -12,6 +12,8 @@ import { type Filter, type Sort } from "./core/auto_filter.ts";
 import { type LineType } from "./canvas/draw.ts";
 import { type OperatorType, type ValidatorType } from "./core/validator.ts";
 
+export { stringAt, indexAt } from "./core/alphabet.ts";
+
 export type CellMerge = [number, number];
 export type InitConfig = DeepPartial<DefaultSettings>;
 

@@ -1,7 +1,6 @@
-import { type SheetData } from "../src/index.ts";
+import { stringAt, type SheetData } from "../src/index.ts";
 import type AutoFilter from "../src/core/auto_filter.ts";
 import { CellRange } from "../src/core/cell_range.ts";
-import { stringAt } from "../src/helper.ts";
 
 /** Deep Immutable `T` */
 export type Immutable<T> = {

@@ -8,10 +8,6 @@
       "default": "./dist/index.js",
       "types": "./dist/types/index.d.ts"
     },
-    "./helper": {
-      "default": "./dist/helper.js",
-      "types": "./dist/types/helper.d.ts"
-    },
     "./types/*": "./dist/types/*.d.ts",
     "./locale/*": {
       "default": "./dist/locale/*.json",
