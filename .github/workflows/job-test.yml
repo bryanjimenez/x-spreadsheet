@@ -14,13 +14,11 @@ jobs:
 
       - run: npm ci
 
-      - name: temporary canvas@next
-        run: npm install --no-save canvas@next
+      # - name: Test and build coverage
+      - name: Test
+        run: npm run test
 
-      - name: Test and build coverage
-        run: npx nyc --reporter json --report-dir nyc_coverage --check-coverage false npm run test
-
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #actions/upload-artifact@v7
-        with:
-          name: nyc_coverage
-          path: nyc_coverage/
+      # - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #actions/upload-artifact@v7
+      #   with:
+      #     name: nyc_coverage
+      #     path: nyc_coverage/

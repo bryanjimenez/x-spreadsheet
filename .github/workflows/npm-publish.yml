@@ -18,13 +18,18 @@ jobs:
     needs: [simple-tag-check]
     uses: ./.github/workflows/job-build.yml
 
-  coverage:
+  # coverage:
+  #   needs: [simple-tag-check]
+  #   uses: ./.github/workflows/job-coverage.yml
+
+  test:
     needs: [simple-tag-check]
-    uses: ./.github/workflows/job-coverage.yml
+    uses: ./.github/workflows/job-test.yml
 
   publish-npm:
     environment: ci
-    needs: [build, coverage]
+    # needs: [build, coverage]
+    needs: [build, test]
     runs-on: ubuntu-latest
     permissions:
       contents: read

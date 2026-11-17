@@ -10,5 +10,8 @@ jobs:
   build:
     uses: ./.github/workflows/job-build.yml
 
-  coverage:
-    uses: ./.github/workflows/job-coverage.yml
+  # coverage:
+  #   uses: ./.github/workflows/job-coverage.yml
+
+  test:
+    uses: ./.github/workflows/job-test.yml
