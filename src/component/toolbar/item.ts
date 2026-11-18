@@ -1,7 +1,7 @@
-import { cssPrefix } from "../../config";
-import { t } from "../../locale/locale";
-import { Element, h } from "../element";
-import tooltip from "../tooltip";
+import { cssPrefix } from "../../config.ts";
+import { t } from "../../locale/locale.ts";
+import Element, { h } from "../element.ts";
+import tooltip from "../tooltip.ts";
 
 export default class Item {
   tip: string;

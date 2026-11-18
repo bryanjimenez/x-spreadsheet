@@ -1,7 +1,7 @@
 /* global document */
-import { h } from "./element";
-import { bind } from "./event";
-import { cssPrefix } from "../config";
+import { h } from "./element.ts";
+import { bind } from "./event.ts";
+import { cssPrefix } from "../config.ts";
 
 export default function tooltip(html: string, target: EventTarget) {
   if (!("classList" in target) || !("getBoundingClientRect" in target)) {

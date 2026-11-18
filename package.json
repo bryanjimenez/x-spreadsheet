@@ -1,6 +1,6 @@
 {
   "name": "@nmemonica/x-spreadsheet",
-  "version": "0.1.8-alpha.4",
+  "version": "0.1.0-alpha.0",
   "description": "A Typescript xpreadsheet",
   "type": "module",
   "exports": {
@@ -8,24 +8,19 @@
       "default": "./dist/index.js",
       "types": "./dist/types/index.d.ts"
     },
-    "./helper": {
-      "default": "./dist/helper.js",
-      "types": "./dist/types/helper.d.ts"
-    },
     "./types/*": "./dist/types/*.d.ts",
     "./locale/*": {
       "default": "./dist/locale/*.json",
       "types": "./dist/types/locale/*.d.ts"
     },
-    "./index.css": "./dist/index.css"
+    "./less.css": "./dist/less.css"
   },
   "types": "dist/types/index.d.ts",
   "files": [
-    "assets",
     "dist",
     "THIRD_PARTY_LICENSE"
   ],
-  "author": "bryan",
+  "author": "bryanjimenez",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -37,9 +32,8 @@
     "build": "rspack build -c ./build/rspack.prod.js",
     "postbuild": "npm run build-dts",
     "build-dts": "tsc -p ./tsconfig.types.json | cat",
-    "test": "mocha -r ./test/require.mjs --recursive --extension ts ./test",
-    "coverage": "nyc npm run test > '/dev/null'; nyc report",
-    "type": "tsc -b",
+    "test": "node --test ./test/*.ts ./test/**/*.ts",
+    "coverage": "node --test --experimental-test-coverage ./test/*.ts ./test/**/*.ts",
     "staged": "git diff --staged --diff-filter=d --name-only",
     "lint": "npm run -s staged | xargs eslint --fix",
     "lint:all": "DEBUG=*,-@hwc*,-eslint:code-path eslint ."
@@ -51,26 +45,18 @@
   ],
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@istanbuljs/nyc-config-typescript": "^1.0.2",
-    "@rspack/cli": "^2.0.8",
-    "@rspack/core": "^2.0.8",
-    "@rspack/dev-server": "^2.0.3",
+    "@rspack/cli": "^2.3.3",
+    "@rspack/core": "^2.3.3",
+    "@rspack/dev-server": "^2.2.2",
     "@types/md5": "^2.3.5",
-    "@types/mocha": "^10.0.6",
     "@typescript-eslint/parser": "^8.61.1",
-    "canvas": "^3.2.3",
     "eslint": "^10.5.0",
     "eslint-plugin-prettier": "^5.5.5",
     "jsdom-global": "^3.0.2",
     "less-loader": "^12.3.1",
     "license-checker-webpack-plugin": "^0.2.1",
-    "mocha": "^11.6.0",
-    "nyc": "^18.0.0",
     "prettier": "^3.8.4",
-    "ts-node": "^10.9.1",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1"
-  },
-  "dependencies": {
-    "typescript": "^6.0.3"
   }
 }

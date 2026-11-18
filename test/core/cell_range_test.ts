@@ -1,6 +1,6 @@
 import assert from "assert";
-import { describe, it } from "mocha";
-import { CellRange } from "../../src/core/cell_range";
+import { describe, it } from "node:test";
+import { CellRange } from "../../src/core/cell_range.ts";
 
 describe("[cell_range.ts](./src/core/cell_range.ts)", function () {
   describe("CellRange", () => {

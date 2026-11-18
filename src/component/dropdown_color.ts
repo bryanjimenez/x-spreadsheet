@@ -1,6 +1,6 @@
-import Dropdown from "./dropdown";
-import Icon from "./icon";
-import ColorPalette from "./color_palette";
+import Dropdown from "./dropdown.ts";
+import Icon from "./icon.ts";
+import ColorPalette from "./color_palette.ts";
 
 export default class DropdownColor extends Dropdown {
   constructor(iconName: string, color: string) {

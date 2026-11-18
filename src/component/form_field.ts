@@ -1,9 +1,9 @@
-import { type Element, h } from "./element";
-import { cssPrefix } from "../config";
-import { t } from "../locale/locale";
-import FormInput from "./form_input";
-import type FormSelect from "./form_select";
-import { type ValidatorType } from "../core/validator";
+import Element, { h } from "./element.ts";
+import { cssPrefix } from "../config.ts";
+import { t } from "../locale/locale.ts";
+import FormInput from "./form_input.ts";
+import type FormSelect from "./form_select.ts";
+import { type ValidatorType } from "../core/validator.ts";
 
 const patterns = {
   number: /(^\d+$)|(^\d+(\.\d{0,4})?$)/u,

@@ -1,6 +1,6 @@
-import { type Element, h } from "./element";
-import Icon from "./icon";
-import { ct, t } from "../locale/locale";
+import Element, { h } from "./element.ts";
+import Icon from "./icon.ts";
+import { ct, t } from "../locale/locale.ts";
 
 function addMonth(date: Date, step: number) {
   date.setMonth(date.getMonth() + step);

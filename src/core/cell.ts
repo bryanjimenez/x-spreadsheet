@@ -1,6 +1,6 @@
-import { expr2xy, xy2expr } from "./alphabet";
-import { isNumber, numberCalc } from "./helper";
-import { Formula, formulam } from "./formula";
+import { expr2xy, xy2expr } from "./alphabet.ts";
+import { isNumber, numberCalc } from "./helper.ts";
+import { type Formula, formulam } from "./formula.ts";
 
 // Converting infix expression to a suffix expression
 // src: AVERAGE(SUM(A1,A2), B1) + 50 + B20

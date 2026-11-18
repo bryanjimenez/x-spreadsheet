@@ -1,4 +1,4 @@
-import { type SheetData } from "..";
+import { type SheetData } from "../index.ts";
 
 export default class History {
   undoItems: string[];

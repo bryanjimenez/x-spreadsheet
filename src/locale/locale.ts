@@ -1,5 +1,5 @@
 /* global window */
-import en from "./en.json";
+import en from "./en.json" with { type:"json" };
 
 // Defines the fallback language as English
 let $languages = ["en"];

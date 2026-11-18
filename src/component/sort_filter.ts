@@ -1,10 +1,10 @@
-import { type Element, h } from "./element";
-import Button from "./button";
-import { bindClickoutside, unbindClickoutside } from "./event";
-import { cssPrefix } from "../config";
-import { t } from "../locale/locale";
-import { type Offset } from "./selector";
-import { type Filter, type Sort } from "../core/auto_filter";
+import Element, { h } from "./element.ts";
+import Button from "./button.ts";
+import { bindClickoutside, unbindClickoutside } from "./event.ts";
+import { cssPrefix } from "../config.ts";
+import { t } from "../locale/locale.ts";
+import { type Offset } from "./selector.ts";
+import { type Filter, type Sort } from "../core/auto_filter.ts";
 
 function buildMenu(clsName: string) {
   return h("div", `${cssPrefix}-item ${clsName}`);

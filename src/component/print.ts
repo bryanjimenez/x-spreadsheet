@@ -1,12 +1,12 @@
 /* global window document */
-import { type Element, h } from "./element";
-import { cssPrefix } from "../config";
-import Button from "./button";
-import { Draw } from "../canvas/draw";
-import { renderCell } from "./table";
-import { t } from "../locale/locale";
-import type DataProxy from "../core/data_proxy";
-import { type CellRangePoints } from "../core/cell_range";
+import Element, { h } from "./element.ts";
+import { cssPrefix } from "../config.ts";
+import Button from "./button.ts";
+import { Draw } from "../canvas/draw.ts";
+import { renderCell } from "./table.ts";
+import { t } from "../locale/locale.ts";
+import type DataProxy from "../core/data_proxy.ts";
+import { type CellRangePoints } from "../core/cell_range.ts";
 
 // resolution: 72 => 595 x 842
 // 150 => 1240 x 1754
@@ -237,7 +237,7 @@ export default class Print {
     `;
     idoc.head.appendChild(style);
     this.canvases?.forEach((it) => {
-      const cn = <HTMLCanvasElement>it.cloneNode(false);
+      const cn = it.cloneNode(false) as HTMLCanvasElement;
       const ctx = cn.getContext("2d");
       // ctx.imageSmoothingEnabled = true;
       ctx?.drawImage(it, 0, 0);

@@ -1,8 +1,8 @@
-import Dropdown from "./dropdown";
-import Icon from "./icon";
-import { h } from "./element";
-import { baseFormulas } from "../core/formula";
-import { cssPrefix } from "../config";
+import Dropdown from "./dropdown.ts";
+import Icon from "./icon.ts";
+import { h } from "./element.ts";
+import { baseFormulas } from "../core/formula.ts";
+import { cssPrefix } from "../config.ts";
 
 export default class DropdownFormula extends Dropdown {
   constructor() {

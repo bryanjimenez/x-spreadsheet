@@ -1,6 +1,6 @@
 /* global window */
 
-import { type DefaultSettings } from "../core/data_proxy";
+import { type DefaultSettings } from "../core/data_proxy.ts";
 
 export type LineType = "medium" | "thick" | "dashed" | "dotted" | "double";
 export type HAlign = "center" | "left" | "right";

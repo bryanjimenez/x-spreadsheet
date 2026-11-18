@@ -7,16 +7,20 @@
 
     "allowSyntheticDefaultImports": true,
 
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
 
     "allowJs": true,
     "checkJs": true,
 
     "removeComments": true,
     "declaration": true,
-
     "noImplicitReturns": true,
+    "types": ["node"]
   },
   "exclude": ["./node_modules", "./dist"],
   "include": ["./src", "./test"]

@@ -1,10 +1,10 @@
-import { type CellData, type RowList } from "..";
-import { expr2expr } from "./alphabet";
-import _cell from "./cell";
-import { type CellRange } from "./cell_range";
-import { rangeSum, cloneDeep } from "./helper";
-import { formulam } from "./formula";
-import { type CopyType } from "./data_proxy";
+import { type CellData, type RowList } from "../index.ts";
+import { expr2expr } from "./alphabet.ts";
+import _cell from "./cell.ts";
+import { type CellRange } from "./cell_range.ts";
+import { rangeSum, cloneDeep } from "./helper.ts";
+import { formulam } from "./formula.ts";
+import { type CopyType } from "./data_proxy.ts";
 
 /**
  * Data for representing a row

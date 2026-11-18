@@ -1,6 +1,6 @@
 import assert from "assert";
-import { describe, it } from "mocha";
-import { formatm, baseFormats } from "../../src/core/format";
+import { describe, it } from "node:test";
+import { formatm, baseFormats } from "../../src/core/format.ts";
 
 const gformats = formatm;
 describe("[format.ts](./src/core/format.ts)", function () {

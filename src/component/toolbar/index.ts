@@ -1,34 +1,34 @@
 /* global window */
 
-import Align from "./align";
-import Valign from "./valign";
-import Autofilter from "./autofilter";
-import Bold from "./bold";
-import Italic from "./italic";
-import Strike from "./strike";
-import Underline from "./underline";
-import Border from "./border";
-import Clearformat from "./clearformat";
-import Paintformat from "./paintformat";
-import TextColor from "./text_color";
-import FillColor from "./fill_color";
-import FontSize from "./font_size";
-import Font from "./font";
-import Format from "./format";
-import Formula from "./formula";
-import Freeze from "./freeze";
-import Merge from "./merge";
-import Redo from "./redo";
-import Undo from "./undo";
-import Print from "./print";
-import Textwrap from "./textwrap";
-import More from "./more";
-import Item from "./item";
+import Align from "./align.ts";
+import Valign from "./valign.ts";
+import Autofilter from "./autofilter.ts";
+import Bold from "./bold.ts";
+import Italic from "./italic.ts";
+import Strike from "./strike.ts";
+import Underline from "./underline.ts";
+import Border from "./border.ts";
+import Clearformat from "./clearformat.ts";
+import Paintformat from "./paintformat.ts";
+import TextColor from "./text_color.ts";
+import FillColor from "./fill_color.ts";
+import FontSize from "./font_size.ts";
+import Font from "./font.ts";
+import Format from "./format.ts";
+import Formula from "./formula.ts";
+import Freeze from "./freeze.ts";
+import Merge from "./merge.ts";
+import Redo from "./redo.ts";
+import Undo from "./undo.ts";
+import Print from "./print.ts";
+import Textwrap from "./textwrap.ts";
+import More from "./more.ts";
+import Item from "./item.ts";
 
-import { type Element, h } from "../element";
-import { cssPrefix } from "../../config";
-import { bind } from "../event";
-import type { default as DataProxy, BorderEdit } from "../../core/data_proxy";
+import Element, { h } from "../element.ts";
+import { cssPrefix } from "../../config.ts";
+import { bind } from "../event.ts";
+import type { default as DataProxy, BorderEdit } from "../../core/data_proxy.ts";
 
 export interface ExtendToolbarOption {
   tip?: string;

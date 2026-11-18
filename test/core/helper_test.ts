@@ -1,5 +1,5 @@
 import assert from "assert";
-import { describe, it } from "mocha";
+import { describe, it } from "node:test";
 import {
   cloneDeep,
   isNumber,
@@ -12,7 +12,7 @@ import {
   isBooleanLoose,
   arrayEquals,
   rangeSum,
-} from "../../src/core/helper";
+} from "../../src/core/helper.ts";
 
 describe("[helper.ts](./src/core/helper.ts)", () => {
   describe(".numberCalc()", () => {

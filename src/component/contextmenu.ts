@@ -1,7 +1,7 @@
-import { type Element, h } from "./element";
-import { bindClickoutside, unbindClickoutside } from "./event";
-import { cssPrefix } from "../config";
-import { tf } from "../locale/locale";
+import Element, { h } from "./element.ts";
+import { bindClickoutside, unbindClickoutside } from "./event.ts";
+import { cssPrefix } from "../config.ts";
+import { tf } from "../locale/locale.ts";
 
 const menuItems = [
   { key: "copy", title: tf("contextmenu.copy"), label: "Ctrl+C" },

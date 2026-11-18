@@ -1,23 +1,23 @@
 /* global window */
-import ContextMenu from "./contextmenu";
-import Editor from "./editor";
-import { Element, h } from "./element";
-import { bind, bindTouch, createEventEmitter, mouseMoveUp } from "./event";
-import { xtoast } from "./message";
-import ModalValidation from "./modal_validation";
-import Print from "./print";
-import Resizer from "./resizer";
-import Scrollbar from "./scrollbar";
-import Selector from "./selector";
-import SortFilter from "./sort_filter";
-import Table from "./table";
-import Toolbar from "./toolbar/index";
-import { cssPrefix } from "../config";
-import { baseFormulas } from "../core/formula";
-import DataProxy, { type BorderEdit } from "../core/data_proxy";
-import { type ToolBarChangeType } from "./toolbar";
-import { type Operator } from "../core/auto_filter";
-import { type SheetData } from "..";
+import ContextMenu from "./contextmenu.ts";
+import Editor from "./editor.ts";
+import Element, { h } from "./element.ts";
+import { bind, bindTouch, createEventEmitter, mouseMoveUp } from "./event.ts";
+import { xtoast } from "./message.ts";
+import ModalValidation from "./modal_validation.ts";
+import Print from "./print.ts";
+import Resizer from "./resizer.ts";
+import Scrollbar from "./scrollbar.ts";
+import Selector from "./selector.ts";
+import SortFilter from "./sort_filter.ts";
+import Table from "./table.ts";
+import Toolbar from "./toolbar/index.ts";
+import { cssPrefix } from "../config.ts";
+import { baseFormulas } from "../core/formula.ts";
+import DataProxy, { type BorderEdit } from "../core/data_proxy.ts";
+import { type ToolBarChangeType } from "./toolbar/index.ts";
+import { type Operator } from "../core/auto_filter.ts";
+import { type SheetData } from "../index.ts";
 
 export type Direction =
   | "left"

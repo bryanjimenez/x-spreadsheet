@@ -1,6 +1,6 @@
-import Calendar from "./calendar";
-import { type Element, h } from "./element";
-import { cssPrefix } from "../config";
+import Calendar from "./calendar.ts";
+import Element, { h } from "./element.ts";
+import { cssPrefix } from "../config.ts";
 
 export default class Datepicker {
   calendar: Calendar;

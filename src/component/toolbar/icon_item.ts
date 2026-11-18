@@ -1,5 +1,5 @@
-import Item from "./item";
-import Icon from "../icon";
+import Item from "./item.ts";
+import Icon from "../icon.ts";
 
 export default class IconItem extends Item {
   element() {

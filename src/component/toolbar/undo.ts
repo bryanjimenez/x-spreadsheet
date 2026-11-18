@@ -1,4 +1,4 @@
-import IconItem from "./icon_item";
+import IconItem from "./icon_item.ts";
 
 export default class Undo extends IconItem {
   constructor() {

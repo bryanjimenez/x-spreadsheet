@@ -1,5 +1,5 @@
-import { type CellData } from "..";
-import { CellRange, CellRef } from "./cell_range";
+import { type CellData } from "../index.ts";
+import { CellRange, type CellRef } from "./cell_range.ts";
 // same as OperatorType from validator.ts?
 // eslint-disable-next-line
 export type Operator =  'all'|'eq'|'neq'|'gt'|'gte'|'lt'|'lte'|'in'|'be'

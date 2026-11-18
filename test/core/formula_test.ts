@@ -1,6 +1,6 @@
 import assert from "assert";
-import { describe, it } from "mocha";
-import { formulam } from "../../src/core/formula";
+import { describe, it } from "node:test";
+import { formulam } from "../../src/core/formula.ts";
 
 describe("[formula.ts](./src/core/formula.ts)", function () {
   describe("formulam", () => {

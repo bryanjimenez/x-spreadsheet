@@ -1,5 +1,5 @@
-import DropdownItem from "./dropdown_item";
-import DropdownFont from "../dropdown_font";
+import DropdownItem from "./dropdown_item.ts";
+import DropdownFont from "../dropdown_font.ts";
 
 export default class Font extends DropdownItem<DropdownFont> {
   constructor() {

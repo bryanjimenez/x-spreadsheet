@@ -1,7 +1,7 @@
-import { Element, h } from "./element";
-import { bindClickoutside, unbindClickoutside } from "./event";
-import { cssPrefix } from "../config";
-import type Icon from "./icon";
+import Element, { h } from "./element.ts";
+import { bindClickoutside, unbindClickoutside } from "./event.ts";
+import { cssPrefix } from "../config.ts";
+import type Icon from "./icon.ts";
 
 export default class Dropdown extends Element<HTMLDivElement> {
   title: Element<HTMLDivElement> | Icon;

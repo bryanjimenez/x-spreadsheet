@@ -5,6 +5,7 @@
     "outDir": "./dist/types/",
     // "outFile": "./dist/xspreadsheet.d.ts",
 
+    "noEmit": false,
     "removeComments": false,
     "declaration": true,
     "emitDeclarationOnly": true,

@@ -1,11 +1,11 @@
 import assert from "assert";
-import { describe, it } from "mocha";
+import { describe, it } from "node:test";
 import {
   fontSizes,
   fonts,
   baseFonts,
   getFontSizePxByPt,
-} from "../../src/core/font";
+} from "../../src/core/font.ts";
 
 describe("[font.ts](./src/core/font.ts)", function () {
   describe("baseFonts", () => {

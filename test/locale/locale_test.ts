@@ -1,7 +1,7 @@
-import "jsdom-global/register";
+import "jsdom-global/register.js";
 import assert from "assert";
-import { describe, it } from "mocha";
-import { locale, t, tf } from "../../src/locale/locale";
+import { describe, it } from "node:test";
+import { locale, t, tf } from "../../src/locale/locale.ts";
 
 // Override messages that exist in the fallback locale
 const localeTest1 = "TEST_1";

@@ -1,7 +1,7 @@
-import Dropdown from "./dropdown";
-import { h } from "./element";
-import { type BaseFormats, baseFormats } from "../core/format";
-import { cssPrefix } from "../config";
+import Dropdown from "./dropdown.ts";
+import { h } from "./element.ts";
+import { type BaseFormats, baseFormats } from "../core/format.ts";
+import { cssPrefix } from "../config.ts";
 
 export default class DropdownFormat extends Dropdown {
   constructor() {

@@ -1,6 +1,6 @@
-import Dropdown from "./dropdown";
-import Icon from "./icon";
-import BorderPalette, { type BorderType } from "./border_palette";
+import Dropdown from "./dropdown.ts";
+import Icon from "./icon.ts";
+import BorderPalette, { type BorderType } from "./border_palette.ts";
 
 export default class DropdownBorder extends Dropdown {
   constructor() {

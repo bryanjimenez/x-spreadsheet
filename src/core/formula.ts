@@ -1,11 +1,11 @@
-import { tf } from "../locale/locale";
+import { tf } from "../locale/locale.ts";
 import {
   isBoolean,
   isBooleanLoose,
   isBooleanStrict,
   isNumber,
   numberCalc,
-} from "./helper";
+} from "./helper.ts";
 
 // TODO: map key and render types
 export interface Formula {

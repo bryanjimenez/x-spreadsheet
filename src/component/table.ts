@@ -1,12 +1,12 @@
-import { stringAt } from "../core/alphabet";
-import { getFontSizePxByPt } from "../core/font";
-import _cell from "../core/cell";
-import { formulam } from "../core/formula";
-import { formatm } from "../core/format";
+import { stringAt } from "../core/alphabet.ts";
+import { getFontSizePxByPt } from "../core/font.ts";
+import _cell from "../core/cell.ts";
+import { formulam } from "../core/formula.ts";
+import { formatm } from "../core/format.ts";
 
-import { Draw, DrawBox, thinLineWidth, npx } from "../canvas/draw";
-import type DataProxy from "../core/data_proxy";
-import { CellRangePoints, type CellRange } from "../core/cell_range";
+import { Draw, DrawBox, thinLineWidth, npx } from "../canvas/draw.ts";
+import type DataProxy from "../core/data_proxy.ts";
+import { type CellRangePoints, type CellRange } from "../core/cell_range.ts";
 
 // gobal var
 const cellPaddingWidth = 5;
